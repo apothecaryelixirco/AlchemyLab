@@ -1,0 +1,498 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		114205AA1CE3808B00A32BCF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114205A91CE3808B00A32BCF /* AppDelegate.swift */; };
+		114205AC1CE3808B00A32BCF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114205AB1CE3808B00A32BCF /* ViewController.swift */; };
+		114205AE1CE3808B00A32BCF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 114205AD1CE3808B00A32BCF /* Assets.xcassets */; };
+		114205B11CE3808B00A32BCF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 114205AF1CE3808B00A32BCF /* Main.storyboard */; };
+		114205BC1CE3808B00A32BCF /* Alchemy_LabTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114205BB1CE3808B00A32BCF /* Alchemy_LabTests.swift */; };
+		114205C71CE3808B00A32BCF /* Alchemy_LabUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114205C61CE3808B00A32BCF /* Alchemy_LabUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		114205B81CE3808B00A32BCF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1142059E1CE3808B00A32BCF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 114205A51CE3808B00A32BCF;
+			remoteInfo = "Alchemy Lab";
+		};
+		114205C31CE3808B00A32BCF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1142059E1CE3808B00A32BCF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 114205A51CE3808B00A32BCF;
+			remoteInfo = "Alchemy Lab";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		114205A61CE3808B00A32BCF /* Alchemy Lab.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Alchemy Lab.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		114205A91CE3808B00A32BCF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		114205AB1CE3808B00A32BCF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		114205AD1CE3808B00A32BCF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		114205B01CE3808B00A32BCF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		114205B21CE3808B00A32BCF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		114205B71CE3808B00A32BCF /* Alchemy LabTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Alchemy LabTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		114205BB1CE3808B00A32BCF /* Alchemy_LabTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alchemy_LabTests.swift; sourceTree = "<group>"; };
+		114205BD1CE3808B00A32BCF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		114205C21CE3808B00A32BCF /* Alchemy LabUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Alchemy LabUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		114205C61CE3808B00A32BCF /* Alchemy_LabUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alchemy_LabUITests.swift; sourceTree = "<group>"; };
+		114205C81CE3808B00A32BCF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		114205A31CE3808B00A32BCF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		114205B41CE3808B00A32BCF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		114205BF1CE3808B00A32BCF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1142059D1CE3808B00A32BCF = {
+			isa = PBXGroup;
+			children = (
+				114205A81CE3808B00A32BCF /* Alchemy Lab */,
+				114205BA1CE3808B00A32BCF /* Alchemy LabTests */,
+				114205C51CE3808B00A32BCF /* Alchemy LabUITests */,
+				114205A71CE3808B00A32BCF /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		114205A71CE3808B00A32BCF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				114205A61CE3808B00A32BCF /* Alchemy Lab.app */,
+				114205B71CE3808B00A32BCF /* Alchemy LabTests.xctest */,
+				114205C21CE3808B00A32BCF /* Alchemy LabUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		114205A81CE3808B00A32BCF /* Alchemy Lab */ = {
+			isa = PBXGroup;
+			children = (
+				114205A91CE3808B00A32BCF /* AppDelegate.swift */,
+				114205AB1CE3808B00A32BCF /* ViewController.swift */,
+				114205AD1CE3808B00A32BCF /* Assets.xcassets */,
+				114205AF1CE3808B00A32BCF /* Main.storyboard */,
+				114205B21CE3808B00A32BCF /* Info.plist */,
+			);
+			path = "Alchemy Lab";
+			sourceTree = "<group>";
+		};
+		114205BA1CE3808B00A32BCF /* Alchemy LabTests */ = {
+			isa = PBXGroup;
+			children = (
+				114205BB1CE3808B00A32BCF /* Alchemy_LabTests.swift */,
+				114205BD1CE3808B00A32BCF /* Info.plist */,
+			);
+			path = "Alchemy LabTests";
+			sourceTree = "<group>";
+		};
+		114205C51CE3808B00A32BCF /* Alchemy LabUITests */ = {
+			isa = PBXGroup;
+			children = (
+				114205C61CE3808B00A32BCF /* Alchemy_LabUITests.swift */,
+				114205C81CE3808B00A32BCF /* Info.plist */,
+			);
+			path = "Alchemy LabUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		114205A51CE3808B00A32BCF /* Alchemy Lab */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 114205CB1CE3808B00A32BCF /* Build configuration list for PBXNativeTarget "Alchemy Lab" */;
+			buildPhases = (
+				114205A21CE3808B00A32BCF /* Sources */,
+				114205A31CE3808B00A32BCF /* Frameworks */,
+				114205A41CE3808B00A32BCF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Alchemy Lab";
+			productName = "Alchemy Lab";
+			productReference = 114205A61CE3808B00A32BCF /* Alchemy Lab.app */;
+			productType = "com.apple.product-type.application";
+		};
+		114205B61CE3808B00A32BCF /* Alchemy LabTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 114205CE1CE3808B00A32BCF /* Build configuration list for PBXNativeTarget "Alchemy LabTests" */;
+			buildPhases = (
+				114205B31CE3808B00A32BCF /* Sources */,
+				114205B41CE3808B00A32BCF /* Frameworks */,
+				114205B51CE3808B00A32BCF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				114205B91CE3808B00A32BCF /* PBXTargetDependency */,
+			);
+			name = "Alchemy LabTests";
+			productName = "Alchemy LabTests";
+			productReference = 114205B71CE3808B00A32BCF /* Alchemy LabTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		114205C11CE3808B00A32BCF /* Alchemy LabUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 114205D11CE3808B00A32BCF /* Build configuration list for PBXNativeTarget "Alchemy LabUITests" */;
+			buildPhases = (
+				114205BE1CE3808B00A32BCF /* Sources */,
+				114205BF1CE3808B00A32BCF /* Frameworks */,
+				114205C01CE3808B00A32BCF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				114205C41CE3808B00A32BCF /* PBXTargetDependency */,
+			);
+			name = "Alchemy LabUITests";
+			productName = "Alchemy LabUITests";
+			productReference = 114205C21CE3808B00A32BCF /* Alchemy LabUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1142059E1CE3808B00A32BCF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0730;
+				LastUpgradeCheck = 0730;
+				ORGANIZATIONNAME = "alchemy Labs";
+				TargetAttributes = {
+					114205A51CE3808B00A32BCF = {
+						CreatedOnToolsVersion = 7.3;
+					};
+					114205B61CE3808B00A32BCF = {
+						CreatedOnToolsVersion = 7.3;
+						TestTargetID = 114205A51CE3808B00A32BCF;
+					};
+					114205C11CE3808B00A32BCF = {
+						CreatedOnToolsVersion = 7.3;
+						TestTargetID = 114205A51CE3808B00A32BCF;
+					};
+				};
+			};
+			buildConfigurationList = 114205A11CE3808B00A32BCF /* Build configuration list for PBXProject "Alchemy Lab" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 1142059D1CE3808B00A32BCF;
+			productRefGroup = 114205A71CE3808B00A32BCF /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				114205A51CE3808B00A32BCF /* Alchemy Lab */,
+				114205B61CE3808B00A32BCF /* Alchemy LabTests */,
+				114205C11CE3808B00A32BCF /* Alchemy LabUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		114205A41CE3808B00A32BCF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				114205AE1CE3808B00A32BCF /* Assets.xcassets in Resources */,
+				114205B11CE3808B00A32BCF /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		114205B51CE3808B00A32BCF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		114205C01CE3808B00A32BCF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		114205A21CE3808B00A32BCF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				114205AC1CE3808B00A32BCF /* ViewController.swift in Sources */,
+				114205AA1CE3808B00A32BCF /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		114205B31CE3808B00A32BCF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				114205BC1CE3808B00A32BCF /* Alchemy_LabTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		114205BE1CE3808B00A32BCF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				114205C71CE3808B00A32BCF /* Alchemy_LabUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		114205B91CE3808B00A32BCF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 114205A51CE3808B00A32BCF /* Alchemy Lab */;
+			targetProxy = 114205B81CE3808B00A32BCF /* PBXContainerItemProxy */;
+		};
+		114205C41CE3808B00A32BCF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 114205A51CE3808B00A32BCF /* Alchemy Lab */;
+			targetProxy = 114205C31CE3808B00A32BCF /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		114205AF1CE3808B00A32BCF /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				114205B01CE3808B00A32BCF /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		114205C91CE3808B00A32BCF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		114205CA1CE3808B00A32BCF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		114205CC1CE3808B00A32BCF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "Alchemy Lab/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Alchemy-Lab";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		114205CD1CE3808B00A32BCF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "Alchemy Lab/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Alchemy-Lab";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		114205CF1CE3808B00A32BCF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "Alchemy LabTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Alchemy-LabTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Alchemy Lab.app/Contents/MacOS/Alchemy Lab";
+			};
+			name = Debug;
+		};
+		114205D01CE3808B00A32BCF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "Alchemy LabTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Alchemy-LabTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Alchemy Lab.app/Contents/MacOS/Alchemy Lab";
+			};
+			name = Release;
+		};
+		114205D21CE3808B00A32BCF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "Alchemy LabUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Alchemy-LabUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = "Alchemy Lab";
+			};
+			name = Debug;
+		};
+		114205D31CE3808B00A32BCF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "Alchemy LabUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Alchemy-LabUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = "Alchemy Lab";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		114205A11CE3808B00A32BCF /* Build configuration list for PBXProject "Alchemy Lab" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				114205C91CE3808B00A32BCF /* Debug */,
+				114205CA1CE3808B00A32BCF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		114205CB1CE3808B00A32BCF /* Build configuration list for PBXNativeTarget "Alchemy Lab" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				114205CC1CE3808B00A32BCF /* Debug */,
+				114205CD1CE3808B00A32BCF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		114205CE1CE3808B00A32BCF /* Build configuration list for PBXNativeTarget "Alchemy LabTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				114205CF1CE3808B00A32BCF /* Debug */,
+				114205D01CE3808B00A32BCF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		114205D11CE3808B00A32BCF /* Build configuration list for PBXNativeTarget "Alchemy LabUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				114205D21CE3808B00A32BCF /* Debug */,
+				114205D31CE3808B00A32BCF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1142059E1CE3808B00A32BCF /* Project object */;
+}
