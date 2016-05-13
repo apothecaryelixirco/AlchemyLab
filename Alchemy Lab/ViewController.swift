@@ -9,7 +9,7 @@
 import Cocoa
 
 
-class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDelegate, AddRecipeIngredientDelegate, RecipeEditorDelegate, NSTableViewDelegate,NSTableViewDataSource, NSApplicationDelegate {
+class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDelegate, AddRecipeIngredientDelegate, RecipeEditorDelegate, IngredientLibraryEditorDelegate  {
 
     
     var PGRatio : Int = 0;
@@ -49,6 +49,17 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
     
     var ingredientToEdit : RecipeIngredient = RecipeIngredient();
 
+    func IngredientEditorDelegate(controller: IngredientLibraryIngredientEditorViewController, ingredient: Ingredient, mode: String) {
+        if (mode == "ADD")
+        {
+            ingredientLibrary.append(ingredient);
+            print ("add ingredient to library.");
+        }
+        if (mode == "EDIT")
+        {
+            print ("edit ingredient from library.");
+        }
+    }
     func RecipeViewDelegate(controller: RecipeEditorViewController, recipe: Recipe, mode: String) {
         if (mode == "ADD")
         {
@@ -131,6 +142,74 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         }
     }
     
+    
+    
+    @IBAction func showIngredientLibraryEditorPopupAsAdd(sender: NSSegmentedControl)
+    {
+        // 1
+        let storyboard = NSStoryboard(name: "Main", bundle: nil)
+        let ingredientLibraryWindowController = storyboard.instantiateControllerWithIdentifier("Ingredient Library Editor View Controller") as! NSWindowController
+        
+        if let ingredientLibraryWindow = ingredientLibraryWindowController.window {
+            
+            print("calling display as popover for ingredient library editor.");
+            let ingredientLibraryEditorViewController = ingredientLibraryWindow.contentViewController as! IngredientLibraryIngredientEditorViewController
+            ingredientLibraryEditorViewController.mode = "ADD";
+            let rectForPopup = outletIngredientLibraryTableView.bounds;
+            let viewForPopup = outletIngredientLibraryTableView;
+            presentViewController(ingredientLibraryEditorViewController, asPopoverRelativeToRect: rectForPopup, ofView: viewForPopup, preferredEdge: NSRectEdge.MaxX, behavior: NSPopoverBehavior.Transient)
+            //            outletRecipeTableView.selectedCell()?.draw
+            //            presentViewControllerAsSheet(addIngredientViewController);
+            print("done with the modal view.");
+            ingredientLibraryEditorViewController.RefreshForEdit();
+        }
+    }
+    
+    
+    @IBAction func showIngredientLibraryEditorPopupAsEditFromTableRow(sender: NSTableView)
+    {
+        // 1
+        print("displaying ingredient library editor as edit.");
+        let storyboard = NSStoryboard(name: "Main", bundle: nil)
+        let ingredientLibraryWindowController = storyboard.instantiateControllerWithIdentifier("Ingredient Library Editor View Controller") as! NSWindowController
+        
+        if let ingredientLibraryWindow = ingredientLibraryWindowController.window {
+            
+            print("calling display as popover for ingredient library editor.");
+            let ingredientLibraryEditorViewController = ingredientLibraryWindow.contentViewController as! IngredientLibraryIngredientEditorViewController
+            ingredientLibraryEditorViewController.mode = "EDIT";
+            ingredientLibraryEditorViewController.ingredientToWorkWith = ingredientLibrary[sender.selectedRow];
+            let rectForPopup = sender.bounds;
+            let viewForPopup = sender;
+            presentViewController(ingredientLibraryEditorViewController, asPopoverRelativeToRect: rectForPopup, ofView: viewForPopup, preferredEdge: NSRectEdge.MaxX, behavior: NSPopoverBehavior.Transient)
+            //            outletRecipeTableView.selectedCell()?.draw
+            //            presentViewControllerAsSheet(addIngredientViewController);
+            print("done with the modal view.");
+            ingredientLibraryEditorViewController.RefreshForEdit();
+        }
+    }
+
+    @IBAction func showIngredientLibraryEditorPopupAsEdit(sender: NSSegmentedControl)
+    {
+        // 1
+        let storyboard = NSStoryboard(name: "Main", bundle: nil)
+        let ingredientLibraryWindowController = storyboard.instantiateControllerWithIdentifier("Ingredient Library Editor View Controller") as! NSWindowController
+        
+        if let ingredientLibraryWindow = ingredientLibraryWindowController.window {
+            
+            print("calling display as popover for ingredient library editor.");
+            let ingredientLibraryEditorViewController = ingredientLibraryWindow.contentViewController as! IngredientLibraryIngredientEditorViewController
+            ingredientLibraryEditorViewController.mode = "EDIT";
+            ingredientLibraryEditorViewController.ingredientToWorkWith = ingredientLibrary[outletIngredientLibraryTableView.selectedRow];
+            let rectForPopup = outletIngredientLibraryTableView.bounds;
+            let viewForPopup = outletIngredientLibraryTableView;
+            presentViewController(ingredientLibraryEditorViewController, asPopoverRelativeToRect: rectForPopup, ofView: viewForPopup, preferredEdge: NSRectEdge.MaxX, behavior: NSPopoverBehavior.Transient)
+            //            outletRecipeTableView.selectedCell()?.draw
+            //            presentViewControllerAsSheet(addIngredientViewController);
+            print("done with the modal view.");
+            ingredientLibraryEditorViewController.RefreshForEdit();
+        }
+    }
     
     @IBAction func showEditPopOver(sender: NSSegmentedControl)
     {
@@ -348,6 +427,28 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         UpdateMixLabView();
         
     }
+    
+    @IBAction func outletIngredientLibraryItemDoubleClick(sender: NSTableView) {
+        print("double cilcked item.  edit ingredient.");
+    }
+    
+    // Ingredient Library Button Cick Handler
+    @IBAction func outletIngredientLibrarySegmentButton(sender: NSSegmentedControl) {
+        if (sender.selectedSegment == 0)
+        {
+            print("add ingredient.");
+            showIngredientLibraryEditorPopupAsAdd(sender);
+        }
+        if (sender.selectedSegment == 1)
+        {
+            print("delete ingredient");
+        }
+        if (sender.selectedSegment == 2)
+        {
+            showIngredientLibraryEditorPopupAsEdit(sender);
+        }
+    }
+    
    /*
     @IBAction func outletPGRatioHandler(sender: NSSlider) {
         PGRatio = sender.integerValue;
