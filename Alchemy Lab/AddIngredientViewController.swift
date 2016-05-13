@@ -21,9 +21,10 @@ class AddIngredientViewController: NSViewController {
     var mode : String = "";
     var ingredientToEdit : RecipeIngredient = RecipeIngredient();
     
+    @IBOutlet weak var outletIngredientName: NSPopUpButton!
     @IBOutlet weak var IngredientPopup: NSPopUpButton!
     @IBOutlet weak var recipeIngredientNotes: NSTextField!
-    @IBOutlet weak var temperatureSlider: NSSlider!
+   // @IBOutlet weak var temperatureSlider: NSSlider!
     @IBOutlet weak var temperatureLabel: NSTextField!
     @IBOutlet weak var percentageLabel: NSTextField!
     
@@ -36,16 +37,17 @@ class AddIngredientViewController: NSViewController {
         // need to find the ingredient associated with this..
     }
     
-    @IBAction func TemperatureSliderAction(sender: NSSlider) {
-        temperatureLabel.stringValue = String(format:"Temperature: %d",temperatureSlider.integerValue);
-    }
+   // @IBAction func TemperatureSliderAction(sender: NSSlider) {
+   //     temperatureLabel.stringValue = String(format:"Temperature: %d",temperatureSlider.integerValue);
+   // }
     @IBOutlet weak var outletNoteTextField: NSTextField!
     
+    @IBOutlet weak var outletTemperatureTextField: NSTextField!
     dynamic var ingredientLibrary : [Ingredient] = [Ingredient]();
     @IBOutlet weak var outletSaveCancelButton: NSSegmentedControl!
     override func viewDidLoad() {
         print("view did load....mode is " + mode);
-        temperatureLabel.stringValue = String(format:"Temperature: %d",temperatureSlider.integerValue);
+     //   temperatureLabel.stringValue = String(format:"Temperature: %d",temperatureSlider.integerValue);
         super.viewDidLoad();
         print("loaded view...");
         
@@ -57,8 +59,18 @@ class AddIngredientViewController: NSViewController {
         if (mode == "EDIT")
         {
             print ("editing ingredient.  need to select the right one and setup our values.");
+            outletIngredientName.enabled = false;
             recipeIngredientNotes.stringValue = ingredientToEdit.Notes;
-            temperatureSlider.doubleValue = Double(ingredientToEdit.Temperature);
+            outletTemperatureTextField.doubleValue = ingredientToEdit.Temperature;
+            if (ingredientToEdit.TempScale == "C")
+            {
+                tempSegmentOutlet.selectedSegment = 1;
+            }
+            if (ingredientToEdit.TempScale == "F")
+            {
+                tempSegmentOutlet.selectedSegment = 0;
+            }
+            //temperatureSlider.doubleValue = Double(ingredientToEdit.Temperature);
             percentageInputTextOutlet.doubleValue = ingredientToEdit.Percentage;
             print("ingredient we're editing: " + ingredientToEdit.RecipeIngredient.Name);
             // need to find the right ingredient in our library..
@@ -96,7 +108,8 @@ class AddIngredientViewController: NSViewController {
                     targetIngredient = ingredientToEdit;
                 }
                 targetIngredient.Percentage = percentageInputTextOutlet.doubleValue;
-                targetIngredient.Temperature = temperatureSlider.doubleValue;
+                targetIngredient.Temperature = Double(outletTemperatureTextField.doubleValue);
+                //targetIngredient.Temperature = temperatureSlider.doubleValue;
                 targetIngredient.Sequence=0; // temp
                 targetIngredient.TempScale = (tempSegmentOutlet.selectedSegment == 0 ? "F" : "C");
                 targetIngredient.RecipeIngredient = ingredientLibrary[IngredientPopup.indexOfSelectedItem];

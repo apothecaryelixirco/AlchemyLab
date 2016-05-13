@@ -9,8 +9,9 @@
 import Cocoa
 
 
-class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDelegate, AddRecipeIngredientDelegate, RecipeEditorDelegate {
+class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDelegate, AddRecipeIngredientDelegate, RecipeEditorDelegate, NSTableViewDelegate,NSTableViewDataSource, NSApplicationDelegate {
 
+    
     var PGRatio : Int = 0;
     var VGRatio : Int = 0;
     var desiredNicStrength : Double = 0;
@@ -32,10 +33,10 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
     @IBOutlet weak var outletAmountLabel: NSTextField!
     @IBOutlet weak var outletNicotineStrengthLabel: NSTextField!
     @IBOutlet weak var outletPGRatioLabel: NSTextField!
-    @IBOutlet weak var outletNicStrengthSlider: NSSlider!
+   // @IBOutlet weak var outletNicStrengthSlider: NSSlider!
     
-    @IBOutlet weak var outletVGRatioSlider: NSSlider!
-    @IBOutlet weak var outletPGRatioSlider: NSSlider!
+  //  @IBOutlet weak var outletVGRatioSlider: NSSlider!
+  //  @IBOutlet weak var outletPGRatioSlider: NSSlider!
     @IBOutlet weak var outletVGRatioLabel: NSTextField!
     
     @IBOutlet weak var outletRecipeTableView: NSTableView!
@@ -60,8 +61,8 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
     
     @IBAction func outletRecipeTableViewRowSelectedHandler(sender: NSTableView) {
         print("a recipe row has been selected!");
-        ingredientToEdit = currentRecipe.RecipeIngredients[outletRecipeTableView.selectedRow];
-        showEditPopOverFromTableRow(sender);
+     //   ingredientToEdit = currentRecipe.RecipeIngredients[outletRecipeTableView.selectedRow];
+    //    showEditPopOverFromTableRow(sender);
         
     }
     func ingredientViewController(controller: AddIngredientViewController, ingredient: RecipeIngredient, ingredientLibrary: [Ingredient], mode: String) {
@@ -90,7 +91,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         if let addIngredientWindow = addIngredientWindowController.window {
 
             let addIngredientViewController = addIngredientWindow.contentViewController as! AddIngredientViewController
-            addIngredientViewController.ingredientLibrary = ingredients;
+            addIngredientViewController.ingredientLibrary = ingredientLibrary;
             addIngredientViewController.incomingRecipe = currentRecipe;
             addIngredientViewController.mode = "ADD";
             
@@ -100,6 +101,11 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         }
     }
 
+    @IBAction func outletRecipeRowDoubleClickIngredient(sender: NSTableView) {
+        print("row has been double clicked!");
+        showEditPopOverFromTableRow(sender);
+    }
+    
     @IBAction func showEditIngredient(sender: AnyObject) {
         
         // 1
@@ -111,7 +117,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         if let addIngredientWindow = addIngredientWindowController.window {
             
             let addIngredientViewController = addIngredientWindow.contentViewController as! AddIngredientViewController
-            addIngredientViewController.ingredientLibrary = ingredients;
+            addIngredientViewController.ingredientLibrary = ingredientLibrary;
             addIngredientViewController.mode = "EDIT";
             addIngredientViewController.incomingRecipe = currentRecipe;
             addIngredientViewController.ingredientToEdit = ingredientToEdit;
@@ -136,12 +142,13 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             
             print("calling display as popover.");
             let addIngredientViewController = addIngredientWindow.contentViewController as! AddIngredientViewController
-            addIngredientViewController.ingredientLibrary = ingredients;
+            addIngredientViewController.ingredientLibrary = ingredientLibrary;
             addIngredientViewController.mode = "EDIT";
             addIngredientViewController.incomingRecipe = currentRecipe;
             addIngredientViewController.ingredientToEdit = ingredientToEdit;
-            
-            presentViewController(addIngredientViewController, asPopoverRelativeToRect: sender.bounds, ofView: sender, preferredEdge: NSRectEdge.MinX, behavior: NSPopoverBehavior.Transient)
+            let rectForPopup = outletRecipeTableView.bounds;
+            let viewForPopup = outletRecipeTableView;
+            presentViewController(addIngredientViewController, asPopoverRelativeToRect: rectForPopup, ofView: viewForPopup, preferredEdge: NSRectEdge.MaxX, behavior: NSPopoverBehavior.Transient)
             //            outletRecipeTableView.selectedCell()?.draw
             //            presentViewControllerAsSheet(addIngredientViewController);
             print("done with the modal view.");
@@ -155,7 +162,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
     
     @IBAction func showEditPopOverFromTableRow(sender: NSTableView)
     {
-        // 1
+        ingredientToEdit = currentRecipe.RecipeIngredients[sender.clickedRow];
         let storyboard = NSStoryboard(name: "Main", bundle: nil)
         let addIngredientWindowController = storyboard.instantiateControllerWithIdentifier("Add Ingredient View Controller") as! NSWindowController
         
@@ -163,13 +170,13 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             
             print("calling display as popover.");
             let addIngredientViewController = addIngredientWindow.contentViewController as! AddIngredientViewController
-            addIngredientViewController.ingredientLibrary = ingredients;
+            addIngredientViewController.ingredientLibrary = ingredientLibrary;
             addIngredientViewController.mode = "EDIT";
             addIngredientViewController.incomingRecipe = currentRecipe;
             
             addIngredientViewController.ingredientToEdit = ingredientToEdit;
             
-            presentViewController(addIngredientViewController, asPopoverRelativeToRect: sender.bounds, ofView: sender, preferredEdge: NSRectEdge.MinX, behavior: NSPopoverBehavior.Transient)
+            presentViewController(addIngredientViewController, asPopoverRelativeToRect: sender.bounds, ofView: sender, preferredEdge: NSRectEdge.MaxX, behavior: NSPopoverBehavior.Transient)
             //            outletRecipeTableView.selectedCell()?.draw
             //            presentViewControllerAsSheet(addIngredientViewController);
             print("done with the modal view.");
@@ -230,7 +237,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             
             print("calling display as popover.");
             let addIngredientViewController = addIngredientWindow.contentViewController as! AddIngredientViewController
-            addIngredientViewController.ingredientLibrary = ingredients;
+            addIngredientViewController.ingredientLibrary = ingredientLibrary;
             addIngredientViewController.incomingRecipe = currentRecipe;
             addIngredientViewController.mode = "ADD";
             
@@ -341,13 +348,14 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         UpdateMixLabView();
         
     }
-    
+   /*
     @IBAction func outletPGRatioHandler(sender: NSSlider) {
         PGRatio = sender.integerValue;
         VGRatio = 100-PGRatio;
         UpdateUIControls();
         UpdateMixLabView();
-    }
+    }*/
+    /*
     
     @IBAction func outletVGRatioSliderHandler(sender: NSSlider) {
         VGRatio = sender.integerValue;
@@ -355,7 +363,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         UpdateUIControls();
         UpdateMixLabView();
 
-    }
+    }*/
     
     @IBAction func outletNicStrengthSliderHandler(sender: NSSlider) {
         desiredNicStrength = Double(sender.integerValue);
@@ -383,7 +391,9 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
     
     // end outlets;
     
-    dynamic var ingredients = LoadPlaceHolderIngredients();
+    @IBOutlet var outletIngredientLibraryArrayController: NSArrayController!
+    
+    dynamic var ingredientLibrary = LoadPlaceHolderIngredients();
     dynamic var recipes = [Recipe()];
     // these are the two data values for the Tables.
     dynamic var recipeDisplay = [RecipeDisplay]();
@@ -391,13 +401,14 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
     
     var currentRecipe = Recipe();
     
+    @IBOutlet weak var outletIngredientLibraryTableView: NSTableView!
     override func viewDidLoad() {
         // defaults for recipe.
         PGRatio = 30;
         VGRatio = 70;
         amountOfJuice = 50;
         desiredNicStrength = 6;
-        recipes = LoadDefaultRecipe(ingredients);
+        recipes = LoadDefaultRecipe(ingredientLibrary);
         
         currentRecipe = recipes[0];
         // let's get our sliders and UI all setup...
@@ -407,23 +418,31 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         ViewController.sharedInstance = self;
         print("reloading recipe list on the left...");
         outletRecipeTableView.reloadData();
+        
+        
+        //TODO: Long term implement drag and drop...?
+        //TODO: 
+        //var registeredTypes:[String] = [NSStringPboardType]
+       // outletRecipeTableView.registerForDraggedTypes(registeredTypes);
+       // outletIngredientLibraryTableView.registerForDraggedTypes(registeredTypes);
+//        outletRecipeTableView.registerForDraggedTypes(<#T##newTypes: [String]##[String]#>)
+//        outletRecipeTableView.registerForDraggedTypes(<#T##newTypes: [String]##[String]#>) -- Drag and drop functionality
+        // http://www.knowstack.com/swift-nstableview-drag-drop-in/
         super.viewDidLoad()
         // Do any additional setup after loading the view.
     }
     
     func UpdateUIControls()
     {
-        outletPGRatioSlider.integerValue = PGRatio;
-        outletVGRatioSlider.integerValue = VGRatio;
+        //outletPGRatioSlider.integerValue = PGRatio;
+        //outletVGRatioSlider.integerValue = VGRatio;
         outletPGRatioTextField.integerValue = PGRatio;
         outletVGRatioTextField.integerValue = VGRatio;
-        outletNicStrengthSlider.doubleValue = desiredNicStrength;
+        //outletNicStrengthSlider.doubleValue = desiredNicStrength;
         outletNicStrengthTextField.doubleValue = desiredNicStrength;
-        outletAmountLabel.stringValue = String(format:"Target e-liquid Amount: %dml",amountOfJuice);
+        //outletAmountLabel.stringValue = String(format:"Target e-liquid Amount: %dml",amountOfJuice);
         outletAmountComboBox.stringValue = String(format:"%dml",amountOfJuice);
         outletRecipeTableView.reloadData();
-        currentRecipe.VGRatio = VGRatio;
-        currentRecipe.PGRatio = PGRatio;
 
     }
     func UpdateRecipeView()
@@ -465,7 +484,8 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         mixLab.removeAll();
         // need to loop through the currently Displayed Recipe and do all of our math based on that. NOT the currentRecipe because that may not have been updated for some reason.
         // first let's determine how much juice we're making.
-        
+        PGRatio = currentRecipe.PGRatio;
+        VGRatio = currentRecipe.VGRatio;
         
         var nicSolutionNeeded : Double = 0.00;
         var totalVGNeeded : Double = (Double(amountOfJuice)-(Double(amountOfJuice) * (Double(PGRatio) / 100)));
@@ -636,6 +656,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             currentRecipe = recipe;
             UpdateRecipeView();
             UpdateMixLabView();
+            UpdateUIControls();
         }
         
         // here's where we need to set up the new recipe/mixLab
@@ -708,6 +729,137 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         }
         return nil;
     }
+    
+    
+    /* Drag and Drop Functionality */
+    /*
+    func tableView(tableView: NSTableView!, objectValueForTableColumn tableColumn: NSTableColumn!, row: Int) -> AnyObject!
+    {
+        var newString:String = ""
+        if (tableView == sourceTableView)
+        {
+            newString = sourceDataArray[row]
+        }
+        else if (tableView == targetTableView)
+        {
+            newString = targetDataArray[row]
+        }
+        return newString;
+    }
+    */
+    
+    /*
+    // delegate for creating the object to drop in.
+    func tableView(tableView: NSTableView, objectValueForTableColumn tableColumn: NSTableColumn?, row: Int) -> AnyObject? {
+//        var newIngredient:RecipeIngredient = RecipeIngredient();
+        print("creating object value from drag and drop delegate.");
+        if (tableView == outletIngredientLibraryTableView)
+        {
+            print("we have an item from our ingredient library!");
+  //          newIngredient.RecipeIngredient = ingredientLibrary[row];
+        }
+        return "item";
+    }
+ */
+    /*
+ func tableView(aTableView: NSTableView,
+ writeRowsWithIndexes rowIndexes: NSIndexSet,
+ toPasteboard pboard: NSPasteboard) -> Bool
+ {
+ if ((aTableView == sourceTableView) || (aTableView == targetTableView))
+ {
+ var data:NSData = NSKeyedArchiver.archivedDataWithRootObject(rowIndexes)
+ var registeredTypes:[String] = [NSStringPboardType]
+ pboard.declareTypes(registeredTypes, owner: self)
+ pboard.setData(data, forType: NSStringPboardType)
+ return true
+ 
+ }
+ else
+ {
+ return false
+ }
+ }*/
+    /*
+    // delegate for putting the object we're pulling out into the pasteboard.
+    func tableView(tableView: NSTableView, writeRowsWithIndexes rowIndexes: NSIndexSet, toPasteboard pboard: NSPasteboard) -> Bool {
+        print ("checking to see if we should put this into the pasteboard.");
+        if (tableView == outletIngredientLibraryTableView)
+        {
+            let data:NSData = NSKeyedArchiver.archivedDataWithRootObject(rowIndexes);
+            let registeredTypes:[String] = [NSStringPboardType];
+            pboard.declareTypes(registeredTypes, owner: self);
+            pboard.setData(data, forType: NSStringPboardType);
+            return true;
+        }
+        return false;
+    }*/
+    
+    
+/*func tableView(aTableView: NSTableView,
+ validateDrop info: NSDraggingInfo,
+ proposedRow row: Int,
+ proposedDropOperation operation: NSTableViewDropOperation) -> NSDragOperation
+ {
+ if operation == .Above
+ {
+ return .Move
+ }
+ return .All
+ 
+ }*/
+    /*
+    func tableView(tableView: NSTableView, validateDrop info: NSDraggingInfo, proposedRow row: Int, proposedDropOperation dropOperation: NSTableViewDropOperation) -> NSDragOperation {
+        print("validating drop operation");
+        return .Move
+    }
+    
+    func tableView(tableView: NSTableView, acceptDrop info: NSDraggingInfo, row: Int, dropOperation: NSTableViewDropOperation) -> Bool {
+        print("accepting drop!");
+        return true;
+    }*/
+    
+    /* final drop operation... */
+    /*
+ func tableView(tableView: NSTableView, acceptDrop info: NSDraggingInfo, row: Int, dropOperation: NSTableViewDropOperation) -> Bool
+ {
+ var data:NSData = info.draggingPasteboard().dataForType(NSStringPboardType)!
+ var rowIndexes:NSIndexSet = NSKeyedUnarchiver.unarchiveObjectWithData(data) as NSIndexSet
+ 
+ if ((info.draggingSource() as NSTableView == targetTableView) && (tableView == targetTableView))
+ {
+ var value:String = targetDataArray[rowIndexes.firstIndex]
+ targetDataArray.removeAtIndex(rowIndexes.firstIndex)
+ if (row > targetDataArray.count)
+ {
+ targetDataArray.insert(value, atIndex: row-1)
+ }
+ else
+ {
+ targetDataArray.insert(value, atIndex: row)
+ }
+ targetTableView.reloadData()
+ return true
+ }
+ else if ((info.draggingSource() as NSTableView == sourceTableView) && (tableView == targetTableView))
+ {
+ var value:String = sourceDataArray[rowIndexes.firstIndex]
+ sourceDataArray.removeAtIndex(rowIndexes.firstIndex)
+ targetDataArray.append(value)
+ sourceTableView.reloadData()
+ targetTableView.reloadData()
+ return true
+ }
+ else
+ {
+ return false
+ }
+ }*/
+ 
+ 
+ 
+ 
+    /* End Drag and Drop Functionality */
 
 }
 

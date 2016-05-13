@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		112AC55B1CE427190085BDA1 /* AddIngredientViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112AC55A1CE427190085BDA1 /* AddIngredientViewController.swift */; };
+		11398D741CE5AE5000ED2886 /* IngredientLibraryIngredientEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11398D731CE5AE5000ED2886 /* IngredientLibraryIngredientEditorViewController.swift */; };
 		114205AA1CE3808B00A32BCF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114205A91CE3808B00A32BCF /* AppDelegate.swift */; };
 		114205AC1CE3808B00A32BCF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114205AB1CE3808B00A32BCF /* ViewController.swift */; };
 		114205AE1CE3808B00A32BCF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 114205AD1CE3808B00A32BCF /* Assets.xcassets */; };
@@ -38,6 +39,7 @@
 
 /* Begin PBXFileReference section */
 		112AC55A1CE427190085BDA1 /* AddIngredientViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddIngredientViewController.swift; sourceTree = "<group>"; };
+		11398D731CE5AE5000ED2886 /* IngredientLibraryIngredientEditorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IngredientLibraryIngredientEditorViewController.swift; sourceTree = "<group>"; };
 		114205A61CE3808B00A32BCF /* AlchemyLab.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AlchemyLab.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		114205A91CE3808B00A32BCF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		114205AB1CE3808B00A32BCF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -107,6 +109,7 @@
 				114205AB1CE3808B00A32BCF /* ViewController.swift */,
 				114205AD1CE3808B00A32BCF /* Assets.xcassets */,
 				114205AF1CE3808B00A32BCF /* Main.storyboard */,
+				11398D731CE5AE5000ED2886 /* IngredientLibraryIngredientEditorViewController.swift */,
 				114205B21CE3808B00A32BCF /* Info.plist */,
 				114205D41CE381AB00A32BCF /* DataTypes.swift */,
 				114205D61CE381DA00A32BCF /* DataLoader.swift */,
@@ -267,6 +270,7 @@
 			files = (
 				112AC55B1CE427190085BDA1 /* AddIngredientViewController.swift in Sources */,
 				114205D71CE381DA00A32BCF /* DataLoader.swift in Sources */,
+				11398D741CE5AE5000ED2886 /* IngredientLibraryIngredientEditorViewController.swift in Sources */,
 				118FB7F21CE54E5800DC4898 /* RecipeEditorViewController.swift in Sources */,
 				114205D51CE381AB00A32BCF /* DataTypes.swift in Sources */,
 				114205AC1CE3808B00A32BCF /* ViewController.swift in Sources */,
