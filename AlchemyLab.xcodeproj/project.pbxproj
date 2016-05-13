@@ -7,12 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		112AC55B1CE427190085BDA1 /* AddIngredientViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112AC55A1CE427190085BDA1 /* AddIngredientViewController.swift */; };
 		114205AA1CE3808B00A32BCF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114205A91CE3808B00A32BCF /* AppDelegate.swift */; };
 		114205AC1CE3808B00A32BCF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114205AB1CE3808B00A32BCF /* ViewController.swift */; };
 		114205AE1CE3808B00A32BCF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 114205AD1CE3808B00A32BCF /* Assets.xcassets */; };
 		114205B11CE3808B00A32BCF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 114205AF1CE3808B00A32BCF /* Main.storyboard */; };
 		114205BC1CE3808B00A32BCF /* Alchemy_LabTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114205BB1CE3808B00A32BCF /* Alchemy_LabTests.swift */; };
 		114205C71CE3808B00A32BCF /* Alchemy_LabUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114205C61CE3808B00A32BCF /* Alchemy_LabUITests.swift */; };
+		114205D51CE381AB00A32BCF /* DataTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114205D41CE381AB00A32BCF /* DataTypes.swift */; };
+		114205D71CE381DA00A32BCF /* DataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114205D61CE381DA00A32BCF /* DataLoader.swift */; };
+		118FB7F21CE54E5800DC4898 /* RecipeEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118FB7F11CE54E5800DC4898 /* RecipeEditorViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,18 +37,22 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		114205A61CE3808B00A32BCF /* Alchemy Lab.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Alchemy Lab.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		112AC55A1CE427190085BDA1 /* AddIngredientViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddIngredientViewController.swift; sourceTree = "<group>"; };
+		114205A61CE3808B00A32BCF /* AlchemyLab.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AlchemyLab.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		114205A91CE3808B00A32BCF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		114205AB1CE3808B00A32BCF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		114205AD1CE3808B00A32BCF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		114205B01CE3808B00A32BCF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		114205B21CE3808B00A32BCF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		114205B71CE3808B00A32BCF /* Alchemy LabTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Alchemy LabTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		114205B71CE3808B00A32BCF /* AlchemyLab.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AlchemyLab.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		114205BB1CE3808B00A32BCF /* Alchemy_LabTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alchemy_LabTests.swift; sourceTree = "<group>"; };
 		114205BD1CE3808B00A32BCF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		114205C21CE3808B00A32BCF /* Alchemy LabUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Alchemy LabUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		114205C21CE3808B00A32BCF /* AlchemyLab.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AlchemyLab.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		114205C61CE3808B00A32BCF /* Alchemy_LabUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alchemy_LabUITests.swift; sourceTree = "<group>"; };
 		114205C81CE3808B00A32BCF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		114205D41CE381AB00A32BCF /* DataTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataTypes.swift; sourceTree = "<group>"; };
+		114205D61CE381DA00A32BCF /* DataLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataLoader.swift; sourceTree = "<group>"; };
+		118FB7F11CE54E5800DC4898 /* RecipeEditorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipeEditorViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,7 +83,7 @@
 		1142059D1CE3808B00A32BCF = {
 			isa = PBXGroup;
 			children = (
-				114205A81CE3808B00A32BCF /* Alchemy Lab */,
+				114205A81CE3808B00A32BCF /* AlchemyLab */,
 				114205BA1CE3808B00A32BCF /* Alchemy LabTests */,
 				114205C51CE3808B00A32BCF /* Alchemy LabUITests */,
 				114205A71CE3808B00A32BCF /* Products */,
@@ -85,14 +93,14 @@
 		114205A71CE3808B00A32BCF /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				114205A61CE3808B00A32BCF /* Alchemy Lab.app */,
-				114205B71CE3808B00A32BCF /* Alchemy LabTests.xctest */,
-				114205C21CE3808B00A32BCF /* Alchemy LabUITests.xctest */,
+				114205A61CE3808B00A32BCF /* AlchemyLab.app */,
+				114205B71CE3808B00A32BCF /* AlchemyLab.xctest */,
+				114205C21CE3808B00A32BCF /* AlchemyLab.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		114205A81CE3808B00A32BCF /* Alchemy Lab */ = {
+		114205A81CE3808B00A32BCF /* AlchemyLab */ = {
 			isa = PBXGroup;
 			children = (
 				114205A91CE3808B00A32BCF /* AppDelegate.swift */,
@@ -100,7 +108,12 @@
 				114205AD1CE3808B00A32BCF /* Assets.xcassets */,
 				114205AF1CE3808B00A32BCF /* Main.storyboard */,
 				114205B21CE3808B00A32BCF /* Info.plist */,
+				114205D41CE381AB00A32BCF /* DataTypes.swift */,
+				114205D61CE381DA00A32BCF /* DataLoader.swift */,
+				112AC55A1CE427190085BDA1 /* AddIngredientViewController.swift */,
+				118FB7F11CE54E5800DC4898 /* RecipeEditorViewController.swift */,
 			);
+			name = AlchemyLab;
 			path = "Alchemy Lab";
 			sourceTree = "<group>";
 		};
@@ -125,9 +138,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		114205A51CE3808B00A32BCF /* Alchemy Lab */ = {
+		114205A51CE3808B00A32BCF /* AlchemyLab */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 114205CB1CE3808B00A32BCF /* Build configuration list for PBXNativeTarget "Alchemy Lab" */;
+			buildConfigurationList = 114205CB1CE3808B00A32BCF /* Build configuration list for PBXNativeTarget "AlchemyLab" */;
 			buildPhases = (
 				114205A21CE3808B00A32BCF /* Sources */,
 				114205A31CE3808B00A32BCF /* Frameworks */,
@@ -137,14 +150,14 @@
 			);
 			dependencies = (
 			);
-			name = "Alchemy Lab";
+			name = AlchemyLab;
 			productName = "Alchemy Lab";
-			productReference = 114205A61CE3808B00A32BCF /* Alchemy Lab.app */;
+			productReference = 114205A61CE3808B00A32BCF /* AlchemyLab.app */;
 			productType = "com.apple.product-type.application";
 		};
-		114205B61CE3808B00A32BCF /* Alchemy LabTests */ = {
+		114205B61CE3808B00A32BCF /* AlchemyLabTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 114205CE1CE3808B00A32BCF /* Build configuration list for PBXNativeTarget "Alchemy LabTests" */;
+			buildConfigurationList = 114205CE1CE3808B00A32BCF /* Build configuration list for PBXNativeTarget "AlchemyLabTests" */;
 			buildPhases = (
 				114205B31CE3808B00A32BCF /* Sources */,
 				114205B41CE3808B00A32BCF /* Frameworks */,
@@ -155,14 +168,14 @@
 			dependencies = (
 				114205B91CE3808B00A32BCF /* PBXTargetDependency */,
 			);
-			name = "Alchemy LabTests";
+			name = AlchemyLabTests;
 			productName = "Alchemy LabTests";
-			productReference = 114205B71CE3808B00A32BCF /* Alchemy LabTests.xctest */;
+			productReference = 114205B71CE3808B00A32BCF /* AlchemyLab.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		114205C11CE3808B00A32BCF /* Alchemy LabUITests */ = {
+		114205C11CE3808B00A32BCF /* AlchemyLabUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 114205D11CE3808B00A32BCF /* Build configuration list for PBXNativeTarget "Alchemy LabUITests" */;
+			buildConfigurationList = 114205D11CE3808B00A32BCF /* Build configuration list for PBXNativeTarget "AlchemyLabUITests" */;
 			buildPhases = (
 				114205BE1CE3808B00A32BCF /* Sources */,
 				114205BF1CE3808B00A32BCF /* Frameworks */,
@@ -173,9 +186,9 @@
 			dependencies = (
 				114205C41CE3808B00A32BCF /* PBXTargetDependency */,
 			);
-			name = "Alchemy LabUITests";
+			name = AlchemyLabUITests;
 			productName = "Alchemy LabUITests";
-			productReference = 114205C21CE3808B00A32BCF /* Alchemy LabUITests.xctest */;
+			productReference = 114205C21CE3808B00A32BCF /* AlchemyLab.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -201,7 +214,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 114205A11CE3808B00A32BCF /* Build configuration list for PBXProject "Alchemy Lab" */;
+			buildConfigurationList = 114205A11CE3808B00A32BCF /* Build configuration list for PBXProject "AlchemyLab" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -214,9 +227,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				114205A51CE3808B00A32BCF /* Alchemy Lab */,
-				114205B61CE3808B00A32BCF /* Alchemy LabTests */,
-				114205C11CE3808B00A32BCF /* Alchemy LabUITests */,
+				114205A51CE3808B00A32BCF /* AlchemyLab */,
+				114205B61CE3808B00A32BCF /* AlchemyLabTests */,
+				114205C11CE3808B00A32BCF /* AlchemyLabUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -252,6 +265,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				112AC55B1CE427190085BDA1 /* AddIngredientViewController.swift in Sources */,
+				114205D71CE381DA00A32BCF /* DataLoader.swift in Sources */,
+				118FB7F21CE54E5800DC4898 /* RecipeEditorViewController.swift in Sources */,
+				114205D51CE381AB00A32BCF /* DataTypes.swift in Sources */,
 				114205AC1CE3808B00A32BCF /* ViewController.swift in Sources */,
 				114205AA1CE3808B00A32BCF /* AppDelegate.swift in Sources */,
 			);
@@ -278,12 +295,12 @@
 /* Begin PBXTargetDependency section */
 		114205B91CE3808B00A32BCF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 114205A51CE3808B00A32BCF /* Alchemy Lab */;
+			target = 114205A51CE3808B00A32BCF /* AlchemyLab */;
 			targetProxy = 114205B81CE3808B00A32BCF /* PBXContainerItemProxy */;
 		};
 		114205C41CE3808B00A32BCF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 114205A51CE3808B00A32BCF /* Alchemy Lab */;
+			target = 114205A51CE3808B00A32BCF /* AlchemyLab */;
 			targetProxy = 114205C31CE3808B00A32BCF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -390,7 +407,7 @@
 				INFOPLIST_FILE = "Alchemy Lab/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Alchemy-Lab";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = AlchemyLab;
 			};
 			name = Debug;
 		};
@@ -402,7 +419,7 @@
 				INFOPLIST_FILE = "Alchemy Lab/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Alchemy-Lab";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = AlchemyLab;
 			};
 			name = Release;
 		};
@@ -414,8 +431,8 @@
 				INFOPLIST_FILE = "Alchemy LabTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Alchemy-LabTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Alchemy Lab.app/Contents/MacOS/Alchemy Lab";
+				PRODUCT_NAME = AlchemyLab;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AlchemyLab.app/Contents/MacOS/AlchemyLab";
 			};
 			name = Debug;
 		};
@@ -427,8 +444,8 @@
 				INFOPLIST_FILE = "Alchemy LabTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Alchemy-LabTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Alchemy Lab.app/Contents/MacOS/Alchemy Lab";
+				PRODUCT_NAME = AlchemyLab;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AlchemyLab.app/Contents/MacOS/AlchemyLab";
 			};
 			name = Release;
 		};
@@ -439,7 +456,7 @@
 				INFOPLIST_FILE = "Alchemy LabUITests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Alchemy-LabUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = AlchemyLab;
 				TEST_TARGET_NAME = "Alchemy Lab";
 			};
 			name = Debug;
@@ -451,7 +468,7 @@
 				INFOPLIST_FILE = "Alchemy LabUITests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Alchemy-LabUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = AlchemyLab;
 				TEST_TARGET_NAME = "Alchemy Lab";
 			};
 			name = Release;
@@ -459,7 +476,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		114205A11CE3808B00A32BCF /* Build configuration list for PBXProject "Alchemy Lab" */ = {
+		114205A11CE3808B00A32BCF /* Build configuration list for PBXProject "AlchemyLab" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				114205C91CE3808B00A32BCF /* Debug */,
@@ -468,29 +485,32 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		114205CB1CE3808B00A32BCF /* Build configuration list for PBXNativeTarget "Alchemy Lab" */ = {
+		114205CB1CE3808B00A32BCF /* Build configuration list for PBXNativeTarget "AlchemyLab" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				114205CC1CE3808B00A32BCF /* Debug */,
 				114205CD1CE3808B00A32BCF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
-		114205CE1CE3808B00A32BCF /* Build configuration list for PBXNativeTarget "Alchemy LabTests" */ = {
+		114205CE1CE3808B00A32BCF /* Build configuration list for PBXNativeTarget "AlchemyLabTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				114205CF1CE3808B00A32BCF /* Debug */,
 				114205D01CE3808B00A32BCF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
-		114205D11CE3808B00A32BCF /* Build configuration list for PBXNativeTarget "Alchemy LabUITests" */ = {
+		114205D11CE3808B00A32BCF /* Build configuration list for PBXNativeTarget "AlchemyLabUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				114205D21CE3808B00A32BCF /* Debug */,
 				114205D31CE3808B00A32BCF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

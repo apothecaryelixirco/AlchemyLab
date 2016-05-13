@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "114205A51CE3808B00A32BCF"
-               BuildableName = "Alchemy Lab.app"
-               BlueprintName = "Alchemy Lab"
-               ReferencedContainer = "container:Alchemy Lab.xcodeproj">
+               BuildableName = "AlchemyLab.app"
+               BlueprintName = "AlchemyLab"
+               ReferencedContainer = "container:AlchemyLab.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "114205B61CE3808B00A32BCF"
-               BuildableName = "Alchemy LabTests.xctest"
-               BlueprintName = "Alchemy LabTests"
-               ReferencedContainer = "container:Alchemy Lab.xcodeproj">
+               BuildableName = "AlchemyLab.xctest"
+               BlueprintName = "AlchemyLabTests"
+               ReferencedContainer = "container:AlchemyLab.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -43,9 +43,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "114205C11CE3808B00A32BCF"
-               BuildableName = "Alchemy LabUITests.xctest"
-               BlueprintName = "Alchemy LabUITests"
-               ReferencedContainer = "container:Alchemy Lab.xcodeproj">
+               BuildableName = "AlchemyLab.xctest"
+               BlueprintName = "AlchemyLabUITests"
+               ReferencedContainer = "container:AlchemyLab.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -53,9 +53,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "114205A51CE3808B00A32BCF"
-            BuildableName = "Alchemy Lab.app"
-            BlueprintName = "Alchemy Lab"
-            ReferencedContainer = "container:Alchemy Lab.xcodeproj">
+            BuildableName = "AlchemyLab.app"
+            BlueprintName = "AlchemyLab"
+            ReferencedContainer = "container:AlchemyLab.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -76,9 +76,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "114205A51CE3808B00A32BCF"
-            BuildableName = "Alchemy Lab.app"
-            BlueprintName = "Alchemy Lab"
-            ReferencedContainer = "container:Alchemy Lab.xcodeproj">
+            BuildableName = "AlchemyLab.app"
+            BlueprintName = "AlchemyLab"
+            ReferencedContainer = "container:AlchemyLab.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -95,9 +95,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "114205A51CE3808B00A32BCF"
-            BuildableName = "Alchemy Lab.app"
-            BlueprintName = "Alchemy Lab"
-            ReferencedContainer = "container:Alchemy Lab.xcodeproj">
+            BuildableName = "AlchemyLab.app"
+            BlueprintName = "AlchemyLab"
+            ReferencedContainer = "container:AlchemyLab.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
