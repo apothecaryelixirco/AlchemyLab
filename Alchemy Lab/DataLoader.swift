@@ -37,36 +37,6 @@ func LoadDefaultRecipe(ingredientLibrary : [Ingredient]) -> [Recipe]
     ingredients.removeAtIndex(1);
     ingredients.removeAtIndex(4);
     let nanaberry : Recipe = Recipe();
-    var recipeIngredients = [RecipeIngredient]();
-    for i in ingredients
-    {
-        let r : RecipeIngredient = RecipeIngredient();
-        r.RecipeIngredient = i;
-        if (i.Type.uppercaseString == "VG")
-        {
-            r.Percentage = 70;
-            r.Sequence = 0;
-            r.Temperature = -1;
-            r.TempScale = "C";
-        }
-        if (i.Type.uppercaseString == "PG")
-        {
-            r.Percentage = 30;
-            r.Sequence = 1;
-            r.Temperature = -1;
-            r.TempScale = "C";
-        }
-        if (i.Type.uppercaseString == "FLAVOR")
-        {
-            print("setting percentage to 5");
-            r.Percentage = 5;
-            r.Sequence = 2;
-            r.Temperature = -1
-            r.TempScale = "C";
-        }
-        recipeIngredients.append(r);
-    }
-    nanaberry.RecipeIngredients = recipeIngredients;
     nanaberry.RecipeAuthor = "Randy Williams";
     nanaberry.RecipeCategory = "Fruits";
     nanaberry.RecipeDate = NSDate();

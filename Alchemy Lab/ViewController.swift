@@ -9,7 +9,7 @@
 import Cocoa
 
 
-class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDelegate, AddRecipeIngredientDelegate, RecipeEditorDelegate, IngredientLibraryEditorDelegate  {
+class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDelegate, AddRecipeIngredientDelegate, RecipeEditorDelegate, IngredientLibraryEditorDelegate, NSXMLParserDelegate, NSWindowDelegate  {
 
     
     var PGRatio : Int = 0;
@@ -360,8 +360,9 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
     func RemoveSelectedRecipeIngredient()
     {
         print("removing selected recipe ingredient..");
-        let ingredientToRemove = currentRecipe.RecipeIngredients[outletRecipeTableView.selectedRow];
-        print("removing " + ingredientToRemove.RecipeIngredient.Name);
+       // let ingredientToRemove = currentRecipe.RecipeIngredients[outletRecipeTableView.selectedRow];
+        
+        //print("removing " + ingredientToRemove.RecipeIngredient.Name);
         let selectIndex = outletRecipeTableView.selectedRow;
         currentRecipe.RecipeIngredients.removeAtIndex(outletRecipeTableView.selectedRow);
 //        outletRecipeTableView.reloadData();
@@ -384,6 +385,8 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         UpdateUIControls();
         UpdateMixLabView();
     }
+    
+    
     
     @IBAction func outletUpdateVGRatioTextField(sender: NSTextField) {
         let string = outletVGRatioTextField.stringValue;
@@ -519,7 +522,8 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         ViewController.sharedInstance = self;
         print("reloading recipe list on the left...");
         outletRecipeTableView.reloadData();
-        
+        print("now attempting to run XML parser...");
+        LoadIngredientsFromXML();
         
         //TODO: Long term implement drag and drop...?
         //TODO: 
@@ -533,6 +537,11 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         // Do any additional setup after loading the view.
     }
     
+    override func viewDidAppear() {
+        self.view.window?.delegate = self;
+        super.viewDidAppear();
+    }
+
     func UpdateUIControls()
     {
         //outletPGRatioSlider.integerValue = PGRatio;
@@ -553,22 +562,23 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         // go through the current recipe and read it all up to display!
         for ingredient in recipe.RecipeIngredients
         {
+            let ingredientFromLibrary = getIngredientByUUID(ingredient.RecipeIngredientID, ingredientLibrary: ingredientLibrary)
             let rlDisplay = RecipeDisplay();
-            rlDisplay.Base = ingredient.RecipeIngredient.Base;
-            rlDisplay.Ingredient = ingredient.RecipeIngredient.Name;
+            rlDisplay.Base = (ingredientFromLibrary?.Base)!;
+            rlDisplay.Ingredient = (ingredientFromLibrary?.Name)!;
             rlDisplay.Percentage = String(format:"%2.2f%%",ingredient.Percentage);
-            if (ingredient.RecipeIngredient.Type.uppercaseString != "FLAVOR")
+            if (ingredientFromLibrary!.Type.uppercaseString != "FLAVOR")
             {
                 rlDisplay.Percentage = "n/a";
             }
-            rlDisplay.Strength = String(format:"%.2fmg/ml",ingredient.RecipeIngredient.Strength);
-            if (ingredient.RecipeIngredient.Type.uppercaseString != "NICOTINE")
+            rlDisplay.Strength = String(format:"%.2fmg/ml",(ingredientFromLibrary?.Strength)!);
+            if (ingredientFromLibrary!.Type.uppercaseString != "NICOTINE")
             {
                 rlDisplay.Strength = "n/a";
             }
-            rlDisplay.Type = ingredient.RecipeIngredient.Type;
+            rlDisplay.Type = ingredientFromLibrary!.Type;
             rlDisplay.backgroundIngredient = ingredient;
-            rlDisplay.backgroundStrength = ingredient.RecipeIngredient.Strength;
+            rlDisplay.backgroundStrength = ingredientFromLibrary!.Strength;
             rlDisplay.backgroundPercentage = ingredient.Percentage;
             recipeDisplay.append(rlDisplay);
         }
@@ -585,8 +595,6 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         mixLab.removeAll();
         // need to loop through the currently Displayed Recipe and do all of our math based on that. NOT the currentRecipe because that may not have been updated for some reason.
         // first let's determine how much juice we're making.
-        PGRatio = currentRecipe.PGRatio;
-        VGRatio = currentRecipe.VGRatio;
         
         var nicSolutionNeeded : Double = 0.00;
         var totalVGNeeded : Double = (Double(amountOfJuice)-(Double(amountOfJuice) * (Double(PGRatio) / 100)));
@@ -595,107 +603,143 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         var PGWeight : Double = 0.0;
         var VGWeight : Double = 0.0;
         var nicBase : String = "";
-        
-        for vg in recipeDisplay where vg.backgroundIngredient.RecipeIngredient.Type.uppercaseString == "VG"
+        for vg in recipeDisplay
         {
-            VGWeight = vg.backgroundIngredient.RecipeIngredient.Gravity;
+            let ingredientFromLibrary = getIngredientByUUID(vg.backgroundIngredient.RecipeIngredientID, ingredientLibrary: ingredientLibrary);
+            if (ingredientFromLibrary?.Type.uppercaseString == "VG")
+            {
+                VGWeight = (ingredientFromLibrary?.Gravity)!;
+                break;
+            }
         }
-        for pg in recipeDisplay where pg.backgroundIngredient.RecipeIngredient.Type.uppercaseString == "PG"
+        for pg in recipeDisplay
         {
-            PGWeight = pg.backgroundIngredient.RecipeIngredient.Gravity;
+            let ingredientFromLibrary = getIngredientByUUID(pg.backgroundIngredient.RecipeIngredientID, ingredientLibrary: ingredientLibrary);
+            if (ingredientFromLibrary?.Type.uppercaseString == "PG")
+            {
+                PGWeight = (ingredientFromLibrary?.Gravity)!;
+                break;
+            }
         }
-        // now we know how much PG/VG weighs for our specific recipe.
-        
-        // determine how much nicotine solution we need first.
-        for nicotine in recipeDisplay where nicotine.backgroundIngredient.RecipeIngredient.Type.uppercaseString == "NICOTINE"
+        var nicotineIngredientId = "";
+        var nicotineDisplayString = "";
+        for nicotine in recipeDisplay
         {
+            let ingredientFromLibrary = getIngredientByUUID(nicotine.backgroundIngredient.RecipeIngredientID, ingredientLibrary: ingredientLibrary);
+            if (ingredientFromLibrary?.Type.uppercaseString == "NICOTINE")
+            {
+                nicotineIngredientId = nicotine.backgroundIngredient.RecipeIngredientID;
+                nicotineDisplayString = nicotine.Ingredient;
+                break;
+            }
+        }
+        if (nicotineIngredientId != "")
+        {
+            print("determining how much nicotine solution we need...");
             // find our nicotine and determine how much nic we need for our solution..
+            let nicotine = getIngredientByUUID(nicotineIngredientId, ingredientLibrary: ingredientLibrary)
             var baseWeight : Double = 0.0;
-            var nicBaseWeight = Double(desiredNicStrength) * nicotine.backgroundIngredient.RecipeIngredient.Gravity;
-            if (nicotine.backgroundIngredient.RecipeIngredient.Base.uppercaseString == "PG")
+            var nicBaseWeight = Double(desiredNicStrength) * nicotine!.Gravity;
+            if (nicotine!.Base.uppercaseString == "PG")
             {
                 baseWeight = PGWeight;
                 nicBase = "PG";
             }
-            if (nicotine.backgroundIngredient.RecipeIngredient.Base.uppercaseString == "VG")
+            if (nicotine!.Base.uppercaseString == "VG")
             {
                 baseWeight = VGWeight;
                 nicBase = "VG";
             }
-            let nicStrength : Double = nicotine.backgroundIngredient.RecipeIngredient.Strength / 10;
+            let nicStrength : Double = nicotine!.Strength / 10;
             nicBaseWeight += Double((100-nicStrength)) * baseWeight;
             nicBaseWeight = nicBaseWeight / 100;
             nicSolutionNeeded = (Double(desiredNicStrength) * Double(amountOfJuice)) / 100;
             // at this point we know all about our nicotine so we should be able to add it to the mixlab display.
             let mlDisplay = mixLabDisplay();
-            mlDisplay.Ingredient = nicotine.Ingredient;
+            mlDisplay.Ingredient = nicotineDisplayString;
             mlDisplay.Volume = String(format:"%.2fml",nicSolutionNeeded);
             mlDisplay.backgroundVolume = nicSolutionNeeded;
             mlDisplay.Weight = String(format:"%.2fg",nicBaseWeight);
             mlDisplay.backgroundWeight = nicBaseWeight;
-            mlDisplay.backgroundCost = (nicSolutionNeeded * nicotine.backgroundIngredient.RecipeIngredient.Cost);
-            mlDisplay.Cost = String(format:"$%2.2f",(nicSolutionNeeded * nicotine.backgroundIngredient.RecipeIngredient.Cost));
-            mixLab.append(mlDisplay);
-        }
-        
-        // Nicotine has been sorted out.  Now we need to sort out how much of our flavorings we need.
-        for flavor in recipeDisplay where flavor.backgroundIngredient.RecipeIngredient.Type.uppercaseString == "FLAVOR"
-        {
-            let mlDisplay = mixLabDisplay();
-            // first determine how much of this flavor we need..
-            let volumeOfFlavorNeeded = (flavor.backgroundPercentage * Double(amountOfJuice)) / 100;
-            if (flavor.Base.uppercaseString == "PG")
-            {
-                totalPGNeeded -= volumeOfFlavorNeeded;
-            }
-            if (flavor.Base.uppercaseString == "VG")
-            {
-                totalVGNeeded -= volumeOfFlavorNeeded;
-            }
-            mlDisplay.Ingredient = flavor.Ingredient;
-            mlDisplay.backgroundWeight = (volumeOfFlavorNeeded * flavor.backgroundIngredient.RecipeIngredient.Gravity);
-            mlDisplay.backgroundVolume = volumeOfFlavorNeeded;
-            mlDisplay.Volume = String(format:"%.2fml",mlDisplay.backgroundVolume);
-            mlDisplay.Weight = String(format:"%.2fg",mlDisplay.backgroundWeight);
-            mlDisplay.backgroundCost = flavor.backgroundIngredient.RecipeIngredient.Cost;
+            mlDisplay.backgroundCost = (nicSolutionNeeded * nicotine!.Cost);
             mlDisplay.Cost = String(format:"$%2.2f",mlDisplay.backgroundCost);
             mixLab.append(mlDisplay);
+
+        }
+        
+        // determine how much nicotine solution we need first.
+        
+        // Nicotine has been sorted out.  Now we need to sort out how much of our flavorings we need.
+        for flavor in recipeDisplay
+        {
+            let flavorIngredient = getIngredientByUUID(flavor.backgroundIngredient.RecipeIngredientID, ingredientLibrary: ingredientLibrary);
+            if (flavorIngredient!.Type.uppercaseString == "FLAVOR")
+            {
+                let mlDisplay = mixLabDisplay();
+                // first determine how much of this flavor we need..
+                let volumeOfFlavorNeeded = (flavor.backgroundPercentage * Double(amountOfJuice)) / 100;
+                if (flavor.Base.uppercaseString == "PG")
+                {
+                    totalPGNeeded -= volumeOfFlavorNeeded;
+                }
+                if (flavor.Base.uppercaseString == "VG")
+                {
+                    totalVGNeeded -= volumeOfFlavorNeeded;
+                }
+                mlDisplay.Ingredient = flavor.Ingredient;
+                mlDisplay.backgroundWeight = (volumeOfFlavorNeeded * flavorIngredient!.Gravity);
+                mlDisplay.backgroundVolume = volumeOfFlavorNeeded;
+                mlDisplay.Volume = String(format:"%.2fml",mlDisplay.backgroundVolume);
+                mlDisplay.Weight = String(format:"%.2fg",mlDisplay.backgroundWeight);
+                mlDisplay.backgroundCost = flavorIngredient!.Cost;
+                mlDisplay.Cost = String(format:"$%2.2f",mlDisplay.backgroundCost);
+                mixLab.append(mlDisplay);
+            }
         }
         
         
         // now we need to determine our VG/PG amounts.
-        for vg in recipeDisplay where vg.backgroundIngredient.RecipeIngredient.Type.uppercaseString == "VG"
+        for vg in recipeDisplay
         {
-            if (nicBase == "VG")
+            let vgIngredient = getIngredientByUUID(vg.backgroundIngredient.RecipeIngredientID, ingredientLibrary: ingredientLibrary);
+            if (vgIngredient!.Type.uppercaseString == "VG")
             {
-                totalVGNeeded -= nicSolutionNeeded;
+                if (nicBase == "VG")
+                {
+                    totalVGNeeded -= nicSolutionNeeded;
+                }
+                let mlDisplay = mixLabDisplay();
+                mlDisplay.Ingredient = vg.Ingredient;
+                mlDisplay.backgroundVolume = totalVGNeeded;
+                mlDisplay.backgroundWeight = (mlDisplay.backgroundVolume * vgIngredient!.Gravity);
+                mlDisplay.Volume = String(format:"%.2fml",mlDisplay.backgroundVolume);
+                mlDisplay.Weight = String(format:"%.2fg",mlDisplay.backgroundWeight);
+                mlDisplay.backgroundCost = (mlDisplay.backgroundVolume * vgIngredient!.Cost);
+                mlDisplay.Cost = String(format:"$%2.2f",mlDisplay.backgroundCost);
+                mixLab.append(mlDisplay);
             }
-            let mlDisplay = mixLabDisplay();
-            mlDisplay.Ingredient = vg.Ingredient;
-            mlDisplay.backgroundVolume = totalVGNeeded;
-            mlDisplay.backgroundWeight = (mlDisplay.backgroundVolume * vg.backgroundIngredient.RecipeIngredient.Gravity);
-            mlDisplay.Volume = String(format:"%.2fml",mlDisplay.backgroundVolume);
-            mlDisplay.Weight = String(format:"%.2fg",mlDisplay.backgroundWeight);
-            mlDisplay.backgroundCost = (mlDisplay.backgroundVolume * vg.backgroundIngredient.RecipeIngredient.Cost);
-            mlDisplay.Cost = String(format:"$%2.2f",mlDisplay.backgroundCost);
-            mixLab.append(mlDisplay);
         }
-
-        for pg in recipeDisplay where pg.backgroundIngredient.RecipeIngredient.Type.uppercaseString == "PG"
+        
+        for pg in recipeDisplay
         {
-            if (nicBase == "PG")
+            let pgIngredient = getIngredientByUUID(pg.backgroundIngredient.RecipeIngredientID, ingredientLibrary: ingredientLibrary);
+            if (pgIngredient!.Type.uppercaseString == "PG")
             {
-                totalPGNeeded -= nicSolutionNeeded;
+                if (nicBase == "PG")
+                {
+                    totalPGNeeded -= nicSolutionNeeded;
+                }
+                let mlDisplay = mixLabDisplay();
+                mlDisplay.Ingredient = pg.Ingredient;
+                mlDisplay.backgroundVolume = totalPGNeeded;
+                mlDisplay.backgroundWeight = (mlDisplay.backgroundVolume * pgIngredient!.Gravity);
+                mlDisplay.Volume = String(format:"%.2fml",mlDisplay.backgroundVolume);
+                mlDisplay.Weight = String(format:"%.2fg",mlDisplay.backgroundWeight);
+                mlDisplay.backgroundCost = (mlDisplay.backgroundVolume * pgIngredient!.Cost);
+                mlDisplay.Cost = String(format:"$%2.2f",mlDisplay.backgroundCost);
+                mixLab.append(mlDisplay);
             }
-            let mlDisplay = mixLabDisplay();
-            mlDisplay.Ingredient = pg.Ingredient;
-            mlDisplay.backgroundVolume = totalPGNeeded;
-            mlDisplay.backgroundWeight = (mlDisplay.backgroundVolume * pg.backgroundIngredient.RecipeIngredient.Gravity);
-            mlDisplay.Volume = String(format:"%.2fml",mlDisplay.backgroundVolume);
-            mlDisplay.Weight = String(format:"%.2fg",mlDisplay.backgroundWeight);
-            mlDisplay.backgroundCost = (mlDisplay.backgroundVolume * pg.backgroundIngredient.RecipeIngredient.Cost);
-            mlDisplay.Cost = String(format:"$%2.2f",mlDisplay.backgroundCost);
-            mixLab.append(mlDisplay);
+            
         }
 
         for ingredient in recipeDisplay
@@ -755,9 +799,17 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             let recipe = object as! Recipe;
             print("Need to update the recipe and mixlab view for " + recipe.RecipeName);
             currentRecipe = recipe;
+            if (currentRecipe.PGRatio + currentRecipe.VGRatio != 100)
+            {
+                // TODO: Remove when supporting Max VG.
+                PGRatio=30;
+                VGRatio=70;
+                currentRecipe.PGRatio = 30;
+                currentRecipe.VGRatio = 70;
+            }
+            UpdateUIControls();
             UpdateRecipeView();
             UpdateMixLabView();
-            UpdateUIControls();
         }
         
         // here's where we need to set up the new recipe/mixLab
@@ -831,6 +883,137 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         return nil;
     }
     
+    /* XML Parsing Functionality */
+    
+    /*
+ <IngredientLibrary>
+	<IngredientLibraryIngredient ID="" Name="FW Menthol" Manufacturer="Flavor West" Type="FLAVOR" Base="PG" Gravity="1.03" Cost="0.23" Strength="0.0" Notes="These are my notes about this flavor"/>
+*/
+    var ingredientLibraryParser = NSXMLParser();
+    var ingredientLibraryFromXML = [Ingredient]();
+    var ingredientFromXML = Ingredient();
+    var hadToAddIDs : Bool = false;
+    
+    func parserDidStartDocument(parser: NSXMLParser) {
+        if (parser == ingredientLibraryParser)
+        {
+            ingredientLibraryFromXML = [Ingredient]();
+            print("parsing ingredient library XML");
+        }
+    }
+    //func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
+    
+    func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
+        if (parser == ingredientLibraryParser && elementName == "IngredientLibraryIngredient")
+        {
+            print ("found an ingredient!");
+            ingredientFromXML = Ingredient();
+            ingredientFromXML.ID = attributeDict["ID"]!;
+            ingredientFromXML.Name = attributeDict["Name"]!;
+            ingredientFromXML.Manufacturer = attributeDict["Manufacturer"]!;
+            ingredientFromXML.Type = attributeDict["Type"]!;
+            ingredientFromXML.Base = attributeDict["Base"]!;
+            ingredientFromXML.Gravity = Double(attributeDict["Gravity"]!)!;
+            ingredientFromXML.Cost = Double(attributeDict["Cost"]!)!;
+            ingredientFromXML.Strength = Double(attributeDict["Strength"]!)!;
+            ingredientFromXML.Notes = attributeDict["Notes"]!;
+            print("finished up ingredient.");
+            if ingredientFromXML.ID == ""
+            {
+                ingredientFromXML.ID = NSUUID().UUIDString;
+                hadToAddIDs = true;
+            }
+            print("found ingredient library ingredient.  yay us!");
+            ingredientLibraryFromXML.append(ingredientFromXML);
+        }
+    }
+    
+    
+    func WriteIngredientLibraryToFile()
+    {
+        let xmlRoot = NSXMLElement(name: "IngredientLibrary");
+        let xmlDoc = NSXMLDocument(rootElement: xmlRoot);
+        for ing in ingredientLibrary
+        {
+            let ingredientElement = NSXMLElement(name: "IngredientLibraryIngredient");
+            xmlRoot.addChild(ingredientElement);
+            let IDAttribute = NSXMLNode.attributeWithName("ID", stringValue: ing.ID) as! NSXMLNode;
+            let NameAttribute = NSXMLNode.attributeWithName("Name", stringValue: ing.Name) as! NSXMLNode;
+            let ManufacturerAttribute = NSXMLNode.attributeWithName("Manufacturer", stringValue: ing.Manufacturer) as! NSXMLNode;
+            let TypeAttribute = NSXMLNode.attributeWithName("Type", stringValue: ing.Type) as! NSXMLNode;
+            let BaseAttribute = NSXMLNode.attributeWithName("Base", stringValue: ing.Base) as! NSXMLNode;
+            let GravityAttribute = NSXMLNode.attributeWithName("Gravity", stringValue: String(ing.Gravity)) as! NSXMLNode;
+            let CostAttribute = NSXMLNode.attributeWithName("Cost", stringValue: String(ing.Cost)) as! NSXMLNode;
+            let StrengthAttribute = NSXMLNode.attributeWithName("Strength", stringValue: String(ing.Strength)) as! NSXMLNode;
+            let NotesAttribute = NSXMLNode.attributeWithName("Notes", stringValue: ing.Name) as! NSXMLNode;
+            ingredientElement.addAttribute(IDAttribute);
+            ingredientElement.addAttribute(NameAttribute);
+            ingredientElement.addAttribute(ManufacturerAttribute);
+            ingredientElement.addAttribute(TypeAttribute);
+            ingredientElement.addAttribute(BaseAttribute);
+            ingredientElement.addAttribute(GravityAttribute);
+            ingredientElement.addAttribute(CostAttribute);
+            ingredientElement.addAttribute(StrengthAttribute);
+            ingredientElement.addAttribute(NotesAttribute);
+        }
+        print("XML Data for Ingredients that we need to add:");
+        let path = NSBundle.mainBundle().pathForResource("IngredientLibrary", ofType: "xml");
+        if (path != nil)
+        {
+            do
+            {
+                try xmlDoc.XMLData.writeToFile(path!, options: NSDataWritingOptions.DataWritingAtomic)
+                //try xmlDoc.XMLString.writeToFile(path!, atomically: false, encoding: NSUTF8StringEncoding);
+                print("wrote XML file!");
+            }
+            catch
+            {
+                print("error writing file.");
+            }
+        }
+        print("finished XML work...");
+    }
+    
+    func parserDidEndDocument(parser: NSXMLParser) {
+        if (parser == ingredientLibraryParser)
+        {
+            print("finished parsing ingredient XML file");
+            print(ingredientLibraryFromXML.count);
+            print("ingredients in the dictionary.");
+            ingredientLibrary = ingredientLibraryFromXML;
+            outletIngredientLibraryTableView.reloadData();
+            if (hadToAddIDs)
+            {
+                print("we need to write the XML file back out now -- we had to add IDs");
+                WriteIngredientLibraryToFile();
+                print("wrote XML!");
+            }
+        }
+    }
+    
+    func LoadIngredientsFromXML()
+    {
+        //        parser = NSXMLParser(contentsOfURL: NSURL(fileURLWithPath: path!))
+        //     let path = NSBundle.mainBundle().pathForResource("MyFile", ofType: "xml")
+        let path = NSBundle.mainBundle().pathForResource("IngredientLibrary", ofType: "xml");
+        if path != nil
+        {
+            ingredientLibraryParser = NSXMLParser(contentsOfURL: NSURL(fileURLWithPath: path!))!;
+            print("loaded file...");
+            ingredientLibraryParser.delegate = self;
+            ingredientLibraryParser.parse();
+        }
+    }
+    
+    
+    func windowShouldClose(sender: AnyObject) -> Bool {
+        print ("window closing, save XML!");
+        WriteIngredientLibraryToFile();
+        print("wrote XML...");
+        return true;
+    }
+
+    /* End XML Parsing Functionality */
     
     /* Drag and Drop Functionality */
     /*

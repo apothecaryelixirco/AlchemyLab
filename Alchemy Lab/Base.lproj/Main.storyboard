@@ -1028,7 +1028,6 @@
                         <outlet property="recipeIngredientNotes" destination="V6a-zw-vPU" id="7TF-PM-9KC"/>
                         <outlet property="tempSegmentOutlet" destination="lAo-gr-e44" id="uVz-Kp-jfp"/>
                         <outlet property="temperatureLabel" destination="ATl-1h-WGf" id="NTf-tp-2Wy"/>
-                        <segue destination="XfG-lQ-9wD" kind="sheet" id="xIt-v9-Mxm"/>
                     </connections>
                 </viewController>
                 <customObject id="e8j-wX-9rk" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -1410,7 +1409,7 @@
                                                             <rect key="frame" x="1" y="1" width="0.0" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
-                                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="hB2-9w-uhp">
+                                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hB2-9w-uhp">
                                                                     <rect key="frame" x="0.0" y="0.0" width="63" height="17"/>
                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="yyw-58-09Y">
                                                                         <font key="font" metaFont="system"/>
@@ -1589,7 +1588,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" headerView="nQl-bf-Ryc" viewBased="YES" id="XaZ-sU-ZqP">
-                                            <rect key="frame" x="0.0" y="0.0" width="599" height="178"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="599" height="0.0"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1841,7 +1840,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <outlineView verticalHuggingPriority="750" tag="1" allowsExpansionToolTips="YES" selectionHighlightStyle="sourceList" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" indentationPerLevel="16" outlineTableColumn="TV0-uh-v1b" id="YeG-TW-ZUb">
-                                            <rect key="frame" x="0.0" y="0.0" width="189" height="578"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="189" height="0.0"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -1894,7 +1893,7 @@
                                                                     </constraints>
                                                                     <imageCell key="cell" refusesFirstResponder="YES" imageScaling="proportionallyDown" image="NSActionTemplate" id="U8F-Su-Xvv"/>
                                                                 </imageView>
-                                                                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UBd-cz-4jf">
+                                                                <textField verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UBd-cz-4jf">
                                                                     <rect key="frame" x="25" y="0.0" width="118" height="17"/>
                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="am4-xg-peA">
                                                                         <font key="font" metaFont="system"/>
@@ -2061,7 +2060,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" headerView="G7K-e8-p0J" viewBased="YES" id="uEE-GU-4Do">
-                                            <rect key="frame" x="0.0" y="0.0" width="191" height="342"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="191" height="0.0"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -2084,7 +2083,7 @@
                                                             <rect key="frame" x="1" y="1" width="188" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
-                                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Fv8-DC-ym9">
+                                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Fv8-DC-ym9">
                                                                     <rect key="frame" x="0.0" y="0.0" width="100" height="17"/>
                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="3Ke-HZ-zlI">
                                                                         <font key="font" metaFont="system"/>
@@ -2100,7 +2099,10 @@
                                                                 <constraint firstItem="Fv8-DC-ym9" firstAttribute="leading" secondItem="xjN-vi-edV" secondAttribute="leading" constant="7" id="0eD-xu-Ml4"/>
                                                                 <constraint firstAttribute="trailing" secondItem="Fv8-DC-ym9" secondAttribute="trailing" constant="90" id="3jV-u9-lIp"/>
                                                                 <constraint firstItem="Fv8-DC-ym9" firstAttribute="leading" secondItem="xjN-vi-edV" secondAttribute="leading" constant="2" id="9ex-n6-R6m"/>
+                                                                <constraint firstAttribute="trailing" secondItem="Fv8-DC-ym9" secondAttribute="trailing" constant="3" id="Bwm-gV-Fzo"/>
+                                                                <constraint firstItem="Fv8-DC-ym9" firstAttribute="centerY" secondItem="xjN-vi-edV" secondAttribute="centerY" id="Czf-T5-fsb"/>
                                                                 <constraint firstItem="Fv8-DC-ym9" firstAttribute="centerY" secondItem="xjN-vi-edV" secondAttribute="centerY" id="Eua-by-3ph"/>
+                                                                <constraint firstItem="Fv8-DC-ym9" firstAttribute="leading" secondItem="xjN-vi-edV" secondAttribute="leading" constant="7" id="FCC-Uf-BdB"/>
                                                                 <constraint firstItem="Fv8-DC-ym9" firstAttribute="leading" secondItem="xjN-vi-edV" secondAttribute="leading" constant="3" id="dfR-Kx-ile"/>
                                                                 <constraint firstItem="Fv8-DC-ym9" firstAttribute="centerY" secondItem="xjN-vi-edV" secondAttribute="centerY" id="zlL-Dy-VOJ"/>
                                                             </constraints>
@@ -2303,7 +2305,4 @@
         <image name="NSAddTemplate" width="11" height="11"/>
         <image name="NSRemoveTemplate" width="11" height="11"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="xIt-v9-Mxm"/>
-    </inferredMetricsTieBreakers>
 </document>

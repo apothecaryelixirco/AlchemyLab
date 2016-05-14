@@ -1,0 +1,23 @@
+<IngredientLibrary>
+    <IngredientLibraryIngredient ID="" Name="FW Menthol" Manufacturer="Flavor West" Type="FLAVOR" Base="PG" Gravity="1.03" Cost="0.23" Strength="0.0" Notes="These are my notes about this flavor"/>
+    <IngredientLibraryIngredient ID="" Name="Cap Strawberry" Manufacturer="Capella" Type="FLAVOR" Base="PG" Gravity="1.03" Cost="0.23" Strength="0.0" Notes="These are my notes about this flavor"/>
+    <IngredientLibraryIngredient ID="" Name="TFA Koolada 10% PG" Manufacturer="The Flavor Apprentice" Type="FLAVOR" Base="PG" Gravity="1.03" Cost="0.23" Strength="0.0" Notes="These are my notes about this flavor"/>
+    <IngredientLibraryIngredient ID="" Name="TFA Vanilla Swirl" Manufacturer="The Flavor Apprentice" Type="FLAVOR" Base="PG" Gravity="1.03" Cost="0.23" Strength="0.0" Notes="These are my notes about this flavor"/>
+    <IngredientLibraryIngredient ID="" Name="TFA Watermelon" Manufacturer="The Flavor Apprentice" Type="FLAVOR" Base="PG" Gravity="1.03" Cost="0.23" Strength="0.0" Notes="These are my notes about this flavor"/>
+    <IngredientLibraryIngredient ID="" Name="TFA Strawberry Ripe" Manufacturer="The Flavor Apprentice" Type="FLAVOR" Base="PG" Gravity="1.03" Cost="0.23" Strength="0.0" Notes="These are my notes about this flavor"/>
+    <IngredientLibraryIngredient ID="" Name="TFA Kentucky Bourbon" Manufacturer="The Flavor Apprentice" Type="FLAVOR" Base="PG" Gravity="1.03" Cost="0.23" Strength="0.0" Notes="These are my notes about this flavor"/>
+    <IngredientLibraryIngredient ID="" Name="TFA Blueberry Wild" Manufacturer="The Flavor Apprentice" Type="FLAVOR" Base="PG" Gravity="1.03" Cost="0.23" Strength="0.0" Notes="These are my notes about this flavor"/>
+    <IngredientLibraryIngredient ID="" Name="TFA Kiwi (Double)" Manufacturer="The Flavor Apprentice" Type="FLAVOR" Base="PG" Gravity="1.03" Cost="0.23" Strength="0.0" Notes="These are my notes about this flavor"/>
+    <IngredientLibraryIngredient ID="" Name="TFA Raspberry Sweet" Manufacturer="The Flavor Apprentice" Type="FLAVOR" Base="PG" Gravity="1.03" Cost="0.23" Strength="0.0" Notes="These are my notes about this flavor"/>
+    <IngredientLibraryIngredient ID="" Name="TFA Dragonfruit" Manufacturer="The Flavor Apprentice" Type="FLAVOR" Base="PG" Gravity="1.03" Cost="0.23" Strength="0.0" Notes="These are my notes about this flavor"/>
+    <IngredientLibraryIngredient ID="" Name="TFA French Vanilla" Manufacturer="The Flavor Apprentice" Type="FLAVOR" Base="PG" Gravity="1.03" Cost="0.23" Strength="0.0" Notes="These are my notes about this flavor"/>
+    <IngredientLibraryIngredient ID="" Name="TFA Strawberry" Manufacturer="The Flavor Apprentice" Type="FLAVOR" Base="PG" Gravity="1.03" Cost="0.23" Strength="0.0" Notes="These are my notes about this flavor"/>
+    <IngredientLibraryIngredient ID="" Name="FW Extreme Ice" Manufacturer="Flavor West" Type="FLAVOR" Base="PG" Gravity="1.03" Cost="0.23" Strength="0.0" Notes="These are my notes about this flavor"/>
+    <IngredientLibraryIngredient ID="" Name="INW Mix Mint" Manufacturer="Inawera" Type="FLAVOR" Base="PG" Gravity="1.03" Cost="0.23" Strength="0.0" Notes="These are my notes about this flavor"/>
+    <IngredientLibraryIngredient ID="" Name="FA Fresh Cream" Manufacturer="FlavourArt" Type="FLAVOR" Base="PG" Gravity="1.03" Cost="0.23" Strength="0.0" Notes="These are my notes about this flavor"/>
+    <IngredientLibraryIngredient ID="" Name="FA Fuji" Manufacturer="FlavourArt" Type="FLAVOR" Base="PG" Gravity="1.03" Cost="0.23" Strength="0.0" Notes="These are my notes about this flavor"/>
+    <IngredientLibraryIngredient ID="" Name="TFA Vanilla Bean Gelato" Manufacturer="The Flavor Apprentice" Type="FLAVOR" Base="PG" Gravity="1.03" Cost="0.23" Strength="0.0" Notes="These are my notes about this flavor"/>
+    <IngredientLibraryIngredient ID="" Name="TFA Watermelon Candy" Manufacturer="The Flavor Apprentice" Type="FLAVOR" Base="PG" Gravity="1.03" Cost="0.23" Strength="0.0" Notes="These are my notes about this flavor"/>
+    <IngredientLibraryIngredient ID="" Name="TFA Quince" Manufacturer="The Flavor Apprentice" Type="FLAVOR" Base="PG" Gravity="1.03" Cost="0.23" Strength="0.0" Notes="These are my notes about this flavor"/>
+    <IngredientLibraryIngredient ID="" Name="LA Banana Cream" Manufacturer="LorAnn" Type="FLAVOR" Base="PG" Gravity="1.03" Cost="0.23" Strength="0.0" Notes="These are my notes about this flavor"/>
+</IngredientLibrary>

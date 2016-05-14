@@ -59,7 +59,8 @@ class mixLabDisplay : NSObject
 
 class RecipeIngredient : NSObject
 {
-    var RecipeIngredient : Ingredient = Ingredient();
+    var RecipeIngredientID : String = "";
+//    var RecipeIngredient : Ingredient = Ingredient();
     var Percentage : Double = 0.00;
     var Temperature : Double = 0.00;
     var TempScale : String = "";

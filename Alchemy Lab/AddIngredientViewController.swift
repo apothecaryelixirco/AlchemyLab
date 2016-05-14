@@ -72,21 +72,16 @@ class AddIngredientViewController: NSViewController {
             }
             //temperatureSlider.doubleValue = Double(ingredientToEdit.Temperature);
             percentageInputTextOutlet.doubleValue = ingredientToEdit.Percentage;
-            print("ingredient we're editing: " + ingredientToEdit.RecipeIngredient.Name);
+            let recipeIngredient = getIngredientByUUID(ingredientToEdit.RecipeIngredientID, ingredientLibrary: ingredientLibrary)
+            print("ingredient we're editing: " + recipeIngredient!.Name);
             // need to find the right ingredient in our library..
-            print("Looking for ID " + ingredientToEdit.RecipeIngredient.ID);
-            var indexOfIngredient : Int = 0;
-            for i in ingredientLibrary
-            {
-               // print ("Ingredient:" + i.Name + " (" + i.ID + ")");
-                if i.ID == ingredientToEdit.RecipeIngredient.ID
-                {
-                    indexOfIngredient = ingredientLibrary.indexOf(i)!;
-                    break;
-                }
-            }
+            print("Looking for ID " + recipeIngredient!.ID);
+            let indexOfIngredient = getIngredientIndexInLibraryByUUID((recipeIngredient?.ID)!,ingredientLibrary: ingredientLibrary);
             print("index is " + String(indexOfIngredient));
-            IngredientPopup.selectItemAtIndex(indexOfIngredient)
+            if (indexOfIngredient != -1)
+            {
+                IngredientPopup.selectItemAtIndex(indexOfIngredient)
+            }
         }
     }
     
@@ -99,6 +94,7 @@ class AddIngredientViewController: NSViewController {
 
     @IBOutlet weak var outletStatusLabel: NSTextField!
     @IBAction func saveCancelSegmentAction(sender: NSSegmentedControl) {
+        print ("attempting to save ingredient!");
             if (sender.selectedSegment == 0)
             {
                 print ("we should be saving here.");
@@ -112,37 +108,48 @@ class AddIngredientViewController: NSViewController {
                 //targetIngredient.Temperature = temperatureSlider.doubleValue;
                 targetIngredient.Sequence=0; // temp
                 targetIngredient.TempScale = (tempSegmentOutlet.selectedSegment == 0 ? "F" : "C");
-                targetIngredient.RecipeIngredient = ingredientLibrary[IngredientPopup.indexOfSelectedItem];
+                let ingredientFromLibrary = getIngredientByUUID(ingredientLibrary[IngredientPopup.indexOfSelectedItem].ID, ingredientLibrary: ingredientLibrary);
+                
+                targetIngredient.RecipeIngredientID = (ingredientFromLibrary?.ID)!;
                 targetIngredient.Notes = recipeIngredientNotes.stringValue;
                 var rejectItem : Bool = false;
-                print("checking for " + targetIngredient.RecipeIngredient.Type.uppercaseString);
-                for i in incomingRecipe.RecipeIngredients
-                {
-                    let x = i.RecipeIngredient.Name + " (" + i.RecipeIngredient.Type + ")";
-                    print(x);
-                }
-                print ("checking for conflicting base: " + targetIngredient.RecipeIngredient.Type);
+                print("checking for " + ingredientFromLibrary!.Type.uppercaseString);
+                print ("checking for conflicting base: " + (ingredientFromLibrary?.Type)!);
                 if (mode == "ADD")
                 {
-                    switch (targetIngredient.RecipeIngredient.Type.uppercaseString)
+                    switch (ingredientFromLibrary!.Type.uppercaseString)
                     {
                         case "NICOTINE":
-                            for baseType in incomingRecipe.RecipeIngredients where baseType.RecipeIngredient.Type.uppercaseString == "NICOTINE"
+                            for ing in incomingRecipe.RecipeIngredients
                             {
-                                print("found a nicotine base present in recipe.");
-                                rejectItem = true;
+                                let ingredientToCheck = getIngredientByUUID(ing.RecipeIngredientID, ingredientLibrary: ingredientLibrary);
+                                if ingredientToCheck?.Type.uppercaseString == "NICOTINE"
+                                {
+                                    print("found a nicotine base present in recipe.");
+                                    rejectItem = true;
+                                }
                             }
                         case "PG":
-                            for baseType in incomingRecipe.RecipeIngredients where baseType.RecipeIngredient.Type.uppercaseString == "PG"
+                            for ing in incomingRecipe.RecipeIngredients
                             {
-                                rejectItem = true;
-                            }
+                                let ingredientToCheck = getIngredientByUUID(ing.RecipeIngredientID, ingredientLibrary: ingredientLibrary);
+                                if ingredientToCheck?.Type.uppercaseString == "PG"
+                                {
+                                    print("found a nicotine base present in recipe.");
+                                    rejectItem = true;
+                                }
+                        }
 
                         case "VG":
-                            for baseType in incomingRecipe.RecipeIngredients where baseType.RecipeIngredient.Type.uppercaseString == "VG"
+                            for ing in incomingRecipe.RecipeIngredients
                             {
-                                rejectItem = true;
-                            }
+                                let ingredientToCheck = getIngredientByUUID(ing.RecipeIngredientID, ingredientLibrary: ingredientLibrary);
+                                if ingredientToCheck?.Type.uppercaseString == "VG"
+                                {
+                                    print("found a nicotine base present in recipe.");
+                                    rejectItem = true;
+                                }
+                        }
                         default:
                         rejectItem=false;
                     }
@@ -159,6 +166,7 @@ class AddIngredientViewController: NSViewController {
                 else
                 {
                     print("call our delegate!");
+                    print("should be saving ingredient using ingredient library id " + targetIngredient.RecipeIngredientID);
                     ViewController.sharedInstance?.ingredientViewController(self, ingredient: targetIngredient, ingredientLibrary: ingredientLibrary, mode: mode);
                     print("delegate has been called.");
                     self.dismissViewController(self);
