@@ -19,6 +19,7 @@
 		114205D71CE381DA00A32BCF /* DataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114205D61CE381DA00A32BCF /* DataLoader.swift */; };
 		11695F531CE6690000E03074 /* DataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11695F521CE6690000E03074 /* DataHelper.swift */; };
 		11695F551CE6B26A00E03074 /* IngredientLibrary.xml in Resources */ = {isa = PBXBuildFile; fileRef = 11695F541CE6B26A00E03074 /* IngredientLibrary.xml */; };
+		11695F581CE70C8C00E03074 /* RecipeLibrary.xml in Resources */ = {isa = PBXBuildFile; fileRef = 11695F571CE70C8C00E03074 /* RecipeLibrary.xml */; };
 		118FB7F21CE54E5800DC4898 /* RecipeEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118FB7F11CE54E5800DC4898 /* RecipeEditorViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -58,6 +59,7 @@
 		114205D61CE381DA00A32BCF /* DataLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataLoader.swift; sourceTree = "<group>"; };
 		11695F521CE6690000E03074 /* DataHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DataHelper.swift; path = ../DataHelper.swift; sourceTree = "<group>"; };
 		11695F541CE6B26A00E03074 /* IngredientLibrary.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = IngredientLibrary.xml; sourceTree = "<group>"; };
+		11695F571CE70C8C00E03074 /* RecipeLibrary.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = RecipeLibrary.xml; sourceTree = "<group>"; };
 		118FB7F11CE54E5800DC4898 /* RecipeEditorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipeEditorViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -117,6 +119,7 @@
 				11398D731CE5AE5000ED2886 /* IngredientLibraryIngredientEditorViewController.swift */,
 				114205B21CE3808B00A32BCF /* Info.plist */,
 				114205D41CE381AB00A32BCF /* DataTypes.swift */,
+				11695F571CE70C8C00E03074 /* RecipeLibrary.xml */,
 				114205D61CE381DA00A32BCF /* DataLoader.swift */,
 				112AC55A1CE427190085BDA1 /* AddIngredientViewController.swift */,
 				118FB7F11CE54E5800DC4898 /* RecipeEditorViewController.swift */,
@@ -249,6 +252,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				114205AE1CE3808B00A32BCF /* Assets.xcassets in Resources */,
+				11695F581CE70C8C00E03074 /* RecipeLibrary.xml in Resources */,
 				114205B11CE3808B00A32BCF /* Main.storyboard in Resources */,
 				11695F551CE6B26A00E03074 /* IngredientLibrary.xml in Resources */,
 			);

@@ -512,7 +512,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         VGRatio = 70;
         amountOfJuice = 50;
         desiredNicStrength = 6;
-        recipes = LoadDefaultRecipe(ingredientLibrary);
+        //recipes = LoadDefaultRecipe(ingredientLibrary);
         
         currentRecipe = recipes[0];
         // let's get our sliders and UI all setup...
@@ -524,6 +524,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         outletRecipeTableView.reloadData();
         print("now attempting to run XML parser...");
         LoadIngredientsFromXML();
+        LoadRecipesFromXML();
         
         //TODO: Long term implement drag and drop...?
         //TODO: 
@@ -822,7 +823,9 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         {
             print("Calling delegate for index..");
             print(index);
-            return recipes[index];
+            if (recipes.count > index) {
+                return recipes[index];
+            }
         }
         return self;
     }
@@ -889,10 +892,15 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
  <IngredientLibrary>
 	<IngredientLibraryIngredient ID="" Name="FW Menthol" Manufacturer="Flavor West" Type="FLAVOR" Base="PG" Gravity="1.03" Cost="0.23" Strength="0.0" Notes="These are my notes about this flavor"/>
 */
+    var recipeLibraryParser = NSXMLParser();
+    var recipeLibraryFromXML = [Recipe]();
+    var recipeWeAreParsing = Recipe();
+
     var ingredientLibraryParser = NSXMLParser();
     var ingredientLibraryFromXML = [Ingredient]();
     var ingredientFromXML = Ingredient();
     var hadToAddIDs : Bool = false;
+    var hadToAddRecipeIDs : Bool = false;
     
     func parserDidStartDocument(parser: NSXMLParser) {
         if (parser == ingredientLibraryParser)
@@ -900,8 +908,13 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             ingredientLibraryFromXML = [Ingredient]();
             print("parsing ingredient library XML");
         }
+        if (parser == recipeLibraryParser)
+        {
+            
+            print("parsing recipe Library XML");
+        }
     }
-    //func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
+
     
     func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
         if (parser == ingredientLibraryParser && elementName == "IngredientLibraryIngredient")
@@ -926,9 +939,126 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             print("found ingredient library ingredient.  yay us!");
             ingredientLibraryFromXML.append(ingredientFromXML);
         }
+        if (parser == recipeLibraryParser)
+        {
+            print("found an element in the recipe Library Parser..");
+            if (elementName == "Recipe")
+            {
+                print("parsing a recipe element, need to reset. EndElement is responsible for getting it in the library for the UI");
+                recipeWeAreParsing = Recipe();
+                recipeWeAreParsing.RecipeIngredients = [RecipeIngredient]();
+                recipeWeAreParsing.ID = attributeDict["ID"]!;
+                recipeWeAreParsing.RecipeName = attributeDict["RecipeName"]!;
+                recipeWeAreParsing.RecipeAuthor = attributeDict["RecipeAuthor"]!;
+                recipeWeAreParsing.RecipeDate = NSDate();
+                recipeWeAreParsing.RecipeDescription = attributeDict["RecipeDescription"]!;
+                recipeWeAreParsing.RecipeCategory = attributeDict["RecipeCategory"]!;
+                recipeWeAreParsing.Notes = attributeDict["Notes"]!;
+                recipeWeAreParsing.PGRatio = Int(attributeDict["PGRatio"]!)!;
+                recipeWeAreParsing.VGRatio = Int(attributeDict["VGRatio"]!)!;
+                recipeWeAreParsing.maxVG = attributeDict["maxVG"]?.uppercaseString == "TRUE";
+                if (recipeWeAreParsing.ID == "")
+                {
+                    // missing ID so we need to generate one
+                    recipeWeAreParsing.ID = NSUUID().UUIDString;
+                    hadToAddRecipeIDs = true;
+                }
+            }
+            if (elementName == "RecipeIngredient")
+            {
+                let ingredientToAddToRecipe = RecipeIngredient();
+                ingredientToAddToRecipe.Notes = attributeDict["Notes"]!;
+                ingredientToAddToRecipe.Percentage = Double(attributeDict["Percentage"]!)!;
+                ingredientToAddToRecipe.RecipeIngredientID = attributeDict["RecipeIngredientID"]!;
+                ingredientToAddToRecipe.Sequence = Int(attributeDict["Sequence"]!)!;
+                ingredientToAddToRecipe.Temperature = Double(attributeDict["Temperature"]!)!;
+                ingredientToAddToRecipe.TempScale = attributeDict["TempScale"]!;
+                //print("finished up ingredient.");
+                recipeWeAreParsing.RecipeIngredients.append(ingredientToAddToRecipe);
+            }
+        }
     }
     
+    // need code in didStartElement for recipeIngredients..
+    func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+        if (parser == recipeLibraryParser && elementName == "Recipe")
+        {
+            print("found end of recipe.  now we should append it.");
+            if recipeWeAreParsing.ID != ""
+            {
+                recipeLibraryFromXML.append(recipeWeAreParsing);
+                outletRecipeTableView.reloadData();
+            }
+        }
+    }
     
+    func WriteRecipeLibraryToFile()
+    {
+        let xmlRoot = NSXMLElement(name: "RecipeLibrary");
+        let xmlDoc = NSXMLDocument(rootElement: xmlRoot);
+        
+        print ("reeive Write recipe calll....");
+        for recipe in recipes
+        {
+            let recipeElement = NSXMLElement(name: "Recipe");
+            xmlRoot.addChild(recipeElement);
+            let IDAttribute = NSXMLNode.attributeWithName("ID", stringValue: recipe.ID) as! NSXMLNode;
+            let MaxVGAttribute = NSXMLNode.attributeWithName("maxVG", stringValue: String(recipe.maxVG)) as! NSXMLNode;
+            let NotesAttribute = NSXMLNode.attributeWithName("Notes", stringValue: recipe.Notes) as! NSXMLNode;
+            let PGRatioAttribute = NSXMLNode.attributeWithName("PGRatio", stringValue: String(recipe.PGRatio)) as! NSXMLNode;
+            let RecipeAuthorAttribute = NSXMLNode.attributeWithName("RecipeAuthor", stringValue: recipe.RecipeAuthor) as! NSXMLNode;
+            let RecipeCategoryAttribute = NSXMLNode.attributeWithName("RecipeCategory", stringValue: recipe.RecipeCategory) as! NSXMLNode;
+            let RecipeDateAttribute = NSXMLNode.attributeWithName("RecipeDate", stringValue: String(recipe.RecipeDate)) as! NSXMLNode;
+            let RecipeDescriptionAttribute = NSXMLNode.attributeWithName("RecipeDescription", stringValue: String(recipe.RecipeDescription)) as! NSXMLNode;
+            let RecipeNameAttribute = NSXMLNode.attributeWithName("RecipeName", stringValue: recipe.RecipeName) as! NSXMLNode;
+            let VGRatioAttribute = NSXMLNode.attributeWithName("VGRatio", stringValue: String(recipe.VGRatio)) as! NSXMLNode;
+
+            recipeElement.addAttribute(IDAttribute);
+            recipeElement.addAttribute(MaxVGAttribute);
+            recipeElement.addAttribute(NotesAttribute);
+            recipeElement.addAttribute(PGRatioAttribute);
+            recipeElement.addAttribute(RecipeAuthorAttribute);
+            recipeElement.addAttribute(RecipeCategoryAttribute);
+            recipeElement.addAttribute(RecipeDateAttribute);
+            recipeElement.addAttribute(RecipeDescriptionAttribute);
+            recipeElement.addAttribute(RecipeNameAttribute);
+            recipeElement.addAttribute(VGRatioAttribute);
+            // now add each ingredient..
+            for ing in recipe.RecipeIngredients
+            {
+                let recipeIngredientElement = NSXMLElement(name: "RecipeIngredient");
+                recipeElement.addChild(recipeIngredientElement);
+                let IDAttribute = NSXMLNode.attributeWithName("RecipeIngredientID", stringValue: ing.RecipeIngredientID) as! NSXMLNode;
+                let NotesAttribute = NSXMLNode.attributeWithName("Notes", stringValue: ing.Notes) as! NSXMLNode;
+                let PercentageAttribute = NSXMLNode.attributeWithName("Percentage", stringValue: String(ing.Percentage)) as! NSXMLNode;
+                let SequenceAttribute = NSXMLNode.attributeWithName("Sequence", stringValue: String(ing.Sequence)) as! NSXMLNode;
+                let TemperatureAttribute = NSXMLNode.attributeWithName("Temperature", stringValue: String(ing.Temperature)) as! NSXMLNode;
+                let TempScaleAttribute = NSXMLNode.attributeWithName("TempScale", stringValue: ing.TempScale) as! NSXMLNode;
+                recipeIngredientElement.addAttribute(IDAttribute);
+                recipeIngredientElement.addAttribute(NotesAttribute);
+                recipeIngredientElement.addAttribute(PercentageAttribute);
+                recipeIngredientElement.addAttribute(SequenceAttribute);
+                recipeIngredientElement.addAttribute(TemperatureAttribute);
+                recipeIngredientElement.addAttribute(TempScaleAttribute);
+            }
+        }
+        print("XML Data for Ingredients that we need to add:");
+        let path = NSBundle.mainBundle().pathForResource("RecipeLibrary", ofType: "xml");
+        if (path != nil)
+        {
+            do
+            {
+                try xmlDoc.XMLData.writeToFile(path!, options: NSDataWritingOptions.DataWritingAtomic)
+                print("wrote XML file!");
+            }
+            catch
+            {
+                print("error writing file.");
+            }
+        }
+        print("finished XML work...");
+        
+    }
     func WriteIngredientLibraryToFile()
     {
         let xmlRoot = NSXMLElement(name: "IngredientLibrary");
@@ -989,6 +1119,23 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
                 print("wrote XML!");
             }
         }
+        if (parser == recipeLibraryParser)
+        {
+            print("finished parsing recipe XML file");
+            print(recipeLibraryFromXML.count);
+            print("recipes in the dictionary.");
+            recipes = recipeLibraryFromXML;
+            print ("yay");
+            outletRecipeTableView.reloadData();
+            if (hadToAddRecipeIDs)
+            {
+                print("we need to write the XML file back out now -- we had to add IDs");
+                WriteRecipeLibraryToFile();
+                print("wrote XML!");
+            }
+
+//            outletRecipeList
+        }
     }
     
     func LoadIngredientsFromXML()
@@ -1005,145 +1152,26 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         }
     }
     
-    
+    func LoadRecipesFromXML()
+    {
+        let path = NSBundle.mainBundle().pathForResource("RecipeLibrary", ofType: "xml");
+        if path != nil
+        {
+            recipeLibraryParser = NSXMLParser(contentsOfURL: NSURL(fileURLWithPath: path!))!;
+            print("loaded recipe file...");
+            recipeLibraryParser.delegate = self;
+            recipeLibraryParser.parse();
+        }
+        
+    }
     func windowShouldClose(sender: AnyObject) -> Bool {
         print ("window closing, save XML!");
         WriteIngredientLibraryToFile();
+        WriteRecipeLibraryToFile();
         print("wrote XML...");
         return true;
     }
 
     /* End XML Parsing Functionality */
-    
-    /* Drag and Drop Functionality */
-    /*
-    func tableView(tableView: NSTableView!, objectValueForTableColumn tableColumn: NSTableColumn!, row: Int) -> AnyObject!
-    {
-        var newString:String = ""
-        if (tableView == sourceTableView)
-        {
-            newString = sourceDataArray[row]
-        }
-        else if (tableView == targetTableView)
-        {
-            newString = targetDataArray[row]
-        }
-        return newString;
-    }
-    */
-    
-    /*
-    // delegate for creating the object to drop in.
-    func tableView(tableView: NSTableView, objectValueForTableColumn tableColumn: NSTableColumn?, row: Int) -> AnyObject? {
-//        var newIngredient:RecipeIngredient = RecipeIngredient();
-        print("creating object value from drag and drop delegate.");
-        if (tableView == outletIngredientLibraryTableView)
-        {
-            print("we have an item from our ingredient library!");
-  //          newIngredient.RecipeIngredient = ingredientLibrary[row];
-        }
-        return "item";
-    }
- */
-    /*
- func tableView(aTableView: NSTableView,
- writeRowsWithIndexes rowIndexes: NSIndexSet,
- toPasteboard pboard: NSPasteboard) -> Bool
- {
- if ((aTableView == sourceTableView) || (aTableView == targetTableView))
- {
- var data:NSData = NSKeyedArchiver.archivedDataWithRootObject(rowIndexes)
- var registeredTypes:[String] = [NSStringPboardType]
- pboard.declareTypes(registeredTypes, owner: self)
- pboard.setData(data, forType: NSStringPboardType)
- return true
- 
- }
- else
- {
- return false
- }
- }*/
-    /*
-    // delegate for putting the object we're pulling out into the pasteboard.
-    func tableView(tableView: NSTableView, writeRowsWithIndexes rowIndexes: NSIndexSet, toPasteboard pboard: NSPasteboard) -> Bool {
-        print ("checking to see if we should put this into the pasteboard.");
-        if (tableView == outletIngredientLibraryTableView)
-        {
-            let data:NSData = NSKeyedArchiver.archivedDataWithRootObject(rowIndexes);
-            let registeredTypes:[String] = [NSStringPboardType];
-            pboard.declareTypes(registeredTypes, owner: self);
-            pboard.setData(data, forType: NSStringPboardType);
-            return true;
-        }
-        return false;
-    }*/
-    
-    
-/*func tableView(aTableView: NSTableView,
- validateDrop info: NSDraggingInfo,
- proposedRow row: Int,
- proposedDropOperation operation: NSTableViewDropOperation) -> NSDragOperation
- {
- if operation == .Above
- {
- return .Move
- }
- return .All
- 
- }*/
-    /*
-    func tableView(tableView: NSTableView, validateDrop info: NSDraggingInfo, proposedRow row: Int, proposedDropOperation dropOperation: NSTableViewDropOperation) -> NSDragOperation {
-        print("validating drop operation");
-        return .Move
-    }
-    
-    func tableView(tableView: NSTableView, acceptDrop info: NSDraggingInfo, row: Int, dropOperation: NSTableViewDropOperation) -> Bool {
-        print("accepting drop!");
-        return true;
-    }*/
-    
-    /* final drop operation... */
-    /*
- func tableView(tableView: NSTableView, acceptDrop info: NSDraggingInfo, row: Int, dropOperation: NSTableViewDropOperation) -> Bool
- {
- var data:NSData = info.draggingPasteboard().dataForType(NSStringPboardType)!
- var rowIndexes:NSIndexSet = NSKeyedUnarchiver.unarchiveObjectWithData(data) as NSIndexSet
- 
- if ((info.draggingSource() as NSTableView == targetTableView) && (tableView == targetTableView))
- {
- var value:String = targetDataArray[rowIndexes.firstIndex]
- targetDataArray.removeAtIndex(rowIndexes.firstIndex)
- if (row > targetDataArray.count)
- {
- targetDataArray.insert(value, atIndex: row-1)
- }
- else
- {
- targetDataArray.insert(value, atIndex: row)
- }
- targetTableView.reloadData()
- return true
- }
- else if ((info.draggingSource() as NSTableView == sourceTableView) && (tableView == targetTableView))
- {
- var value:String = sourceDataArray[rowIndexes.firstIndex]
- sourceDataArray.removeAtIndex(rowIndexes.firstIndex)
- targetDataArray.append(value)
- sourceTableView.reloadData()
- targetTableView.reloadData()
- return true
- }
- else
- {
- return false
- }
- }*/
- 
- 
- 
- 
-    /* End Drag and Drop Functionality */
-
 }
 

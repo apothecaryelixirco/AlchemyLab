@@ -1,0 +1,7 @@
+<Recipes>
+    <Recipe ID="" RecipeName="Bourbon Ice Cream" RecipeAuthor="Randy Williams" RecipeDate="05/13/2016" RecipeDescription="Bourbon!  For MEN!" RecipeCategory="Desserts" Notes="a creamy alcoholic treat!" PGRatio="30" VGRatio="70" maxVG="False">
+        <RecipeIngredient RecipeIngredientID="12CCA800-469A-4350-910E-5EF1FC091EEA" Percentage="0.00" Temperature="0.00" TempScale="F" Sequence="0" Notes="my notes about this specific recipe ingredient."/>
+        <RecipeIngredient RecipeIngredientID="6BC50A96-3894-44AB-ABDF-23F689AC58B9" Percentage="0.00" Temperature="0.00" TempScale="F" Sequence="0" Notes="my notes about this specific recipe ingredient."/>
+    </Recipe>
+    <Recipes>
+        
