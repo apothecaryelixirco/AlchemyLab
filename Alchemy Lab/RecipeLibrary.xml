@@ -1,7 +1,21 @@
-<Recipes>
-    <Recipe ID="" RecipeName="Bourbon Ice Cream" RecipeAuthor="Randy Williams" RecipeDate="05/13/2016" RecipeDescription="Bourbon!  For MEN!" RecipeCategory="Desserts" Notes="a creamy alcoholic treat!" PGRatio="30" VGRatio="70" maxVG="False">
-        <RecipeIngredient RecipeIngredientID="12CCA800-469A-4350-910E-5EF1FC091EEA" Percentage="0.00" Temperature="0.00" TempScale="F" Sequence="0" Notes="my notes about this specific recipe ingredient."/>
-        <RecipeIngredient RecipeIngredientID="6BC50A96-3894-44AB-ABDF-23F689AC58B9" Percentage="0.00" Temperature="0.00" TempScale="F" Sequence="0" Notes="my notes about this specific recipe ingredient."/>
+<RecipeLibrary>
+    <Recipe ID="8BAF2DB9-89C8-4B64-9A11-930DFA23C77B" Notes="" PGRatio="30" RecipeAuthor="Randy Williams" RecipeCategory="Fruits" RecipeDate="2016-05-16 04:26:46 +0000" RecipeDescription="" RecipeName="NanaBerry" VGRatio="70" maxVG="false"/>
+    <Recipe ID="AC1B41FF-0DD5-4A4E-8384-4E7CC444D6C2" Notes="" PGRatio="30" RecipeAuthor="" RecipeCategory="Menthol" RecipeDate="2016-05-16 04:26:46 +0000" RecipeDescription="" RecipeName="Seven Seas" VGRatio="70" maxVG="false"/>
+    <Recipe ID="B065003A-E945-4C39-8EBC-6422CAB69593" Notes="" PGRatio="30" RecipeAuthor="" RecipeCategory="Menthol" RecipeDate="2016-05-16 04:26:46 +0000" RecipeDescription="" RecipeName="Haley Menthol" VGRatio="70" maxVG="false"/>
+    <Recipe ID="B75D09CD-3955-4E64-B6D1-0015A6FD240C" Notes="" PGRatio="30" RecipeAuthor="" RecipeCategory="Custards" RecipeDate="2016-05-16 04:26:46 +0000" RecipeDescription="" RecipeName="Strawberry Milk" VGRatio="70" maxVG="false"/>
+    <Recipe ID="2A7D36EF-1A5B-4A22-A3A4-221CC34880F9" Notes="" PGRatio="30" RecipeAuthor="" RecipeCategory="Default" RecipeDate="2016-05-16 04:26:46 +0000" RecipeDescription="" RecipeName="blahblah" VGRatio="70" maxVG="false"/>
+    <Recipe ID="CAC88542-2327-44DC-A61D-526BD8CB5AFB" Notes="" PGRatio="30" RecipeAuthor="" RecipeCategory="Default" RecipeDate="2016-05-16 04:26:46 +0000" RecipeDescription="" RecipeName="Another new recipe" VGRatio="70" maxVG="false"/>
+    <Recipe ID="946AE052-B599-464B-9F30-313FEC78A850" Notes="" PGRatio="30" RecipeAuthor="Randy Williams" RecipeCategory="Default" RecipeDate="2016-05-16 04:26:46 +0000" RecipeDescription="Nice cool creamy shake" RecipeName="Strawberry Banana Milkshake" VGRatio="70" maxVG="false">
+        <RecipeIngredient Notes="" Percentage="0.0" RecipeIngredientID="041C3584-8841-453E-A552-3F5EC219705C" Sequence="0" TempScale="F" Temperature="0.0"/>
+        <RecipeIngredient Notes="" Percentage="0.0" RecipeIngredientID="395AEA8F-7A9D-4D05-BCED-95DC8A49CCCF" Sequence="0" TempScale="F" Temperature="0.0"/>
+        <RecipeIngredient Notes="" Percentage="6.0" RecipeIngredientID="D4E2EA32-B69F-494E-9AC2-EC50E0CEFF38" Sequence="0" TempScale="F" Temperature="0.0"/>
+        <RecipeIngredient Notes="" Percentage="5.0" RecipeIngredientID="4D92CC2E-F980-4076-A79F-FCF238C721AA" Sequence="0" TempScale="F" Temperature="0.0"/>
+        <RecipeIngredient Notes="" Percentage="1.0" RecipeIngredientID="1734CDAD-C673-47E8-B453-614B0FAA99EF" Sequence="0" TempScale="F" Temperature="0.0"/>
+        <RecipeIngredient Notes="" Percentage="1.0" RecipeIngredientID="4D0953F3-50A3-47FB-93AF-F880F5B4DA62" Sequence="0" TempScale="F" Temperature="0.0"/>
+        <RecipeIngredient Notes="" Percentage="4.0" RecipeIngredientID="6BC50A96-3894-44AB-ABDF-23F689AC58B9" Sequence="0" TempScale="F" Temperature="0.0"/>
+        <RecipeIngredient Notes="" Percentage="1.0" RecipeIngredientID="4F0278BF-B1EE-4038-B8D6-AF85B477FC9A" Sequence="0" TempScale="F" Temperature="0.0"/>
+        <RecipeIngredient Notes="" Percentage="1.0" RecipeIngredientID="D93C401F-2B7B-4C19-8D56-012F10CE64EA" Sequence="0" TempScale="F" Temperature="0.0"/>
+        <RecipeIngredient Notes="" Percentage="0.0" RecipeIngredientID="4CFA6761-E3AE-4E1C-A159-F9B264C0B94D" Sequence="0" TempScale="F" Temperature="0.0"/>
     </Recipe>
-    <Recipes>
-        
+    <Recipe ID="846CC82C-9013-442B-B0B2-FCE23F9AADD5" Notes="" PGRatio="30" RecipeAuthor="" RecipeCategory="Default" RecipeDate="2016-05-16 04:26:46 +0000" RecipeDescription="" RecipeName="Blah" VGRatio="70" maxVG="true"/>
+</RecipeLibrary>

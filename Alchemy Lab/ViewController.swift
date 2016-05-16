@@ -1048,6 +1048,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         {
             do
             {
+                print ("path is " + path!);
                 try xmlDoc.XMLData.writeToFile(path!, options: NSDataWritingOptions.DataWritingAtomic)
                 print("wrote XML file!");
             }
