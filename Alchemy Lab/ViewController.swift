@@ -735,7 +735,9 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             mlDisplay.Weight = String(format:"%.2fg",nicBaseWeight);
             mlDisplay.backgroundWeight = nicBaseWeight;
             mlDisplay.backgroundCost = (nicSolutionNeeded * nicotine!.Cost);
-            mlDisplay.Cost = String(format:"$%2.2f",mlDisplay.backgroundCost);
+            mlDisplay.Cost = String(format:"$%.2f",mlDisplay.backgroundCost);
+            mlDisplay.backgroundPercentage = 0;
+            mlDisplay.Percentage = "n/a";
             mixLab.append(mlDisplay);
 
         }
@@ -765,7 +767,9 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
                 mlDisplay.Volume = String(format:"%.2fml",mlDisplay.backgroundVolume);
                 mlDisplay.Weight = String(format:"%.2fg",mlDisplay.backgroundWeight);
                 mlDisplay.backgroundCost = flavorIngredient!.Cost;
-                mlDisplay.Cost = String(format:"$%2.2f",mlDisplay.backgroundCost);
+                mlDisplay.Cost = String(format:"$%.2f",mlDisplay.backgroundCost);
+                mlDisplay.backgroundPercentage = flavor.backgroundPercentage;
+                mlDisplay.Percentage = String(format:"%.2f%%",mlDisplay.backgroundPercentage);
                 mixLab.append(mlDisplay);
             }
         }
@@ -788,7 +792,9 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
                 mlDisplay.Volume = String(format:"%.2fml",mlDisplay.backgroundVolume);
                 mlDisplay.Weight = String(format:"%.2fg",mlDisplay.backgroundWeight);
                 mlDisplay.backgroundCost = (mlDisplay.backgroundVolume * vgIngredient!.Cost);
-                mlDisplay.Cost = String(format:"$%2.2f",mlDisplay.backgroundCost);
+                mlDisplay.Cost = String(format:"$%.2f",mlDisplay.backgroundCost);
+                mlDisplay.Percentage = "n/a";
+                mlDisplay.backgroundPercentage = 0;
                 mixLab.append(mlDisplay);
             }
         }
@@ -809,7 +815,9 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
                 mlDisplay.Volume = String(format:"%.2fml",mlDisplay.backgroundVolume);
                 mlDisplay.Weight = String(format:"%.2fg",mlDisplay.backgroundWeight);
                 mlDisplay.backgroundCost = (mlDisplay.backgroundVolume * pgIngredient!.Cost);
-                mlDisplay.Cost = String(format:"$%2.2f",mlDisplay.backgroundCost);
+                mlDisplay.Cost = String(format:"$%.2f",mlDisplay.backgroundCost);
+                mlDisplay.Percentage = "n/a";
+                mlDisplay.backgroundPercentage = 0;
                 mixLab.append(mlDisplay);
             }
             
@@ -838,11 +846,13 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         var totalVolume : Double = 0.00;
         var totalWeight : Double = 0.00;
         var totalCost : Double = 0.00;
+        var totalPercentage : Double = 0.00;
         for mixlabingredient in mixLab
         {
             totalVolume += mixlabingredient.backgroundVolume;
             totalWeight += mixlabingredient.backgroundWeight;
             totalCost += mixlabingredient.backgroundCost;
+            totalPercentage += mixlabingredient.backgroundPercentage;
         }
         
         let mlDisplay = mixLabDisplay();
@@ -850,6 +860,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         mlDisplay.Volume = String(format: "%.2fml",totalVolume);
         mlDisplay.Weight = String(format: "%.2fg",totalWeight);
         mlDisplay.Cost = String(format: "$%.2f",totalCost);
+        mlDisplay.Percentage = String(format: "%.2f%%",totalPercentage);
         mixLab.append(mlDisplay);
         
         outletMixLabView.reloadData();

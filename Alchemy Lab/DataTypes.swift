@@ -46,6 +46,8 @@ class mixLabDisplay : NSObject
     var Volume : String = "";
     var Weight : String = "";
     var Cost : String = "";
+    var Percentage : String = "";
+    var backgroundPercentage : Double = 0.00;
     var backgroundCost : Double = 0.00;
     var backgroundVolume : Double = 0.00;
     var backgroundWeight : Double = 0.00;
