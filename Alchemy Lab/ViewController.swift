@@ -47,6 +47,15 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
     @IBOutlet weak var outletPGRatioTextField: NSTextField!
     @IBOutlet weak var outletNicStrengthTextField: NSTextField!
     
+    
+    @IBAction func outletRefreshButtonAction(sender: NSButton) {
+        UpdateRecipeView();
+        outletRecipeTableView.reloadData();
+        UpdateMixLabView();
+        outletMixLabView.reloadData();
+    }
+    @IBOutlet weak var outletMixLabView: NSTableView!
+    
     var ingredientToEdit : RecipeIngredient = RecipeIngredient();
 
     func IngredientEditorDelegate(controller: IngredientLibraryIngredientEditorViewController, ingredient: Ingredient, mode: String) {
@@ -54,10 +63,27 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         {
             ingredientLibrary.append(ingredient);
             print ("add ingredient to library.");
+            outletIngredientLibraryTableView.reloadData();
+
         }
         if (mode == "EDIT")
         {
-            print ("edit ingredient from library.");
+            let ingIndex = getIngredientIndexInLibraryByUUID(ingredient.ID, ingredientLibrary: ingredientLibrary);
+            if (ingIndex > -1)
+            {
+                ingredientLibrary[ingIndex] = ingredient;
+            }
+            //[self.managedObjectContext reset];
+            //[myArrayController fetch:self];
+
+            UpdateRecipeView();
+            UpdateMixLabView();
+            outletMixLab.rearrangeObjects();
+            outletRecipe.rearrangeObjects();
+
+            outletRecipeTableView.reloadData();
+            outletMixLabView.reloadData();
+            outletIngredientLibraryTableView.reloadData();
         }
     }
     func RecipeViewDelegate(controller: RecipeEditorViewController, recipe: Recipe, mode: String) {
@@ -65,6 +91,9 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         {
             // we have received a recipe, now we need to add it to our view.
             recipes.append(recipe);
+
+            UpdateMixLabView();
+            UpdateRecipeView();
             outletRecipeList.reloadData();
         }
         print("received recipe from recipe view controller.");
@@ -76,6 +105,13 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
     //    showEditPopOverFromTableRow(sender);
         
     }
+    
+    
+    @IBAction func outletRecipeListDoubleClickRecipeAction(sender: NSOutlineView) {
+        ShowRecipeEditorPopOverForRowDoubleClick(sender);
+        print("recipe double clicked, edit this bitch.");
+    }
+    
     func ingredientViewController(controller: AddIngredientViewController, ingredient: RecipeIngredient, ingredientLibrary: [Ingredient], mode: String) {
         if (mode == "EDIT")
         {
@@ -281,6 +317,26 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
     }
 
     
+    @IBAction func ShowRecipeEditorPopOverForRowDoubleClick(sender: NSOutlineView)
+    {
+        //Recipe Editor View Controller
+        // 1
+        let storyboard = NSStoryboard(name: "Main", bundle: nil)
+        let recipeEditorWindowController = storyboard.instantiateControllerWithIdentifier("Recipe Editor View Controller") as! NSWindowController
+        if let recipeEditorWindow = recipeEditorWindowController.window {
+            
+            print("calling display as popover for recipe EDITING.");
+            let recipeEditorViewController = recipeEditorWindow.contentViewController as! RecipeEditorViewController
+            recipeEditorViewController.mode = "EDIT";
+            recipeEditorViewController.workingRecipe = recipes[sender.selectedRow];
+            presentViewController(recipeEditorViewController, asPopoverRelativeToRect: sender.bounds, ofView: sender, preferredEdge: NSRectEdge.MinY, behavior: NSPopoverBehavior.Transient)
+            print("done with the modal view.");
+            recipeEditorViewController.RefreshUIForEdit();
+            //            recipeEditorViewController.
+        }
+    }
+
+
     
     @IBAction func ShowRecipeEditorPopOver(sender: NSSegmentedControl)
     {
@@ -293,7 +349,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             print("calling display as popover for recipe EDITING.");
             let recipeEditorViewController = recipeEditorWindow.contentViewController as! RecipeEditorViewController
             recipeEditorViewController.mode = "EDIT";
-            recipeEditorViewController.workingRecipe = currentRecipe;
+            recipeEditorViewController.workingRecipe = recipes[outletRecipeList.selectedRow];
             presentViewController(recipeEditorViewController, asPopoverRelativeToRect: sender.bounds, ofView: sender, preferredEdge: NSRectEdge.MinY, behavior: NSPopoverBehavior.Transient)
             print("done with the modal view.");
             recipeEditorViewController.RefreshUIForEdit();
@@ -354,6 +410,14 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             ingredientToEdit = currentRecipe.RecipeIngredients[outletRecipeTableView.selectedRow];
             //showEditIngredient(self);
             showEditPopOver(sender);
+        }
+        if (sender.selectedSegment == 3)
+        {
+            // refresh button
+            UpdateRecipeView();
+            outletRecipeTableView.reloadData();
+            UpdateMixLabView();
+            outletMixLabView.reloadData();
         }
     }
     
@@ -432,6 +496,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
     }
     
     @IBAction func outletIngredientLibraryItemDoubleClick(sender: NSTableView) {
+        showIngredientLibraryEditorPopupAsEditFromTableRow(sender);
         print("double cilcked item.  edit ingredient.");
     }
     
@@ -485,6 +550,8 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         if (sender.selectedSegment == 1)
         {
             print ("remove recipe");
+            recipes.removeAtIndex(outletRecipeList.selectedRow);
+            outletRecipeList.reloadData();
         }
         if (sender.selectedSegment == 2)
         {
@@ -507,7 +574,12 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
     
     @IBOutlet weak var outletIngredientLibraryTableView: NSTableView!
     override func viewDidLoad() {
+        LoadIngredientsFromXML();
+        LoadRecipesFromXML();
+
         // defaults for recipe.
+        // http://swiftrien.blogspot.com/2015/04/adding-menu-items-and-their-actions.html
+        
         PGRatio = 30;
         VGRatio = 70;
         amountOfJuice = 50;
@@ -523,8 +595,9 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         print("reloading recipe list on the left...");
         outletRecipeTableView.reloadData();
         print("now attempting to run XML parser...");
-        LoadIngredientsFromXML();
-        LoadRecipesFromXML();
+        
+        outletMixLab.rearrangeObjects();
+        outletRecipe.rearrangeObjects();
         
         //TODO: Long term implement drag and drop...?
         //TODO: 
@@ -534,6 +607,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
 //        outletRecipeTableView.registerForDraggedTypes(<#T##newTypes: [String]##[String]#>)
 //        outletRecipeTableView.registerForDraggedTypes(<#T##newTypes: [String]##[String]#>) -- Drag and drop functionality
         // http://www.knowstack.com/swift-nstableview-drag-drop-in/
+        outletRecipeList.reloadData()
         super.viewDidLoad()
         // Do any additional setup after loading the view.
     }
@@ -583,9 +657,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             rlDisplay.backgroundPercentage = ingredient.Percentage;
             recipeDisplay.append(rlDisplay);
         }
-        
-        
-        //        outletRecipeTableView.reloadData();
+        outletRecipeTableView.reloadData();
     }
     
     
@@ -780,6 +852,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         mlDisplay.Cost = String(format: "$%.2f",totalCost);
         mixLab.append(mlDisplay);
         
+        outletMixLabView.reloadData();
         
     }
 

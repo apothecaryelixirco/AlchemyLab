@@ -102,6 +102,7 @@ class IngredientLibraryIngredientEditorViewController: NSViewController {
         if (sender.selectedSegment == 1)
         {
             print("save ingredient.");
+            print("name is goign to be: " + ingredientToWorkWith.Name);
             ViewController.sharedInstance?.IngredientEditorDelegate(self, ingredient: ingredientToWorkWith, mode: mode);
             dismissViewController(self);
 
