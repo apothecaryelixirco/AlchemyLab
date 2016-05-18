@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Alchemy Lab Release Scheme.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 		<key>Alchemy Lab.xcscheme</key>
 		<dict>
 			<key>orderHint</key>

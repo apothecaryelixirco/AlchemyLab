@@ -236,6 +236,9 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             print("calling display as popover for ingredient library editor.");
             let ingredientLibraryEditorViewController = ingredientLibraryWindow.contentViewController as! IngredientLibraryIngredientEditorViewController
             ingredientLibraryEditorViewController.mode = "EDIT";
+            if (outletIngredientLibraryTableView.selectedRow > -1)
+            {
+                
             ingredientLibraryEditorViewController.ingredientToWorkWith = ingredientLibrary[outletIngredientLibraryTableView.selectedRow];
             let rectForPopup = outletIngredientLibraryTableView.bounds;
             let viewForPopup = outletIngredientLibraryTableView;
@@ -244,6 +247,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             //            presentViewControllerAsSheet(addIngredientViewController);
             print("done with the modal view.");
             ingredientLibraryEditorViewController.RefreshForEdit();
+            }
         }
     }
     
@@ -590,6 +594,18 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         }
         if (sender.selectedSegment == 2)
         {
+            dialogAlertUser("Copy recipe functionality coming soon.");
+            /*
+            print ("duplicate recipe.");
+            let duplicate = recipes[outletRecipeList.selectedRow].mutableCopy() as! Recipe;
+            duplicate.ID = NSUUID().UUIDString;
+            duplicate.RecipeName = "Copy of " + duplicate.RecipeName;
+            recipes.append(duplicate);
+            outletRecipeList.reloadData();
+            */
+        }
+        if (sender.selectedSegment == 3)
+        {
             ShowRecipeEditorPopOver(sender);
             print ("edit recipe");
         }
@@ -599,7 +615,8 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
     
     @IBOutlet var outletIngredientLibraryArrayController: NSArrayController!
     
-    dynamic var ingredientLibrary = LoadPlaceHolderIngredients();
+    //dynamic var ingredientLibrary = LoadPlaceHolderIngredients();
+    dynamic var ingredientLibrary = [Ingredient()];
     dynamic var recipes = [Recipe()];
     // these are the two data values for the Tables.
     dynamic var recipeDisplay = [RecipeDisplay]();
@@ -710,7 +727,12 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         // first let's determine how much VG/PG we need as a total...based on our ratio.
         var PGWeight : Double = 0.0;
         var VGWeight : Double = 0.0;
-        var nicBase : String = "";
+      //  var nicBase : String = "";
+        var nicPGRatio : Double = 0.00;
+        var nicVGRatio : Double = 0.00;
+      //  var nicSolutionVolumeThatIsPG : Double = 0.0;
+     //   var nicSolutionVolumeThatIsVG : Double = 0.0;
+        
         for vg in recipeDisplay
         {
             let ingredientFromLibrary = getIngredientByUUID(vg.backgroundIngredient.RecipeIngredientID, ingredientLibrary: ingredientLibrary);
@@ -746,33 +768,44 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             print("determining how much nicotine solution we need...");
             // find our nicotine and determine how much nic we need for our solution..
             let nicotine = getIngredientByUUID(nicotineIngredientId, ingredientLibrary: ingredientLibrary)
+            nicPGRatio = (nicotine?.PGRatioForIngredient)!;
+            nicVGRatio = (nicotine?.VGRatioForIngredient)!;
+            //TODO: need to figure out the math for hybrid nicotine concentrations.
             var baseWeight : Double = 0.0;
             var nicBaseWeight = Double(desiredNicStrength) * nicotine!.Gravity;
             if (nicotine!.Base.uppercaseString == "PG")
             {
                 baseWeight = PGWeight;
-                nicBase = "PG";
+               // nicBase = "PG";
             }
             if (nicotine!.Base.uppercaseString == "VG")
             {
                 baseWeight = VGWeight;
-                nicBase = "VG";
+                //nicBase = "VG";
             }
             let nicStrength : Double = nicotine!.Strength / 10;
             nicBaseWeight += Double((100-nicStrength)) * baseWeight;
             nicBaseWeight = nicBaseWeight / 100;
             nicSolutionNeeded = (Double(desiredNicStrength) * Double(amountOfJuice)) / 100;
+            nicBaseWeight = nicSolutionNeeded * (nicotine?.Gravity)!;
+            totalVGNeeded -= nicSolutionNeeded * (nicVGRatio/100);
+            totalPGNeeded -= nicSolutionNeeded * (nicPGRatio/100);
+           // print(String(format: "Nic amount in VG: %2.2f -- PG: %2.2f",nicSolutionVolumeThatIsVG, nicSolutionVolumeThatIsPG));
+            
             // at this point we know all about our nicotine so we should be able to add it to the mixlab display.
             let mlDisplay = mixLabDisplay();
-            mlDisplay.Ingredient = nicotineDisplayString;
+            
+            mlDisplay.Ingredient = nicotineDisplayString + String(format: " [%d%%vg/%d%%pg]",Int((nicotine?.VGRatioForIngredient)!), Int((nicotine?.PGRatioForIngredient)!));
+            
+            //    mlDisplay.Ingredient = nicotineDisplayString;
             mlDisplay.Volume = String(format:"%.2fml",nicSolutionNeeded);
             mlDisplay.backgroundVolume = nicSolutionNeeded;
             mlDisplay.Weight = String(format:"%.2fg",nicBaseWeight);
             mlDisplay.backgroundWeight = nicBaseWeight;
             mlDisplay.backgroundCost = (nicSolutionNeeded * nicotine!.Cost);
             mlDisplay.Cost = String(format:"$%.2f",mlDisplay.backgroundCost);
-            mlDisplay.backgroundPercentage = 0;
-            mlDisplay.Percentage = "n/a";
+            mlDisplay.backgroundPercentage = (nicSolutionNeeded / Double(amountOfJuice)) * 100;
+            mlDisplay.Percentage = String(format: "%.2f%%",mlDisplay.backgroundPercentage);
             mixLab.append(mlDisplay);
 
         }
@@ -788,6 +821,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
                 let mlDisplay = mixLabDisplay();
                 // first determine how much of this flavor we need..
                 let volumeOfFlavorNeeded = (flavor.backgroundPercentage * Double(amountOfJuice)) / 100;
+                /* allowing flavors to be hybrid base ratios as well.
                 if (flavor.Base.uppercaseString == "PG")
                 {
                     totalPGNeeded -= volumeOfFlavorNeeded;
@@ -795,11 +829,13 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
                 if (flavor.Base.uppercaseString == "VG")
                 {
                     totalVGNeeded -= volumeOfFlavorNeeded;
-                }
-                mlDisplay.Ingredient = flavor.Ingredient;
+                }*/
+                mlDisplay.Ingredient = flavor.Ingredient + String(format: " [%d%%vg/%d%%pg]",Int((flavorIngredient?.VGRatioForIngredient)!), Int((flavorIngredient?.PGRatioForIngredient)!));
                 mlDisplay.backgroundWeight = (volumeOfFlavorNeeded * flavorIngredient!.Gravity);
                 mlDisplay.backgroundVolume = volumeOfFlavorNeeded;
                 mlDisplay.Volume = String(format:"%.2fml",mlDisplay.backgroundVolume);
+                totalVGNeeded -= mlDisplay.backgroundVolume * ((flavorIngredient?.VGRatioForIngredient)!/100);
+                totalPGNeeded -= mlDisplay.backgroundVolume * ((flavorIngredient?.PGRatioForIngredient)!/100);
                 mlDisplay.Weight = String(format:"%.2fg",mlDisplay.backgroundWeight);
                 mlDisplay.backgroundCost = flavorIngredient!.Cost;
                 mlDisplay.Cost = String(format:"$%.2f",mlDisplay.backgroundCost);
@@ -816,10 +852,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             let vgIngredient = getIngredientByUUID(vg.backgroundIngredient.RecipeIngredientID, ingredientLibrary: ingredientLibrary);
             if (vgIngredient!.Type.uppercaseString == "VG")
             {
-                if (nicBase == "VG")
-                {
-                    totalVGNeeded -= nicSolutionNeeded;
-                }
+                //totalVGNeeded -= nicSolutionVolumeThatIsVG;
                 let mlDisplay = mixLabDisplay();
                 mlDisplay.Ingredient = vg.Ingredient;
                 mlDisplay.backgroundVolume = totalVGNeeded;
@@ -828,8 +861,10 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
                 mlDisplay.Weight = String(format:"%.2fg",mlDisplay.backgroundWeight);
                 mlDisplay.backgroundCost = (mlDisplay.backgroundVolume * vgIngredient!.Cost);
                 mlDisplay.Cost = String(format:"$%.2f",mlDisplay.backgroundCost);
-                mlDisplay.Percentage = "n/a";
-                mlDisplay.backgroundPercentage = 0;
+                mlDisplay.backgroundPercentage = (totalVGNeeded / Double(amountOfJuice)) * 100
+
+                mlDisplay.Percentage = String(format:"%.2f%%",mlDisplay.backgroundPercentage);
+                //mlDisplay.backgroundPercentage = 0;
                 mixLab.append(mlDisplay);
             }
         }
@@ -839,10 +874,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             let pgIngredient = getIngredientByUUID(pg.backgroundIngredient.RecipeIngredientID, ingredientLibrary: ingredientLibrary);
             if (pgIngredient!.Type.uppercaseString == "PG")
             {
-                if (nicBase == "PG")
-                {
-                    totalPGNeeded -= nicSolutionNeeded;
-                }
+                //totalPGNeeded -= nicSolutionVolumeThatIsVG;
                 let mlDisplay = mixLabDisplay();
                 mlDisplay.Ingredient = pg.Ingredient;
                 mlDisplay.backgroundVolume = totalPGNeeded;
@@ -851,8 +883,9 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
                 mlDisplay.Weight = String(format:"%.2fg",mlDisplay.backgroundWeight);
                 mlDisplay.backgroundCost = (mlDisplay.backgroundVolume * pgIngredient!.Cost);
                 mlDisplay.Cost = String(format:"$%.2f",mlDisplay.backgroundCost);
-                mlDisplay.Percentage = "n/a";
-                mlDisplay.backgroundPercentage = 0;
+                //mlDisplay.Percentage = "n/a";
+                mlDisplay.backgroundPercentage = (totalPGNeeded / Double(amountOfJuice)) * 100
+                mlDisplay.Percentage = String(format:"%.2f%%",mlDisplay.backgroundPercentage);
                 mixLab.append(mlDisplay);
             }
             
@@ -1049,6 +1082,9 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             ingredientFromXML.Cost = Double(attributeDict["Cost"]!)!;
             ingredientFromXML.Strength = Double(attributeDict["Strength"]!)!;
             ingredientFromXML.Notes = attributeDict["Notes"]!;
+            /* XML TODO OMG OMG OMG OMG */
+            ingredientFromXML.VGRatioForIngredient = Double(attributeDict["VGRatioForIngredient"]!)!;
+            ingredientFromXML.PGRatioForIngredient = Double(attributeDict["PGRatioForIngredient"]!)!;
             print("finished up ingredient.");
             if ingredientFromXML.ID == ""
             {
@@ -1196,6 +1232,9 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             let CostAttribute = NSXMLNode.attributeWithName("Cost", stringValue: String(ing.Cost)) as! NSXMLNode;
             let StrengthAttribute = NSXMLNode.attributeWithName("Strength", stringValue: String(ing.Strength)) as! NSXMLNode;
             let NotesAttribute = NSXMLNode.attributeWithName("Notes", stringValue: ing.Name) as! NSXMLNode;
+            let VGRatioForIngredientAttribute = NSXMLNode.attributeWithName("VGRatioForIngredient", stringValue: String(ing.VGRatioForIngredient)) as! NSXMLNode;
+            let PGRatioForIngredientAttribute = NSXMLNode.attributeWithName("PGRatioForIngredient", stringValue: String(ing.PGRatioForIngredient)) as! NSXMLNode;
+
             ingredientElement.addAttribute(IDAttribute);
             ingredientElement.addAttribute(NameAttribute);
             ingredientElement.addAttribute(ManufacturerAttribute);
@@ -1205,6 +1244,9 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             ingredientElement.addAttribute(CostAttribute);
             ingredientElement.addAttribute(StrengthAttribute);
             ingredientElement.addAttribute(NotesAttribute);
+            ingredientElement.addAttribute(VGRatioForIngredientAttribute);
+            ingredientElement.addAttribute(PGRatioForIngredientAttribute);
+            
         }
         print("XML Data for Ingredients that we need to add:");
         let path = NSBundle.mainBundle().pathForResource("IngredientLibrary", ofType: "xml");

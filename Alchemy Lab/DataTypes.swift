@@ -20,8 +20,10 @@ class Ingredient : NSObject
     var Cost : Double = 0.00;
     var Strength : Double = 0.00;
     var Notes : String = "";
+    var VGRatioForIngredient : Double = 0.00;
+    var PGRatioForIngredient : Double = 0.00;
     
-    init(name : String, manufacturer : String, type: String, base : String, gravity : Double, cost : Double, strength : Double, notes : String)
+    init(name : String, manufacturer : String, type: String, base : String, gravity : Double, cost : Double, strength : Double, notes : String, vgratioforingredient : Double, pgratioforingredient : Double)
     {
         self.Name = name;
         self.Manufacturer = manufacturer;
@@ -30,6 +32,8 @@ class Ingredient : NSObject
         self.Gravity = gravity;
         self.Cost = cost;
         self.Strength = strength;
+        self.VGRatioForIngredient = vgratioforingredient;
+        self.PGRatioForIngredient = pgratioforingredient;
         self.Notes = notes;
         super.init();
     }

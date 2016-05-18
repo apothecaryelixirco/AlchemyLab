@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+/*
 func LoadPlaceHolderIngredients() -> [Ingredient]
 {
     var ingredients = [Ingredient]();
@@ -29,6 +29,7 @@ func LoadPlaceHolderIngredients() -> [Ingredient]
     ingredients.append(flavor3);
     return ingredients;
 }
+ */
 
 func LoadDefaultRecipe(ingredientLibrary : [Ingredient]) -> [Recipe]
 {
