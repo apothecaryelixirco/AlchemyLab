@@ -500,6 +500,16 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         print("double cilcked item.  edit ingredient.");
     }
     
+    func dialogAlertUser(AlertInfo: String) -> Bool {
+        let myPopup: NSAlert = NSAlert()
+        myPopup.messageText = "Alchemy Lab Alert";
+        myPopup.informativeText = AlertInfo;
+        myPopup.alertStyle = NSAlertStyle.CriticalAlertStyle;
+        myPopup.addButtonWithTitle("OK");
+        myPopup.runModal();
+        return true;
+    }
+    
     // Ingredient Library Button Cick Handler
     @IBAction func outletIngredientLibrarySegmentButton(sender: NSSegmentedControl) {
         if (sender.selectedSegment == 0)
@@ -509,6 +519,31 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         }
         if (sender.selectedSegment == 1)
         {
+            if (outletIngredientLibraryTableView.selectedRow > -1)
+            {
+                // probably need to check and see if this ingredient is used in any recipes..
+                let IDTocheck = ingredientLibrary[outletIngredientLibraryTableView.selectedRow].ID;
+                var ingredientInUse : Bool = false;
+                for recipe in recipes
+                {
+                    for ingredient in recipe.RecipeIngredients
+                    {
+                        if (ingredient.RecipeIngredientID == IDTocheck)
+                        {
+                            ingredientInUse = true;
+                        }
+                    }
+                }
+                if (ingredientInUse)
+                {
+                    dialogAlertUser("Cannot delete ingredient - currently in use in recipe.");
+                    // let the user know we can't delete this ingredient as it's in use.
+                }
+                else
+                {
+                    ingredientLibrary.removeAtIndex(outletIngredientLibraryTableView.selectedRow);
+                }
+            }
             print("delete ingredient");
         }
         if (sender.selectedSegment == 2)

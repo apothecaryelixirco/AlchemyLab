@@ -95,7 +95,7 @@ class AddIngredientViewController: NSViewController {
     @IBOutlet weak var outletStatusLabel: NSTextField!
     @IBAction func saveCancelSegmentAction(sender: NSSegmentedControl) {
         print ("attempting to save ingredient!");
-            if (sender.selectedSegment == 0)
+            if (sender.selectedSegment == 1)
             {
                 print ("we should be saving here.");
                 // need to check if our ingredient is a base (PG/VG/NIC) and if it is, we can't add it if it's already there.
@@ -172,7 +172,7 @@ class AddIngredientViewController: NSViewController {
                     self.dismissViewController(self);
                 }
             }
-            if (sender.selectedSegment == 1)
+            if (sender.selectedSegment == 0)
             {
                 print("cancel chosen - bail.");
                 self.dismissViewController(self);

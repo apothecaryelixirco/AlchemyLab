@@ -13,6 +13,8 @@ protocol RecipeEditorDelegate: class {
     func RecipeViewDelegate(controller: RecipeEditorViewController, recipe: Recipe, mode : String)
 }
 
+
+
 class RecipeEditorViewController: NSViewController {
 
     weak var delegate: RecipeEditorDelegate?
@@ -78,7 +80,7 @@ class RecipeEditorViewController: NSViewController {
     
     @IBAction func outletSaveSegmentHandler(sender: NSSegmentedControl) {
         print("handler!");
-        if (sender.selectedSegment == 0)
+        if (sender.selectedSegment == 1)
         {
             // validate control values
             var validatedRecipe : Bool = true;
@@ -105,7 +107,7 @@ class RecipeEditorViewController: NSViewController {
                 dismissViewController(self);
             }
         }
-        if (sender.selectedSegment == 1)
+        if (sender.selectedSegment == 0)
         {
             dismissViewController(self);
             print("cancel");
