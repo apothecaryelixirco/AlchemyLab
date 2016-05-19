@@ -272,7 +272,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         
         if let addIngredientWindow = addIngredientWindowController.window {
             
-            print("calling display as popover.");
+            print("Recipe Ingredient Editor Popover.");
             let addIngredientViewController = addIngredientWindow.contentViewController as! AddIngredientViewController
             addIngredientViewController.ingredientLibrary = ingredientLibrary;
             addIngredientViewController.mode = "EDIT";
@@ -300,7 +300,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         
         if let addIngredientWindow = addIngredientWindowController.window {
             
-            print("calling display as popover.");
+            print("Recipe Ingredient Editor Popover from Table Row");
             let addIngredientViewController = addIngredientWindow.contentViewController as! AddIngredientViewController
             addIngredientViewController.ingredientLibrary = ingredientLibrary;
             addIngredientViewController.mode = "EDIT";
@@ -390,13 +390,14 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         
         if let addIngredientWindow = addIngredientWindowController.window {
             
-            print("calling display as popover.");
+            print("Calling display as popover for adding recipe ingredient.");
             let addIngredientViewController = addIngredientWindow.contentViewController as! AddIngredientViewController
             addIngredientViewController.ingredientLibrary = ingredientLibrary;
             addIngredientViewController.incomingRecipe = currentRecipe;
             addIngredientViewController.mode = "ADD";
             
             presentViewController(addIngredientViewController, asPopoverRelativeToRect: sender.bounds, ofView: sender, preferredEdge: NSRectEdge.MinX, behavior: NSPopoverBehavior.Transient)
+            addIngredientViewController.RefreshForAdd();
 //            outletRecipeTableView.selectedCell()?.draw
 //            presentViewControllerAsSheet(addIngredientViewController);
             print("done with the modal view.");
@@ -724,11 +725,15 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         outletRecipeTableView.reloadData();
 
     }
+    
+    
+    
     func UpdateRecipeView()
     {
         let recipe : Recipe = currentRecipe;
         recipeDisplay.removeAll();
-        // go through the current recipe and read it all up to display!
+        // sort our ingredients by sequence prior to displaying.
+        recipe.RecipeIngredients.sortInPlace({$0.Sequence < $1.Sequence});
         for ingredient in recipe.RecipeIngredients
         {
             let ingredientFromLibrary = getIngredientByUUID(ingredient.RecipeIngredientID, ingredientLibrary: ingredientLibrary)
@@ -752,9 +757,6 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             rlDisplay.backgroundPercentage = ingredient.Percentage;
             recipeDisplay.append(rlDisplay);
         }
-        //recipeDisplay.sortInPlace({$0.Sequence < $1.Sequence});
-        //outletPGRatioTextField.integerValue = recipe.PGRatio;
-        //outletVGRatioLabel.integerValue = recipe.VGRatio;
         outletRecipeTableView.reloadData();
     }
     

@@ -56,6 +56,22 @@ class AddIngredientViewController: NSViewController {
         // Do view setup here.
     }
     
+    func RefreshForAdd()
+    {
+        if (mode == "ADD")
+        {
+            // we need to find out what sequence we are at and increment that by 1.
+            var highSequence : Int = -1;
+            for loopIngredient in incomingRecipe.RecipeIngredients
+            {
+                if (loopIngredient.Sequence > highSequence)
+                {
+                    highSequence = loopIngredient.Sequence;
+                }
+            }
+            outletSequenceValue.integerValue = highSequence+1;
+        }
+    }
     func RefreshForEdit()
     {
         if (mode == "EDIT")
