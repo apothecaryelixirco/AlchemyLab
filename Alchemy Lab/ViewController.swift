@@ -91,11 +91,23 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         {
             // we have received a recipe, now we need to add it to our view.
             recipes.append(recipe);
-
-            UpdateMixLabView();
-            UpdateRecipeView();
-            outletRecipeList.reloadData();
         }
+        outletRecipeList.reloadData();
+        if (mode == "EDIT")
+        {
+            let recipeIndex = getRecipeIndexInLibraryByUUID(recipe.ID, recipeLibrary: recipes);
+            if (recipeIndex > -1)
+            {
+                let indexSet = NSIndexSet(index: recipeIndex);
+                outletRecipeList.selectRowIndexes(indexSet, byExtendingSelection: false);
+            }
+            // we've edited a recipe, need to reload it which means we need to select it?
+            // need to get the index of the recipe we're working with..
+        }
+        UpdateUIControls();
+        UpdateMixLabView();
+        UpdateRecipeView();
+
         print("received recipe from recipe view controller.");
     }
     
@@ -341,6 +353,9 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
     }
 
 
+ 
+    //text = NSTextField.alloc().initWithFrame_(((0, 0), (30.0, 22.0)))
+    //text.setCell_(NSSearchFieldCell.alloc().init())
     
     @IBAction func ShowRecipeEditorPopOver(sender: NSSegmentedControl)
     {
@@ -500,9 +515,31 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
     }
     
     @IBAction func outletIngredientLibraryItemDoubleClick(sender: NSTableView) {
-        showIngredientLibraryEditorPopupAsEditFromTableRow(sender);
+//        showIngredientLibraryEditorPopupAsEditFromTableRow(sender);
         print("double cilcked item.  edit ingredient.");
+        // when we double click a row let's add the ingredient to our recipe.
+        if (sender.selectedRow > -1)
+        {
+            // filtering is causing us to get the wrong ingredient...why??!?!
+            AddIngredientFromDoubleClick(sender.selectedRow);
+        }
+//        AddIngredientFromDoubleClick
     }
+    
+    
+    func AddIngredientFromDoubleClick(ingredientIndex: Int)
+    {
+        /*
+ row = [notesTable selectedRow];
+ [myArrayController setSelectionIndex:row];
+ 
+ NSMutableDictionary *dictionary = [myArrayController selection];
+ editNoteTextView.string = [dictionary valueForKey:@notesText];*/
+        //theRealObject = [[someArrayController selection] valueForKey:@"self"];
+            // TODO OMG OMG OMG
+        print("we double clicked something....");
+    }
+    
     
     func dialogAlertUser(AlertInfo: String) -> Bool {
         let myPopup: NSAlert = NSAlert()
@@ -709,6 +746,8 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             rlDisplay.backgroundPercentage = ingredient.Percentage;
             recipeDisplay.append(rlDisplay);
         }
+        //outletPGRatioTextField.integerValue = recipe.PGRatio;
+        //outletVGRatioLabel.integerValue = recipe.VGRatio;
         outletRecipeTableView.reloadData();
     }
     
@@ -954,12 +993,13 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             currentRecipe = recipe;
             if (currentRecipe.PGRatio + currentRecipe.VGRatio != 100)
             {
+                print("VG/PG Ratio is not 100");
                 // TODO: Remove when supporting Max VG.
-                PGRatio=30;
-                VGRatio=70;
                 currentRecipe.PGRatio = 30;
                 currentRecipe.VGRatio = 70;
             }
+            PGRatio = currentRecipe.PGRatio;
+            VGRatio = currentRecipe.VGRatio;
             UpdateUIControls();
             UpdateRecipeView();
             UpdateMixLabView();
