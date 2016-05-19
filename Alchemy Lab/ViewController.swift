@@ -190,8 +190,23 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             //application.runModalForWindow(addIngredientWindow)
         }
     }
+    @IBOutlet weak var outletMixLabScrollView: NSScrollView!
+
     
-    
+    @IBAction func outletMixLabSegmentActionhandler(sender: NSSegmentedControl) {
+        if (sender.selectedSegment == 1)
+        {
+//            let op = NSPrintOperation(view: self.outletMixLabScrollView);
+//            outletMixLabScrollView.print(self);
+            let pInfo = NSPrintInfo();
+            pInfo.orientation = NSPaperOrientation.Landscape;
+            let pOperation = NSPrintOperation(view: self.outletMixLabScrollView, printInfo: pInfo);
+            pOperation.runOperation();
+            
+//            outletMixLabView.print(self);
+  //          op.runOperation();
+        }
+    }
     
     @IBAction func showIngredientLibraryEditorPopupAsAdd(sender: NSSegmentedControl)
     {
@@ -464,7 +479,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
     
     @IBAction func outletNicStrengthTextFieldAction(sender: NSTextField) {
         let string = outletNicStrengthTextField.stringValue;
-        let numericSet = "0123456789"
+        let numericSet = "0123456789.";
         let filteredCharacters = string.characters.filter {
             return numericSet.containsString(String($0))
         }
@@ -1264,6 +1279,41 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         print("finished XML work...");
         
     }
+    
+//    
+//    func saveMixLabAsPDF()
+//    {
+//        var htmlString : String = "<!DOCTYPE html> <html><head><style>body {font: normal 12px Verdana, Arial, sans-serif;}table#t01 tr:nth-child(even){background-color: #eee;}table#t01 tr:nth-child(odd) {background-color:#fff;}table#t01 th{background-color: #2b78ba;color: white;}</style></head><body>";
+//        htmlString += currentRecipe.RecipeName + " - " + currentRecipe.RecipeAuthor + " - ";
+//        htmlString += currentRecipe.RecipeDate.description + String(format: "%d/%d VG/PG",currentRecipe.PGRatio, currentRecipe.VGRatio);
+//        htmlString += "<table id=\"t01\"><tr><th>Ingredient</th><th>Percentage</th><th>Volume</th><th>Weight</th><th>Cost</th></tr>";
+//        for tableRow in mixLabDisplay
+//        {
+//            
+//        }
+//        PDFDoc
+//
+//  //      let gContext = NSGraphicsContext(self.outletMixLabView.contentSiz)
+//        /*
+// UIGraphicsBeginImageContext(self.myTableView.contentSize);
+// [self.myTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+// [self.myTableView.layer renderInContext:UIGraphicsGetCurrentContext()];
+// 
+// int rows = [self.myTableView numberOfRowsInSection:0];
+// int numberofRowsInView = 4;
+// for (int i =0; i < rows/numberofRowsInView; i++) {
+// [self.myTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:(i+1)*numberofRowsInView inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+// [self.myTableView.layer renderInContext:UIGraphicsGetCurrentContext()];
+// 
+// }
+// UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+// UIImageView *myImage=[[UIImageView alloc]initWithImage:image];
+// UIGraphicsEndImageContext();
+// 
+// 
+// [self createPDFfromUIViews:myImage saveToDocumentsWithFileName:@"PDF Name"];*/
+//        
+//    }
     func WriteIngredientLibraryToFile()
     {
         let xmlRoot = NSXMLElement(name: "IngredientLibrary");

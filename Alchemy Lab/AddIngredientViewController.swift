@@ -111,6 +111,8 @@ class AddIngredientViewController: NSViewController {
     
     @IBOutlet weak var tempSegmentOutlet: NSSegmentedControl!
 
+    
+    
     @IBOutlet weak var outletStatusLabel: NSTextField!
     @IBAction func saveCancelSegmentAction(sender: NSSegmentedControl) {
         print ("attempting to save ingredient!");
