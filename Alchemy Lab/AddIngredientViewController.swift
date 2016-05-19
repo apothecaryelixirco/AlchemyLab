@@ -31,6 +31,8 @@ class AddIngredientViewController: NSViewController {
     @IBOutlet weak var percentageInputTextOutlet: NSTextField!
     @IBOutlet var ingredientArrayController: NSArrayController!
     
+    @IBOutlet weak var outletSequenceValue: NSTextField!
+    
     @IBAction func IngredientPopupAction(sender: NSPopUpButton) {
         let selectedIngredient = ingredientLibrary[IngredientPopup.indexOfSelectedItem];
         print(selectedIngredient.Name);
@@ -82,6 +84,7 @@ class AddIngredientViewController: NSViewController {
             {
                 IngredientPopup.selectItemAtIndex(indexOfIngredient)
             }
+            outletSequenceValue.integerValue = ingredientToEdit.Sequence;
         }
     }
     
@@ -112,6 +115,7 @@ class AddIngredientViewController: NSViewController {
                 
                 targetIngredient.RecipeIngredientID = (ingredientFromLibrary?.ID)!;
                 targetIngredient.Notes = recipeIngredientNotes.stringValue;
+                targetIngredient.Sequence = outletSequenceValue.integerValue;
                 var rejectItem : Bool = false;
                 print("checking for " + ingredientFromLibrary!.Type.uppercaseString);
                 print ("checking for conflicting base: " + (ingredientFromLibrary?.Type)!);

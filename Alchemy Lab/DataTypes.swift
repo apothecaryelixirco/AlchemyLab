@@ -87,6 +87,7 @@ class RecipeDisplay : NSObject {
     var Base : String = "";
     var Percentage : String = "";
     var Strength : String = "";
+    var Sequence : Int = 0;
     var backgroundStrength : Double = 0.00;
     var backgroundPercentage : Double = 0.00;
     var backgroundIngredient : RecipeIngredient = RecipeIngredient();

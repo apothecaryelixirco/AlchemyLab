@@ -112,6 +112,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
     }
     
     @IBAction func outletRecipeTableViewRowSelectedHandler(sender: NSTableView) {
+//        let ingredient = getIngredientByUUID(recipeDisplay[sender.selectedRow]?.ID, ingredientLibrary: <#T##[Ingredient]#>)
         print("a recipe row has been selected!");
      //   ingredientToEdit = currentRecipe.RecipeIngredients[outletRecipeTableView.selectedRow];
     //    showEditPopOverFromTableRow(sender);
@@ -446,14 +447,18 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
        // let ingredientToRemove = currentRecipe.RecipeIngredients[outletRecipeTableView.selectedRow];
         
         //print("removing " + ingredientToRemove.RecipeIngredient.Name);
+        // fix bug with removing when no index selected.
         let selectIndex = outletRecipeTableView.selectedRow;
-        currentRecipe.RecipeIngredients.removeAtIndex(outletRecipeTableView.selectedRow);
-//        outletRecipeTableView.reloadData();
-        UpdateRecipeView();
-        UpdateMixLabView();
-        UpdateUIControls();
-        let indexSet = NSIndexSet(index: selectIndex);
-        outletRecipeTableView.selectRowIndexes(indexSet,byExtendingSelection: false);
+        if (selectIndex > -1)
+        {
+            currentRecipe.RecipeIngredients.removeAtIndex(outletRecipeTableView.selectedRow);
+            //        outletRecipeTableView.reloadData();
+            UpdateRecipeView();
+            UpdateMixLabView();
+            UpdateUIControls();
+            let indexSet = NSIndexSet(index: selectIndex);
+            outletRecipeTableView.selectRowIndexes(indexSet,byExtendingSelection: false);
+        }
     }
     
     @IBAction func outletNicStrengthTextFieldAction(sender: NSTextField) {
@@ -731,6 +736,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             rlDisplay.Base = (ingredientFromLibrary?.Base)!;
             rlDisplay.Ingredient = (ingredientFromLibrary?.Name)!;
             rlDisplay.Percentage = String(format:"%2.2f%%",ingredient.Percentage);
+            rlDisplay.Sequence = ingredient.Sequence;
             if (ingredientFromLibrary!.Type.uppercaseString != "FLAVOR")
             {
                 rlDisplay.Percentage = "n/a";
@@ -746,6 +752,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             rlDisplay.backgroundPercentage = ingredient.Percentage;
             recipeDisplay.append(rlDisplay);
         }
+        //recipeDisplay.sortInPlace({$0.Sequence < $1.Sequence});
         //outletPGRatioTextField.integerValue = recipe.PGRatio;
         //outletVGRatioLabel.integerValue = recipe.VGRatio;
         outletRecipeTableView.reloadData();
@@ -1313,6 +1320,8 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             print(ingredientLibraryFromXML.count);
             print("ingredients in the dictionary.");
             ingredientLibrary = ingredientLibraryFromXML;
+            // now let's sort the ingredients...
+            ingredientLibrary.sortInPlace({$0.Name < $1.Name});
             outletIngredientLibraryTableView.reloadData();
             if (hadToAddIDs)
             {
