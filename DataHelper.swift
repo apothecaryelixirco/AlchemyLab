@@ -30,6 +30,7 @@ func getIngredientUUIDInLibraryByIndex(index : Int, ingredientLibrary : [Ingredi
     }
     return nil;
 }
+
 func getIngredientIndexInLibraryByUUID(UUID : String, ingredientLibrary : [Ingredient]) -> Int
 {
     
@@ -40,6 +41,7 @@ func getIngredientIndexInLibraryByUUID(UUID : String, ingredientLibrary : [Ingre
     return -1;
 }
 
+/* added 05.19.2016 */
 func getRecipeIndexInLibraryByUUID(UUID : String, recipeLibrary : [Recipe]) -> Int
 {
     if let i = recipeLibrary.indexOf({$0.ID == UUID})
