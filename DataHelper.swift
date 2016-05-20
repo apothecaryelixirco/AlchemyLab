@@ -74,3 +74,14 @@ func getRecipeIndexInLibraryByUUID(UUID : String, recipeLibrary : [Recipe]) -> I
     }
     return -1;
 }
+
+/* added 05.20.2016 */ /* may not be needed. */
+func getRecipeByUUID(UUID : String, recipeLibrary: [Recipe]) -> Recipe?
+{
+    print("looking for recipe..");
+    if let i = recipeLibrary.indexOf({$0.ID == UUID})
+    {
+        return recipeLibrary[i];
+    }
+    return nil;
+}

@@ -78,7 +78,21 @@ class RecipeEditorViewController: NSViewController {
 
     }
     
+    func getAllValuesFromControls()
+    {
+        workingRecipe.RecipeName = outletRecipeName.stringValue;
+        workingRecipe.Notes = outletRecipeName.stringValue;
+        workingRecipe.RecipeAuthor = outletAuthor.stringValue;
+        workingRecipe.maxVG = outletMaxVG.state == 1 ? true : false;
+        workingRecipe.RecipeCategory = outletRecipeCategory.stringValue;
+        workingRecipe.RecipeDate = outletDatePicker.dateValue;
+        workingRecipe.RecipeDescription = outletDescription.stringValue;
+        workingRecipe.PGRatio = outletPGRatio.integerValue;
+        workingRecipe.VGRatio = outletVGRatio.integerValue;
+    }
+    
     @IBAction func outletSaveSegmentHandler(sender: NSSegmentedControl) {
+        getAllValuesFromControls();
         print("handler!");
         if (sender.selectedSegment == 1)
         {

@@ -19,12 +19,9 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
     static var sharedInstance : ViewController?;
     // outlets
     
-    @IBOutlet weak var outletRecipeList: NSOutlineView!
+//    @IBOutlet weak var outletRecipeList: NSOutlineView!
     @IBOutlet weak var outletIngredientList: NSOutlineView!
     
-    //@IBOutlet var outletRecipe: NSArrayController!
-    
-   // @IBOutlet var outletMixLab: NSArrayController!
     @IBOutlet var outletRecipe: NSArrayController!
     
     @IBOutlet var outletMixLab: NSArrayController!
@@ -91,20 +88,47 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         }
     }
     
+    func getOutlineViewIndexByRecipeID(RecipeID : String) -> Int
+    {
+        for index in 0...outletRecipeCategoryOutlineView.numberOfRows
+        {
+            let object:AnyObject? = outletRecipeCategoryOutlineView.itemAtRow(index);
+            if (object is RecipeSourceListRecipe)
+            {
+                let recipeToCheck = object as! RecipeSourceListRecipe;
+                if (recipeToCheck.RecipeID == RecipeID)
+                {
+                    return(index);
+                }
+            }
+        }
+        return -1;
+    }
+    
     func RecipeViewDelegate(controller: RecipeEditorViewController, recipe: Recipe, mode: String) {
         if (mode == "ADD")
         {
             // we have received a recipe, now we need to add it to our view.
-            recipes.append(recipe);
+            recipeLibrary.append(recipe);
         }
-        outletRecipeList.reloadData();
+        LoadRecipesIntoSourceListContainer();
+        outletRecipeCategoryOutlineView.reloadData();
+        outletRecipeCategoryOutlineView.expandItem(nil, expandChildren: true);
+
+
         if (mode == "EDIT")
         {
-            let recipeIndex = getRecipeIndexInLibraryByUUID(recipe.ID, recipeLibrary: recipes);
-            if (recipeIndex > -1)
+            LoadRecipesIntoSourceListContainer();
+            outletRecipeCategoryOutlineView.reloadData();
+            outletRecipeCategoryOutlineView.expandItem(nil, expandChildren: true);
+
+            //dialogAlertUser("coming out of edit.");
+            let indexInOutlineView = getOutlineViewIndexByRecipeID(recipe.ID);
+            if (indexInOutlineView > -1)
             {
-                let indexSet = NSIndexSet(index: recipeIndex);
-                outletRecipeList.selectRowIndexes(indexSet, byExtendingSelection: false);
+                print("we found an index!");
+                let indexSet = NSIndexSet(index: indexInOutlineView);
+                outletRecipeCategoryOutlineView.selectRowIndexes(indexSet, byExtendingSelection: false);
             }
             // we've edited a recipe, need to reload it which means we need to select it?
             // need to get the index of the recipe we're working with..
@@ -112,7 +136,6 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         UpdateUIControls();
         UpdateMixLabView();
         UpdateRecipeView();
-
         print("received recipe from recipe view controller.");
     }
     
@@ -364,7 +387,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             
             addIngredientViewController.ingredientToEdit = ingredientToEdit;
             
-            presentViewController(addIngredientViewController, asPopoverRelativeToRect: outletRecipeList.bounds, ofView: outletRecipeTableView, preferredEdge: NSRectEdge.MaxX, behavior: NSPopoverBehavior.Transient)
+            presentViewController(addIngredientViewController, asPopoverRelativeToRect: outletRecipeTableView.bounds, ofView: outletRecipeTableView, preferredEdge: NSRectEdge.MaxX, behavior: NSPopoverBehavior.Transient)
             addIngredientViewController.RefreshForEdit();
         }
     }
@@ -395,7 +418,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             print("calling display as popover for recipe EDITING.");
             let recipeEditorViewController = recipeEditorWindow.contentViewController as! RecipeEditorViewController
             recipeEditorViewController.mode = "EDIT";
-            recipeEditorViewController.workingRecipe = recipes[sender.selectedRow];
+            recipeEditorViewController.workingRecipe = recipeLibrary[sender.selectedRow];
             presentViewController(recipeEditorViewController, asPopoverRelativeToRect: sender.bounds, ofView: sender, preferredEdge: NSRectEdge.MinY, behavior: NSPopoverBehavior.Transient)
             print("done with the modal view.");
             recipeEditorViewController.RefreshUIForEdit();
@@ -408,8 +431,11 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
     //text = NSTextField.alloc().initWithFrame_(((0, 0), (30.0, 22.0)))
     //text.setCell_(NSSearchFieldCell.alloc().init())
     
-    @IBAction func ShowRecipeEditorPopOver(sender: NSSegmentedControl)
+    //text = NSTextField.alloc().initWithFrame_(((0, 0), (30.0, 22.0)))
+    //text.setCell_(NSSearchFieldCell.alloc().init())
+    func ShowRecipeEditorPopOverFromRecipeLibraryIndex(index: Int)
     {
+        
         //Recipe Editor View Controller
         // 1
         let storyboard = NSStoryboard(name: "Main", bundle: nil)
@@ -419,13 +445,35 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             print("calling display as popover for recipe EDITING.");
             let recipeEditorViewController = recipeEditorWindow.contentViewController as! RecipeEditorViewController
             recipeEditorViewController.mode = "EDIT";
-            recipeEditorViewController.workingRecipe = recipes[outletRecipeList.selectedRow];
-            presentViewController(recipeEditorViewController, asPopoverRelativeToRect: sender.bounds, ofView: sender, preferredEdge: NSRectEdge.MinY, behavior: NSPopoverBehavior.Transient)
+            recipeEditorViewController.workingRecipe = recipeLibrary[index];
+            presentViewController(recipeEditorViewController, asPopoverRelativeToRect: outletRecipeCategoryOutlineView.bounds, ofView: outletRecipeCategoryOutlineView, preferredEdge: NSRectEdge.MinY, behavior: NSPopoverBehavior.Transient)
             print("done with the modal view.");
             recipeEditorViewController.RefreshUIForEdit();
-//            recipeEditorViewController.
+            //            recipeEditorViewController.
+            
         }
     }
+
+    
+//    @IBAction func ShowRecipeEditorPopOver(sender: NSSegmentedControl)
+//    {
+//        //Recipe Editor View Controller
+//        // 1
+//        let storyboard = NSStoryboard(name: "Main", bundle: nil)
+//        let recipeEditorWindowController = storyboard.instantiateControllerWithIdentifier("Recipe Editor View Controller") as! NSWindowController
+//        if let recipeEditorWindow = recipeEditorWindowController.window {
+//            
+//            print("calling display as popover for recipe EDITING.");
+//            let recipeEditorViewController = recipeEditorWindow.contentViewController as! RecipeEditorViewController
+//            recipeEditorViewController.mode = "EDIT";
+//            getR
+//            recipeEditorViewController.workingRecipe = recipeLibrary[outletRecipeList.selectedRow];
+//            presentViewController(recipeEditorViewController, asPopoverRelativeToRect: sender.bounds, ofView: sender, preferredEdge: NSRectEdge.MinY, behavior: NSPopoverBehavior.Transient)
+//            print("done with the modal view.");
+//            recipeEditorViewController.RefreshUIForEdit();
+////            recipeEditorViewController.
+//        }
+//    }
     
     
     
@@ -672,7 +720,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
                 // probably need to check and see if this ingredient is used in any recipes..
                 let IDTocheck = ingredientLibrary[outletIngredientLibraryTableView.selectedRow].ID;
                 var ingredientInUse : Bool = false;
-                for recipe in recipes
+                for recipe in recipeLibrary
                 {
                     for ingredient in recipe.RecipeIngredients
                     {
@@ -737,8 +785,23 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         if (sender.selectedSegment == 1)
         {
             print ("remove recipe");
-            recipes.removeAtIndex(outletRecipeList.selectedRow);
-            outletRecipeList.reloadData();
+            // need to remove a recipe, so first we need to find out what the Index of the selected recipe is in the library..
+            let selectedIndex = outletRecipeCategoryOutlineView.selectedRow;
+            let object:AnyObject? = outletRecipeCategoryOutlineView.itemAtRow(selectedIndex);
+            if (object is RecipeSourceListRecipe)
+            {
+                let recipeToRemoveFromControlSegment = object as! RecipeSourceListRecipe;
+                print("we are going to remove" + recipeToRemoveFromControlSegment.Name);
+                let indexToRemove = getRecipeIndexInLibraryByUUID(recipeToRemoveFromControlSegment.RecipeID, recipeLibrary: recipeLibrary);
+                if (indexToRemove > -1)
+                {
+                    recipeLibrary.removeAtIndex(indexToRemove);
+                    LoadRecipesIntoSourceListContainer();
+                    outletRecipeCategoryOutlineView.reloadData();
+                    outletRecipeCategoryOutlineView.expandItem(nil, expandChildren: true);
+                }
+
+            }
         }
         if (sender.selectedSegment == 2)
         {
@@ -754,9 +817,40 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         }
         if (sender.selectedSegment == 3)
         {
-            ShowRecipeEditorPopOver(sender);
-            print ("edit recipe");
+            print("we need to edit a recipe..let's find out which recipe we're editing..");
+            let selectedIndex = outletRecipeCategoryOutlineView.selectedRow;
+            let object:AnyObject? = outletRecipeCategoryOutlineView.itemAtRow(selectedIndex);
+            if (object is RecipeSourceListRecipe)
+            {
+                let recipeToEditFromControlSegment = object as! RecipeSourceListRecipe;
+                print("we are going to edit " + recipeToEditFromControlSegment.Name);
+                let indexToEdit = getRecipeIndexInLibraryByUUID(recipeToEditFromControlSegment.RecipeID, recipeLibrary: recipeLibrary);
+                if (indexToEdit > -1)
+                {
+                    print(String(format: "found recipe at index %d",indexToEdit));
+                    ShowRecipeEditorPopOverFromRecipeLibraryIndex(indexToEdit);
+                }
+            }
         }
+    }
+    
+    @IBAction func outletRecipeCategoryOutlineViewDoubleClickAction(sender: NSOutlineView) {
+        print("received double click event for Recipe Category outline view, handle it.");
+        let selectedIndex = sender.selectedRow;
+        let object:AnyObject? = sender.itemAtRow(selectedIndex);
+        if (object is RecipeSourceListRecipe)
+        {
+            let recipeToEditFromControlSegment = object as! RecipeSourceListRecipe;
+            print("we are going to edit " + recipeToEditFromControlSegment.Name);
+            let indexToEdit = getRecipeIndexInLibraryByUUID(recipeToEditFromControlSegment.RecipeID, recipeLibrary: recipeLibrary);
+            if (indexToEdit > -1)
+            {
+                print(String(format: "found recipe at index %d",indexToEdit));
+                ShowRecipeEditorPopOverFromRecipeLibraryIndex(indexToEdit);
+            }
+        }
+
+        // we need to edit a recipe now based on this.
     }
     
     // end outlets;
@@ -765,7 +859,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
     
     //dynamic var ingredientLibrary = LoadPlaceHolderIngredients();
     dynamic var ingredientLibrary = [Ingredient()];
-    dynamic var recipes = [Recipe()];
+    dynamic var recipeLibrary = [Recipe()];
     // these are the two data values for the Tables.
     dynamic var recipeDisplay = [RecipeDisplay]();
     dynamic var mixLab = [mixLabDisplay]();
@@ -790,7 +884,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         desiredNicStrength = 6;
         //recipes = LoadDefaultRecipe(ingredientLibrary);
         
-        currentRecipe = recipes[0];
+        currentRecipe = recipeLibrary[0];
         // let's get our sliders and UI all setup...
         UpdateUIControls();
         UpdateRecipeView();
@@ -811,8 +905,10 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
 //        outletRecipeTableView.registerForDraggedTypes(<#T##newTypes: [String]##[String]#>)
 //        outletRecipeTableView.registerForDraggedTypes(<#T##newTypes: [String]##[String]#>) -- Drag and drop functionality
         // http://www.knowstack.com/swift-nstableview-drag-drop-in/
-        outletRecipeList.reloadData()
+        //outletRecipeList.reloadData()
+        self.outletRecipeCategoryOutlineView.reloadData();
         self.outletRecipeCategoryOutlineView.expandItem(nil, expandChildren: true)
+//        self.view.c
         super.viewDidLoad()
         // Do any additional setup after loading the view.
     }
@@ -1124,135 +1220,21 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         
     }
     
-    /* old source list implementation */
-    /*
-
-    override var representedObject: AnyObject? {
-        didSet {
-        // Update the view, if already loaded.
-        }
-    }
-
-    func outlineViewSelectionDidChange(notification: NSNotification) {
-        print(notification);
-        
-        let selectedIndex = notification.object?.selectedRow
-        let object:AnyObject? = notification.object?.itemAtRow(selectedIndex!)
-        
-        if object is Recipe
-        {
-            let recipe = object as! Recipe;
-            print("Need to update the recipe and mixlab view for " + recipe.RecipeName);
-            currentRecipe = recipe;
-            if (currentRecipe.PGRatio + currentRecipe.VGRatio != 100)
-            {
-                print("VG/PG Ratio is not 100");
-                // TODO: Remove when supporting Max VG.
-                currentRecipe.PGRatio = 30;
-                currentRecipe.VGRatio = 70;
-            }
-            PGRatio = currentRecipe.PGRatio;
-            VGRatio = currentRecipe.VGRatio;
-            UpdateUIControls();
-            UpdateRecipeView();
-            UpdateMixLabView();
-        }
-        
-        // here's where we need to set up the new recipe/mixLab
-        
-    }
-    
-    
-    func outlineView(outlineView: NSOutlineView, child index: Int, ofItem item: AnyObject?) -> AnyObject {
-        if (outlineView.tag == 1) // this means we're in the recipe source list.
-        {
-            print("Calling delegate for index..");
-            print(index);
-            if (recipes.count > index) {
-                return recipes[index];
-            }
-        }
-        return self;
-    }
-    
-    func outlineView(outlineView: NSOutlineView, isItemExpandable item: AnyObject) -> Bool {
-        if (outlineView.tag == 1) // this means we're in the recipe source list.
-        {
-        print(2);
-            return false;
-        }
-        return false;
-    }
-    
-    func outlineView(outlineView: NSOutlineView, numberOfChildrenOfItem item: AnyObject?) -> Int {
-        if (outlineView.tag == 1) // this means we're in the recipe source list.
-        {
-            print("I believe this is our constructor for the list...first call.");
-            // here is where we should add our groups first, right?
-            if (item == nil)
-            {
-                return recipes.count
-            }
-            return 0
-        }
-        return 0;
-    }
-    func outlineView(outlineView: NSOutlineView, objectValueForTableColumn tableColumn: NSTableColumn?, byItem item: AnyObject?) -> AnyObject? {
-        if (outlineView.tag == 1) // this means we're in the recipe source list..
-        {
-            print(4);
-            //        return "ITEM"
-            return item as! Recipe;
-        }
-        return nil;
-    }
-    
-    func outlineView(outlineView: NSOutlineView, setObjectValue object: AnyObject?, forTableColumn tableColumn: NSTableColumn?, byItem item: AnyObject?) {
-        if (outlineView.tag == 1)
-        {
-            print(5);
-            print(object, tableColumn, recipes)
-        }
-    }
-    
-    func outlineView(outlineView: NSOutlineView,
-                     viewForTableColumn tableColumn: NSTableColumn?,
-                                        item: AnyObject) -> NSView? {
-        if (outlineView.tag == 1)
-        {
-            print("Delegate called!");
-            
-            let r = item as! Recipe;
-            let v = outlineView.makeViewWithIdentifier("DataCell", owner: self) as! NSTableCellView;
-            v.textField?.stringValue = r.RecipeName;
-            v.imageView!.image = NSImage(named: NSImageNameQuickLookTemplate);
-            return v;
-        }
-        return nil;
-    }
-    */
- 
- 
-    /* End old source list implementation */
-    
-    /* new source List implementation */
-/*class RecipeSourceListHeader : NSObject
- class RecipeSourceListCategory : NSObject
- class RecipeSourceListRecipe : NSObject
-*/
+ /* New source list implementation */
  
     var recipeSourceListHeader : RecipeSourceListHeader = RecipeSourceListHeader();
     func LoadRecipesIntoSourceListContainer()
     {
+        recipeSourceListHeader = RecipeSourceListHeader();
         recipeSourceListHeader.Name = "Recipes";
         // let's determine our categories...
         var categories : [String] = []
         // we've created our header.  now we have to create our recipes.
-        for recipeCategory in recipes
+        for recipeCategory in recipeLibrary
         {
-            if !categories.contains(recipeCategory.RecipeCategory.uppercaseString)
+            if !categories.contains(recipeCategory.RecipeCategory.capitalizedString)
             {
-                categories.append(recipeCategory.RecipeCategory.uppercaseString);
+                categories.append(recipeCategory.RecipeCategory.capitalizedString);
             }
         }
         // now we have a list of categories, let's create an object for each one.
@@ -1260,12 +1242,14 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         {
             let recipeCategory = RecipeSourceListCategory();
             recipeCategory.CategoryName = categoryToCreate;
-            for recipeToAddToCategory in recipes where recipeToAddToCategory.RecipeCategory.uppercaseString == recipeCategory.CategoryName
+            recipeCategory.Icon = NSImage(named: "category");
+            for recipeToAddToCategory in recipeLibrary where recipeToAddToCategory.RecipeCategory.capitalizedString == recipeCategory.CategoryName
             {
                 // create the recipe and add it to the list.
                 let recipeSourceToAdd = RecipeSourceListRecipe();
                 recipeSourceToAdd.Name = recipeToAddToCategory.RecipeName;
                 recipeSourceToAdd.RecipeID = recipeToAddToCategory.ID;
+                recipeSourceToAdd.Icon = NSImage(named: "chemical");
                 print("adding recipe to category.");
                 recipeCategory.Recipes.append(recipeSourceToAdd);
             }
@@ -1284,34 +1268,36 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
     }
     
     func outlineView(outlineView: NSOutlineView, child index: Int, ofItem item: AnyObject?) -> AnyObject {
-        if (outlineView == outletRecipeCategoryOutlineView)
+        print("outlineView: 1");
+        if (recipeSourceListHeader.RecipeCategories.count < 1)
         {
-            
+            return self;
+        }
             if let item: AnyObject = item {
                 switch item {
                 case let recipeHeader as RecipeSourceListHeader:
+                    print("item is a recipe header.");
                     return recipeHeader.RecipeCategories[index]
                 case let recipeCategory as RecipeSourceListCategory:
+                    print("item is a recipe category.");
                     return recipeCategory.Recipes[index]
                 default:
+                    print("item is self.");
                     return self
                 }
             } else {
                 switch index {
                 case 0:
-                    return recipeSourceListHeader.RecipeCategories[0];
+                    print("returning first row.");
+                    return recipeSourceListHeader;
                 default:
                     return recipeSourceListHeader.RecipeCategories[0]; // not sure about this.
                 }
             }
-        }
-        return self;
     }
     
     func outlineView(outlineView: NSOutlineView, isItemExpandable item: AnyObject) -> Bool {
-        if (outlineView == outletRecipeCategoryOutlineView)
-        {
-            
+        print("outlineView: 2");
             switch item {
             case let recipeHeader as RecipeSourceListHeader:
                 return (recipeHeader.RecipeCategories.count > 0) ? true : false
@@ -1320,56 +1306,60 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             default:
                 return false
             }
-        }
-        return false;
     }
     
     func outlineView(outlineView: NSOutlineView, numberOfChildrenOfItem item: AnyObject?) -> Int {
-        if (outlineView == outletRecipeCategoryOutlineView)
-        {
-            
+        print("outlineView: 3");
             if let item: AnyObject = item {
                 switch item {
                 case let recipeHeader as RecipeSourceListHeader:
+                    print("outlineView: returning recipe categories count.");
                     return recipeHeader.RecipeCategories.count
                 case let recipeCategory as RecipeSourceListCategory:
+                    print("outlineView: returning recipe count.");
                     return recipeCategory.Recipes.count
                 default:
+                    print("outlineView: not returning shit.");
                     return 0
                 }
             } else {
-                return 1 //Department1 , Department 2
+                print("outlineView: default bullshit.");
+                return 1; //Department1 , Department 2
             }
-        }
-        return 0;
     }
     
     
     // NSOutlineViewDelegate
     func outlineView(outlineView: NSOutlineView, viewForTableColumn: NSTableColumn?, item: AnyObject) -> NSView? {
-        if (outlineView == outletRecipeCategoryOutlineView)
-        {
-            
+        
+        print("outlineView: 4");
             switch item {
             case let recipeHeader as RecipeSourceListHeader:
+                print("we should be creating a header cell.");
                 let view = outlineView.makeViewWithIdentifier("HeaderCell", owner: self) as! NSTableCellView
                 if let textField = view.textField {
                     textField.stringValue = recipeHeader.Name;
                 }
                 return view
             case let recipeCategory as RecipeSourceListCategory:
-                let view = outlineView.makeViewWithIdentifier("DataCell", owner: self) as! NSTableCellView
+                print("outlineView: we should be creating a tablecellview here it seems...");
+                print(recipeCategory.CategoryName);
+                let view = outlineView.makeViewWithIdentifier("CategoryCell", owner: self) as! NSTableCellView;
+                print("made the view!");
                 if let textField = view.textField {
                     textField.stringValue = recipeCategory.CategoryName;
                 }
-                //if let image = account.icon {
-                //    view.imageView!.image = image
-                //}
+                if let image = recipeCategory.Icon {
+                    view.imageView!.image = image
+                }
                 return view
             case let recipe as RecipeSourceListRecipe:
-                let view = outlineView.makeViewWithIdentifier("DataCell", owner: self) as! NSTableCellView
+                let view = outlineView.makeViewWithIdentifier("RecipeCell", owner: self) as! NSTableCellView
                 if let textField = view.textField {
                     textField.stringValue = recipe.Name
+                }
+                if let image = recipe.Icon {
+                    view.imageView!.image = image;
                 }
                // if let image = employee.icon {
                //     view.imageView!.image = image
@@ -1378,36 +1368,48 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             default:
                 return nil
             }
-        }
-        return nil;
     }
     
     func outlineView(outlineView: NSOutlineView, isGroupItem item: AnyObject) -> Bool {
-        if (outlineView == outletRecipeCategoryOutlineView)
-        {
-            
+        print("outlineView: 5");
             switch item {
             case let recipeHeader as RecipeSourceListHeader:
+                print("outlineView: returning true.");
                 return true
             default:
+                print("outlineView: returning false.");
                 return false
             }
-        }
-        return false;
     }
     
     func outlineViewSelectionDidChange(notification: NSNotification)
     {
-        print(notification)
-        var selectedIndex = notification.object?.selectedRow
-        var object:AnyObject? = notification.object?.itemAtRow(selectedIndex!)
-        print(object)
+        print(notification);
+        var selectedIndex = notification.object?.selectedRow;
+        var object:AnyObject? = notification.object?.itemAtRow(selectedIndex!);
         if (object is RecipeSourceListRecipe)
         {
-            print("we selected a recipe!!!");
-        }
-        else{
-            print("Do nothing on Department or Account Selection")
+            let r = object as! RecipeSourceListRecipe;
+            
+            print("need to load up recipe: " + r.Name + "(" + r.RecipeID + ")");
+            let i = getRecipeIndexInLibraryByUUID(r.RecipeID, recipeLibrary: recipeLibrary);
+            if (i > -1)
+            {
+                currentRecipe = recipeLibrary[i];
+                if (currentRecipe.PGRatio + currentRecipe.VGRatio != 100)
+                {
+                    currentRecipe.PGRatio = 30;
+                    currentRecipe.VGRatio = 70;
+                }
+                PGRatio = currentRecipe.PGRatio;
+                VGRatio = currentRecipe.VGRatio;
+                UpdateUIControls();
+                UpdateRecipeView();
+                UpdateMixLabView();
+            } else
+            {
+                dialogAlertUser("cannot find recipe in library.");
+            }
         }
         
     }
@@ -1529,7 +1531,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         let xmlDoc = NSXMLDocument(rootElement: xmlRoot);
         
         print ("reeive Write recipe calll....");
-        for recipe in recipes
+        for recipe in recipeLibrary
         {
             let recipeElement = NSXMLElement(name: "Recipe");
             xmlRoot.addChild(recipeElement);
@@ -1665,7 +1667,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             print("finished parsing recipe XML file");
             print(recipeLibraryFromXML.count);
             print("recipes in the dictionary.");
-            recipes = recipeLibraryFromXML;
+            recipeLibrary = recipeLibraryFromXML;
             print ("yay");
             outletRecipeTableView.reloadData();
             if (hadToAddRecipeIDs)
