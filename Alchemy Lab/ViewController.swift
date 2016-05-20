@@ -777,6 +777,8 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         LoadIngredientsFromXML();
         LoadRecipesFromXML();
         
+        // recipes are now in the library, let's make our view for it.
+        LoadRecipesIntoSourceListContainer();
         // now that recipes are loaded...we need to create our
 
         // defaults for recipe.
@@ -810,6 +812,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
 //        outletRecipeTableView.registerForDraggedTypes(<#T##newTypes: [String]##[String]#>) -- Drag and drop functionality
         // http://www.knowstack.com/swift-nstableview-drag-drop-in/
         outletRecipeList.reloadData()
+        self.outletRecipeCategoryOutlineView.expandItem(nil, expandChildren: true)
         super.viewDidLoad()
         // Do any additional setup after loading the view.
     }
@@ -1122,7 +1125,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
     }
     
     /* old source list implementation */
-    
+    /*
 
     override var representedObject: AnyObject? {
         didSet {
@@ -1227,128 +1230,190 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         }
         return nil;
     }
+    */
  
  
     /* End old source list implementation */
     
-    /* new source List implementation 
+    /* new source List implementation */
+/*class RecipeSourceListHeader : NSObject
+ class RecipeSourceListCategory : NSObject
+ class RecipeSourceListRecipe : NSObject
+*/
  
- override var representedObject: AnyObject? {
- didSet {
- // Update the view, if already loaded.
- }
- }
+    var recipeSourceListHeader : RecipeSourceListHeader = RecipeSourceListHeader();
+    func LoadRecipesIntoSourceListContainer()
+    {
+        recipeSourceListHeader.Name = "Recipes";
+        // let's determine our categories...
+        var categories : [String] = []
+        // we've created our header.  now we have to create our recipes.
+        for recipeCategory in recipes
+        {
+            if !categories.contains(recipeCategory.RecipeCategory.uppercaseString)
+            {
+                categories.append(recipeCategory.RecipeCategory.uppercaseString);
+            }
+        }
+        // now we have a list of categories, let's create an object for each one.
+        for categoryToCreate in categories
+        {
+            let recipeCategory = RecipeSourceListCategory();
+            recipeCategory.CategoryName = categoryToCreate;
+            for recipeToAddToCategory in recipes where recipeToAddToCategory.RecipeCategory.uppercaseString == recipeCategory.CategoryName
+            {
+                // create the recipe and add it to the list.
+                let recipeSourceToAdd = RecipeSourceListRecipe();
+                recipeSourceToAdd.Name = recipeToAddToCategory.RecipeName;
+                recipeSourceToAdd.RecipeID = recipeToAddToCategory.ID;
+                print("adding recipe to category.");
+                recipeCategory.Recipes.append(recipeSourceToAdd);
+            }
+            recipeSourceListHeader.RecipeCategories.append(recipeCategory);
+        }
+        print("now we have a list!!");
+    }
+    
  
- func outlineView(outlineView: NSOutlineView, child index: Int, ofItem item: AnyObject?) -> AnyObject {
- if let item: AnyObject = item {
- switch item {
- case let department as Department:
- return department.accounts[index]
- case let account as Account:
- return account.employees[index]
- default:
- return self
- }
- } else {
- switch index {
- case 0:
- return department1
- default:
- return department2
- }
- }
- }
+    @IBOutlet weak var outletRecipeCategoryOutlineView: NSOutlineView!
+    
+    override var representedObject: AnyObject? {
+        didSet {
+            // Update the view, if already loaded.
+        }
+    }
+    
+    func outlineView(outlineView: NSOutlineView, child index: Int, ofItem item: AnyObject?) -> AnyObject {
+        if (outlineView == outletRecipeCategoryOutlineView)
+        {
+            
+            if let item: AnyObject = item {
+                switch item {
+                case let recipeHeader as RecipeSourceListHeader:
+                    return recipeHeader.RecipeCategories[index]
+                case let recipeCategory as RecipeSourceListCategory:
+                    return recipeCategory.Recipes[index]
+                default:
+                    return self
+                }
+            } else {
+                switch index {
+                case 0:
+                    return recipeSourceListHeader.RecipeCategories[0];
+                default:
+                    return recipeSourceListHeader.RecipeCategories[0]; // not sure about this.
+                }
+            }
+        }
+        return self;
+    }
+    
+    func outlineView(outlineView: NSOutlineView, isItemExpandable item: AnyObject) -> Bool {
+        if (outlineView == outletRecipeCategoryOutlineView)
+        {
+            
+            switch item {
+            case let recipeHeader as RecipeSourceListHeader:
+                return (recipeHeader.RecipeCategories.count > 0) ? true : false
+            case let recipeCategory as RecipeSourceListCategory:
+                return (recipeCategory.Recipes.count > 0) ? true : false
+            default:
+                return false
+            }
+        }
+        return false;
+    }
+    
+    func outlineView(outlineView: NSOutlineView, numberOfChildrenOfItem item: AnyObject?) -> Int {
+        if (outlineView == outletRecipeCategoryOutlineView)
+        {
+            
+            if let item: AnyObject = item {
+                switch item {
+                case let recipeHeader as RecipeSourceListHeader:
+                    return recipeHeader.RecipeCategories.count
+                case let recipeCategory as RecipeSourceListCategory:
+                    return recipeCategory.Recipes.count
+                default:
+                    return 0
+                }
+            } else {
+                return 1 //Department1 , Department 2
+            }
+        }
+        return 0;
+    }
+    
+    
+    // NSOutlineViewDelegate
+    func outlineView(outlineView: NSOutlineView, viewForTableColumn: NSTableColumn?, item: AnyObject) -> NSView? {
+        if (outlineView == outletRecipeCategoryOutlineView)
+        {
+            
+            switch item {
+            case let recipeHeader as RecipeSourceListHeader:
+                let view = outlineView.makeViewWithIdentifier("HeaderCell", owner: self) as! NSTableCellView
+                if let textField = view.textField {
+                    textField.stringValue = recipeHeader.Name;
+                }
+                return view
+            case let recipeCategory as RecipeSourceListCategory:
+                let view = outlineView.makeViewWithIdentifier("DataCell", owner: self) as! NSTableCellView
+                if let textField = view.textField {
+                    textField.stringValue = recipeCategory.CategoryName;
+                }
+                //if let image = account.icon {
+                //    view.imageView!.image = image
+                //}
+                return view
+            case let recipe as RecipeSourceListRecipe:
+                let view = outlineView.makeViewWithIdentifier("DataCell", owner: self) as! NSTableCellView
+                if let textField = view.textField {
+                    textField.stringValue = recipe.Name
+                }
+               // if let image = employee.icon {
+               //     view.imageView!.image = image
+               // }
+                return view
+            default:
+                return nil
+            }
+        }
+        return nil;
+    }
+    
+    func outlineView(outlineView: NSOutlineView, isGroupItem item: AnyObject) -> Bool {
+        if (outlineView == outletRecipeCategoryOutlineView)
+        {
+            
+            switch item {
+            case let recipeHeader as RecipeSourceListHeader:
+                return true
+            default:
+                return false
+            }
+        }
+        return false;
+    }
+    
+    func outlineViewSelectionDidChange(notification: NSNotification)
+    {
+        print(notification)
+        var selectedIndex = notification.object?.selectedRow
+        var object:AnyObject? = notification.object?.itemAtRow(selectedIndex!)
+        print(object)
+        if (object is RecipeSourceListRecipe)
+        {
+            print("we selected a recipe!!!");
+        }
+        else{
+            print("Do nothing on Department or Account Selection")
+        }
+        
+    }
+    
  
- func outlineView(outlineView: NSOutlineView, isItemExpandable item: AnyObject) -> Bool {
- switch item {
- case let department as Department:
- return (department.accounts.count > 0) ? true : false
- case let account as Account:
- return (account.employees.count > 0) ? true : false
- default:
- return false
- }
- }
  
- func outlineView(outlineView: NSOutlineView, numberOfChildrenOfItem item: AnyObject?) -> Int {
- if let item: AnyObject = item {
- switch item {
- case let department as Department:
- return department.accounts.count
- case let account as Account:
- return account.employees.count
- default:
- return 0
- }
- } else {
- return 2 //Department1 , Department 2
- }
- }
- 
- 
- // NSOutlineViewDelegate
- func outlineView(outlineView: NSOutlineView, viewForTableColumn: NSTableColumn?, item: AnyObject) -> NSView? {
- switch item {
- case let department as Department:
- let view = outlineView.makeViewWithIdentifier("HeaderCell", owner: self) as NSTableCellView
- if let textField = view.textField {
- textField.stringValue = department.name
- }
- return view
- case let account as Account:
- let view = outlineView.makeViewWithIdentifier("DataCell", owner: self) as NSTableCellView
- if let textField = view.textField {
- textField.stringValue = account.name
- }
- if let image = account.icon {
- view.imageView!.image = image
- }
- return view
- case let employee as Employee:
- let view = outlineView.makeViewWithIdentifier("DataCell", owner: self) as NSTableCellView
- if let textField = view.textField {
- textField.stringValue = employee.firstName + " " + employee.lastName
- }
- if let image = employee.icon {
- view.imageView!.image = image
- }
- return view
- default:
- return nil
- }
- 
- }
- 
- func outlineView(outlineView: NSOutlineView, isGroupItem item: AnyObject) -> Bool {
- switch item {
- case let department as Department:
- return true
- default:
- return false
- }
- }
- 
- func outlineViewSelectionDidChange(notification: NSNotification){
- println(notification)
- var selectedIndex = notification.object?.selectedRow
- var object:AnyObject? = notification.object?.itemAtRow(selectedIndex!)
- println(object)
- 
- if (object is Employee){
- println("selected Object is a Employee " +  (object as Employee).firstName);
- self.firstNameTextField?.stringValue = (object as Employee).firstName
- self.lastNameTextField?.stringValue = (object as Employee).lastName
- self.emailIdTextField?.stringValue = (object as Employee).email
- }
- else{
- println("Do nothing on Department or Account Selection")
- }
- 
- }
- 
- }
- 
- */
     /* XML Parsing Functionality */
  
     /*

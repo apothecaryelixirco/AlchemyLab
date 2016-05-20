@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Cocoa
 
 
 class Ingredient : NSObject
@@ -118,18 +119,25 @@ class Recipe : NSObject
     }
 }
 
-// may not be necessary.
-class RecipeCategory : NSObject
+class RecipeSourceListHeader : NSObject
 {
-    var ID = NSUUID().UUIDString;
-    var Recipes = [Recipe]();
-    var CategoryName = "";
-    
-    override init()
-    {
-        super.init();
-    }
+    var Name : String = "";
+    var Icon : NSImage? = NSImage();
+    var RecipeCategories : [RecipeSourceListCategory] = [];
 }
 
+class RecipeSourceListCategory : NSObject
+{
+    var CategoryName : String = "";
+    var Icon : NSImage? = NSImage();
+    var Recipes : [RecipeSourceListRecipe] = [RecipeSourceListRecipe]();
+}
+
+class RecipeSourceListRecipe : NSObject
+{
+    var Name : String = "";
+    var RecipeID : String = "";
+    var Icon : NSImage? = NSImage();
+}
 
 

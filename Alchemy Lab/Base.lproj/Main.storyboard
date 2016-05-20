@@ -2185,6 +2185,7 @@
                         <outlet property="outletPGRatioLabel" destination="Ohy-yD-dUm" id="QWD-Xf-474"/>
                         <outlet property="outletPGRatioTextField" destination="tSp-SE-9gt" id="OtE-Uz-Mlh"/>
                         <outlet property="outletRecipe" destination="a2c-H5-YWb" id="Wao-dR-fUb"/>
+                        <outlet property="outletRecipeCategoryOutlineView" destination="cer-Dr-YQJ" id="Uv2-80-1wC"/>
                         <outlet property="outletRecipeControlSegment" destination="ihe-91-Dpl" id="kDf-rO-wGL"/>
                         <outlet property="outletRecipeIngredientSegment" destination="I4R-Sc-ojj" id="Cml-2d-9fw"/>
                         <outlet property="outletRecipeList" destination="YeG-TW-ZUb" id="gE2-Eh-Foj"/>
