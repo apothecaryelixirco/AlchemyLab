@@ -1804,12 +1804,12 @@
                                 <segmentedCell key="cell" borderStyle="border" alignment="left" style="smallSquare" trackingMode="momentary" id="Gfq-u7-DMy">
                                     <font key="font" metaFont="system"/>
                                     <segments>
-                                        <segment image="NSAddTemplate"/>
-                                        <segment image="NSRemoveTemplate" tag="1"/>
-                                        <segment image="NSActionTemplate">
+                                        <segment toolTip="Add ingredient to recipe" image="NSAddTemplate"/>
+                                        <segment toolTip="Remove ingredient from recipe" image="NSRemoveTemplate" tag="1"/>
+                                        <segment toolTip="Modify recipe ingredient" image="NSActionTemplate">
                                             <nil key="label"/>
                                         </segment>
-                                        <segment image="NSRefreshTemplate">
+                                        <segment toolTip="Refresh recipe ingredients" image="NSRefreshTemplate">
                                             <nil key="label"/>
                                         </segment>
                                     </segments>
@@ -2030,20 +2030,23 @@
                                 </tableHeaderView>
                             </scrollView>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jRc-8i-oJW">
-                                <rect key="frame" x="607" y="368" width="106" height="23"/>
+                                <rect key="frame" x="607" y="368" width="79" height="23"/>
                                 <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="b2J-m9-h8c">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VtT-oc-QmO">
-                                <rect key="frame" x="712" y="368" width="88" height="23"/>
+                                <rect key="frame" x="685" y="368" width="116" height="23"/>
                                 <segmentedCell key="cell" borderStyle="border" alignment="left" style="smallSquare" trackingMode="momentary" id="jDV-if-d7B">
                                     <font key="font" metaFont="system"/>
                                     <segments>
-                                        <segment image="NSAddTemplate"/>
-                                        <segment image="NSRemoveTemplate" tag="1"/>
-                                        <segment image="NSActionTemplate">
+                                        <segment toolTip="Quick add ingredient to current recipe" image="NSShareTemplate"/>
+                                        <segment toolTip="Add ingredient to ingredient library" image="NSAddTemplate" tag="1"/>
+                                        <segment toolTip="Remove ingredient from ingredient library" image="NSRemoveTemplate">
+                                            <nil key="label"/>
+                                        </segment>
+                                        <segment toolTip="Modify ingredient" image="NSActionTemplate">
                                             <nil key="label"/>
                                         </segment>
                                     </segments>
@@ -2071,8 +2074,8 @@
                                 <segmentedCell key="cell" borderStyle="border" alignment="left" style="smallSquare" trackingMode="momentary" id="MFy-s2-L5C">
                                     <font key="font" metaFont="system"/>
                                     <segments>
-                                        <segment image="NSRefreshTemplate" width="32"/>
-                                        <segment image="NSShareTemplate" width="32" tag="1"/>
+                                        <segment toolTip="Not implemented yet." image="NSRefreshTemplate" width="32"/>
+                                        <segment toolTip="Print MixLab Output" image="NSShareTemplate" width="32" tag="1"/>
                                     </segments>
                                 </segmentedCell>
                                 <connections>

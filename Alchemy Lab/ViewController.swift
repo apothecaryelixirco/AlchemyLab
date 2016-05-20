@@ -63,6 +63,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         {
             ingredientLibrary.append(ingredient);
             print ("add ingredient to library.");
+            ingredientLibrary.sortInPlace({$0.Name < $1.Name});
             outletIngredientLibraryTableView.reloadData();
 
         }
@@ -83,9 +84,13 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
 
             outletRecipeTableView.reloadData();
             outletMixLabView.reloadData();
+            ingredientLibrary.sortInPlace({$0.Name < $1.Name});
             outletIngredientLibraryTableView.reloadData();
+            //TODO: Ingredient library isn't sorting properly after adding an ingredient.
+
         }
     }
+    
     func RecipeViewDelegate(controller: RecipeEditorViewController, recipe: Recipe, mode: String) {
         if (mode == "ADD")
         {
@@ -163,9 +168,10 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
 
     @IBAction func outletRecipeRowDoubleClickIngredient(sender: NSTableView) {
         print("row has been double clicked!");
-        showEditPopOverFromTableRow(sender);
+        showRecipeIngredientEditPopOverFromTableRow(sender);
     }
     
+    /* Deprecated
     @IBAction func showEditIngredient(sender: AnyObject) {
         
         // 1
@@ -190,21 +196,22 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             //application.runModalForWindow(addIngredientWindow)
         }
     }
+ */
     @IBOutlet weak var outletMixLabScrollView: NSScrollView!
 
     
+    
     @IBAction func outletMixLabSegmentActionhandler(sender: NSSegmentedControl) {
+        if (sender.selectedSegment == 0)
+        {
+            dialogAlertUser("Feature not implemented yet.");
+        }
         if (sender.selectedSegment == 1)
         {
-//            let op = NSPrintOperation(view: self.outletMixLabScrollView);
-//            outletMixLabScrollView.print(self);
             let pInfo = NSPrintInfo();
             pInfo.orientation = NSPaperOrientation.Landscape;
             let pOperation = NSPrintOperation(view: self.outletMixLabScrollView, printInfo: pInfo);
             pOperation.runOperation();
-            
-//            outletMixLabView.print(self);
-  //          op.runOperation();
         }
     }
     
@@ -279,7 +286,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         }
     }
     
-    @IBAction func showEditPopOver(sender: NSSegmentedControl)
+    @IBAction func showRecipeIngredientEditPopOver(sender: NSSegmentedControl)
     {
         // 1
         let storyboard = NSStoryboard(name: "Main", bundle: nil)
@@ -287,7 +294,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         
         if let addIngredientWindow = addIngredientWindowController.window {
             
-            print("Recipe Ingredient Editor Popover.");
+            print("Recipe Ingredient Editor Popover. (button click)");
             let addIngredientViewController = addIngredientWindow.contentViewController as! AddIngredientViewController
             addIngredientViewController.ingredientLibrary = ingredientLibrary;
             addIngredientViewController.mode = "EDIT";
@@ -306,8 +313,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         }
     }
     
-    
-    @IBAction func showEditPopOverFromTableRow(sender: NSTableView)
+    @IBAction func showRecipeIngredientEditPopOverFromTableRow(sender: NSTableView)
     {
         ingredientToEdit = currentRecipe.RecipeIngredients[sender.clickedRow];
         let storyboard = NSStoryboard(name: "Main", bundle: nil)
@@ -331,6 +337,35 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             // 3
             //let application = NSApplication.sharedApplication()
             //application.runModalForWindow(addIngredientWindow)
+        }
+    }
+
+    func showRecipeIngredientEditPopOverFromRecipeIngredientID(recipeIngredientID: String)
+    {
+        UpdateRecipeView();
+        print("displaying recipe ingredient editor for newly added ingredient.");
+        let indexOfIngredientInRecipe = getRecipeIngredientIndexInLibraryByUUID(recipeIngredientID, recipeIngredients: currentRecipe.RecipeIngredients);
+        if (indexOfIngredientInRecipe == -1)
+        {
+            dialogAlertUser("error editing ingredient.");
+            return;
+        }
+        let ingredientToEdit = currentRecipe.RecipeIngredients[indexOfIngredientInRecipe];
+        let storyboard = NSStoryboard(name: "Main", bundle: nil)
+        let addIngredientWindowController = storyboard.instantiateControllerWithIdentifier("Add Ingredient View Controller") as! NSWindowController
+        
+        if let addIngredientWindow = addIngredientWindowController.window {
+            
+            print("Recipe Ingredient Editor Popover from Table Row");
+            let addIngredientViewController = addIngredientWindow.contentViewController as! AddIngredientViewController
+            addIngredientViewController.ingredientLibrary = ingredientLibrary;
+            addIngredientViewController.mode = "EDIT";
+            addIngredientViewController.incomingRecipe = currentRecipe;
+            
+            addIngredientViewController.ingredientToEdit = ingredientToEdit;
+            
+            presentViewController(addIngredientViewController, asPopoverRelativeToRect: outletRecipeList.bounds, ofView: outletRecipeTableView, preferredEdge: NSRectEdge.MaxX, behavior: NSPopoverBehavior.Transient)
+            addIngredientViewController.RefreshForEdit();
         }
     }
 
@@ -445,7 +480,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             // let's find which ingredient we're working with...
             ingredientToEdit = currentRecipe.RecipeIngredients[outletRecipeTableView.selectedRow];
             //showEditIngredient(self);
-            showEditPopOver(sender);
+            showRecipeIngredientEditPopOver(sender);
         }
         if (sender.selectedSegment == 3)
         {
@@ -536,17 +571,18 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
     }
     
     @IBAction func outletIngredientLibraryItemDoubleClick(sender: NSTableView) {
-//        showIngredientLibraryEditorPopupAsEditFromTableRow(sender);
         print("double cilcked item.  edit ingredient.");
         // when we double click a row let's add the ingredient to our recipe.
         if (sender.selectedRow > -1)
         {
+            showIngredientLibraryEditorPopupAsEditFromTableRow(sender);
             // filtering is causing us to get the wrong ingredient...why??!?!
-            AddIngredientFromDoubleClick(sender.selectedRow);
+            //AddIngredientFromDoubleClick(sender.selectedRow); this is for quick-add to recipe.
         }
 //        AddIngredientFromDoubleClick
     }
     
+    // TODO: Implement filtering potentially.
     
     func AddIngredientFromDoubleClick(ingredientIndex: Int)
     {
@@ -572,14 +608,64 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         return true;
     }
     
+    func dialogAlertUserAreYouSure(HeaderInfo : String, AlertInfo: String) -> Bool
+    {
+        let alert : NSAlert = NSAlert();
+        alert.messageText = HeaderInfo;
+        alert.informativeText = AlertInfo;
+        alert.alertStyle = NSAlertStyle.CriticalAlertStyle;
+        alert.addButtonWithTitle("Ok");
+        alert.addButtonWithTitle("Cancel");
+        let returnCode = alert.runModal();
+        if (returnCode == NSAlertFirstButtonReturn)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    func QuickAddIngredientToRecipe(ingredientToAdd : Ingredient) -> Bool
+    {
+        let recipeIngredientToAdd : RecipeIngredient = RecipeIngredient();
+        var sequence : Int = 0;
+        for loopIngredient in currentRecipe.RecipeIngredients
+        {
+            if (loopIngredient.RecipeIngredientID == ingredientToAdd.ID)
+            {
+                dialogAlertUser("Ingredient already exists in recipe.  Cannot add duplicate.");
+                return false;
+            }
+            if (loopIngredient.Sequence > sequence)
+            {
+                sequence = loopIngredient.Sequence + 1;
+            }
+        }
+        recipeIngredientToAdd.RecipeIngredientID = ingredientToAdd.ID;
+        recipeIngredientToAdd.Sequence = sequence;
+        currentRecipe.RecipeIngredients.append(recipeIngredientToAdd);
+        return true;
+    }
+    
     // Ingredient Library Button Cick Handler
     @IBAction func outletIngredientLibrarySegmentButton(sender: NSSegmentedControl) {
         if (sender.selectedSegment == 0)
         {
+            // quick add ingredient to recipe..
+            if (outletIngredientLibraryTableView.selectedRow > -1)
+            {
+                let ingredientToAddToRecipe = getIngredientByUUID(ingredientLibrary[outletIngredientLibraryTableView.selectedRow].ID, ingredientLibrary: ingredientLibrary);
+                QuickAddIngredientToRecipe(ingredientToAddToRecipe!);
+                UpdateRecipeView();
+                showRecipeIngredientEditPopOverFromRecipeIngredientID((ingredientToAddToRecipe?.ID)!);
+            }
+        }
+        
+        if (sender.selectedSegment == 1)
+        {
             print("add ingredient.");
             showIngredientLibraryEditorPopupAsAdd(sender);
         }
-        if (sender.selectedSegment == 1)
+        if (sender.selectedSegment == 2)
         {
             if (outletIngredientLibraryTableView.selectedRow > -1)
             {
@@ -603,12 +689,16 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
                 }
                 else
                 {
-                    ingredientLibrary.removeAtIndex(outletIngredientLibraryTableView.selectedRow);
+                    let areWeSure = dialogAlertUserAreYouSure("Remove Ingredient?", AlertInfo: "Are you sure you want to remove " + ingredientLibrary[outletIngredientLibraryTableView.selectedRow].Name + "?");
+                    if (areWeSure)
+                    {
+                        ingredientLibrary.removeAtIndex(outletIngredientLibraryTableView.selectedRow);
+                    }
                 }
             }
             print("delete ingredient");
         }
-        if (sender.selectedSegment == 2)
+        if (sender.selectedSegment == 3)
         {
             showIngredientLibraryEditorPopupAsEdit(sender);
         }
@@ -1280,40 +1370,6 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         
     }
     
-//    
-//    func saveMixLabAsPDF()
-//    {
-//        var htmlString : String = "<!DOCTYPE html> <html><head><style>body {font: normal 12px Verdana, Arial, sans-serif;}table#t01 tr:nth-child(even){background-color: #eee;}table#t01 tr:nth-child(odd) {background-color:#fff;}table#t01 th{background-color: #2b78ba;color: white;}</style></head><body>";
-//        htmlString += currentRecipe.RecipeName + " - " + currentRecipe.RecipeAuthor + " - ";
-//        htmlString += currentRecipe.RecipeDate.description + String(format: "%d/%d VG/PG",currentRecipe.PGRatio, currentRecipe.VGRatio);
-//        htmlString += "<table id=\"t01\"><tr><th>Ingredient</th><th>Percentage</th><th>Volume</th><th>Weight</th><th>Cost</th></tr>";
-//        for tableRow in mixLabDisplay
-//        {
-//            
-//        }
-//        PDFDoc
-//
-//  //      let gContext = NSGraphicsContext(self.outletMixLabView.contentSiz)
-//        /*
-// UIGraphicsBeginImageContext(self.myTableView.contentSize);
-// [self.myTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
-// [self.myTableView.layer renderInContext:UIGraphicsGetCurrentContext()];
-// 
-// int rows = [self.myTableView numberOfRowsInSection:0];
-// int numberofRowsInView = 4;
-// for (int i =0; i < rows/numberofRowsInView; i++) {
-// [self.myTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:(i+1)*numberofRowsInView inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
-// [self.myTableView.layer renderInContext:UIGraphicsGetCurrentContext()];
-// 
-// }
-// UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-// UIImageView *myImage=[[UIImageView alloc]initWithImage:image];
-// UIGraphicsEndImageContext();
-// 
-// 
-// [self createPDFfromUIViews:myImage saveToDocumentsWithFileName:@"PDF Name"];*/
-//        
-//    }
     func WriteIngredientLibraryToFile()
     {
         let xmlRoot = NSXMLElement(name: "IngredientLibrary");
