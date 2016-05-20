@@ -776,6 +776,8 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
     override func viewDidLoad() {
         LoadIngredientsFromXML();
         LoadRecipesFromXML();
+        
+        // now that recipes are loaded...we need to create our
 
         // defaults for recipe.
         // http://swiftrien.blogspot.com/2015/04/adding-menu-items-and-their-actions.html
@@ -843,6 +845,8 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         {
             let ingredientFromLibrary = getIngredientByUUID(ingredient.RecipeIngredientID, ingredientLibrary: ingredientLibrary)
             let rlDisplay = RecipeDisplay();
+            if (ingredientFromLibrary != nil)
+            {
             rlDisplay.Base = (ingredientFromLibrary?.Base)!;
             rlDisplay.Ingredient = (ingredientFromLibrary?.Name)!;
             rlDisplay.Percentage = String(format:"%2.2f%%",ingredient.Percentage);
@@ -860,7 +864,13 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             rlDisplay.backgroundIngredient = ingredient;
             rlDisplay.backgroundStrength = ingredientFromLibrary!.Strength;
             rlDisplay.backgroundPercentage = ingredient.Percentage;
+            }
+            else
+            {
+                rlDisplay.Ingredient = ingredient.RecipeIngredientID + "NOT FOUND";
+            }
             recipeDisplay.append(rlDisplay);
+
         }
         outletRecipeTableView.reloadData();
     }
@@ -969,33 +979,41 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         for flavor in recipeDisplay
         {
             let flavorIngredient = getIngredientByUUID(flavor.backgroundIngredient.RecipeIngredientID, ingredientLibrary: ingredientLibrary);
-            if (flavorIngredient!.Type.uppercaseString == "FLAVOR")
+            let mlDisplay = mixLabDisplay();
+            if (flavorIngredient != nil)
             {
-                let mlDisplay = mixLabDisplay();
-                // first determine how much of this flavor we need..
-                let volumeOfFlavorNeeded = (flavor.backgroundPercentage * Double(amountOfJuice)) / 100;
-                /* allowing flavors to be hybrid base ratios as well.
-                if (flavor.Base.uppercaseString == "PG")
+                
+                if (flavorIngredient!.Type.uppercaseString == "FLAVOR")
                 {
-                    totalPGNeeded -= volumeOfFlavorNeeded;
+                    // first determine how much of this flavor we need..
+                    let volumeOfFlavorNeeded = (flavor.backgroundPercentage * Double(amountOfJuice)) / 100;
+                    /* allowing flavors to be hybrid base ratios as well.
+                     if (flavor.Base.uppercaseString == "PG")
+                     {
+                     totalPGNeeded -= volumeOfFlavorNeeded;
+                     }
+                     if (flavor.Base.uppercaseString == "VG")
+                     {
+                     totalVGNeeded -= volumeOfFlavorNeeded;
+                     }*/
+                    mlDisplay.Ingredient = flavor.Ingredient + String(format: " [%d%%vg/%d%%pg]",Int((flavorIngredient?.VGRatioForIngredient)!), Int((flavorIngredient?.PGRatioForIngredient)!));
+                    mlDisplay.backgroundWeight = (volumeOfFlavorNeeded * flavorIngredient!.Gravity);
+                    mlDisplay.backgroundVolume = volumeOfFlavorNeeded;
+                    mlDisplay.Volume = String(format:"%.2fml",mlDisplay.backgroundVolume);
+                    totalVGNeeded -= mlDisplay.backgroundVolume * ((flavorIngredient?.VGRatioForIngredient)!/100);
+                    totalPGNeeded -= mlDisplay.backgroundVolume * ((flavorIngredient?.PGRatioForIngredient)!/100);
+                    mlDisplay.Weight = String(format:"%.2fg",mlDisplay.backgroundWeight);
+                    mlDisplay.backgroundCost = flavorIngredient!.Cost;
+                    mlDisplay.Cost = String(format:"$%.2f",mlDisplay.backgroundCost);
+                    mlDisplay.backgroundPercentage = flavor.backgroundPercentage;
+                    mlDisplay.Percentage = String(format:"%.2f%%",mlDisplay.backgroundPercentage);
+                    mixLab.append(mlDisplay);
                 }
-                if (flavor.Base.uppercaseString == "VG")
-                {
-                    totalVGNeeded -= volumeOfFlavorNeeded;
-                }*/
-                mlDisplay.Ingredient = flavor.Ingredient + String(format: " [%d%%vg/%d%%pg]",Int((flavorIngredient?.VGRatioForIngredient)!), Int((flavorIngredient?.PGRatioForIngredient)!));
-                mlDisplay.backgroundWeight = (volumeOfFlavorNeeded * flavorIngredient!.Gravity);
-                mlDisplay.backgroundVolume = volumeOfFlavorNeeded;
-                mlDisplay.Volume = String(format:"%.2fml",mlDisplay.backgroundVolume);
-                totalVGNeeded -= mlDisplay.backgroundVolume * ((flavorIngredient?.VGRatioForIngredient)!/100);
-                totalPGNeeded -= mlDisplay.backgroundVolume * ((flavorIngredient?.PGRatioForIngredient)!/100);
-                mlDisplay.Weight = String(format:"%.2fg",mlDisplay.backgroundWeight);
-                mlDisplay.backgroundCost = flavorIngredient!.Cost;
-                mlDisplay.Cost = String(format:"$%.2f",mlDisplay.backgroundCost);
-                mlDisplay.backgroundPercentage = flavor.backgroundPercentage;
-                mlDisplay.Percentage = String(format:"%.2f%%",mlDisplay.backgroundPercentage);
-                mixLab.append(mlDisplay);
+            } else {
+                print("cannot find ingredient in library. oops.");
+                mlDisplay.Ingredient = "INGREDIENT NOT FOUND";
             }
+
         }
         
         
@@ -1003,6 +1021,9 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         for vg in recipeDisplay
         {
             let vgIngredient = getIngredientByUUID(vg.backgroundIngredient.RecipeIngredientID, ingredientLibrary: ingredientLibrary);
+            if (vgIngredient != nil)
+            {
+                
             if (vgIngredient!.Type.uppercaseString == "VG")
             {
                 //totalVGNeeded -= nicSolutionVolumeThatIsVG;
@@ -1020,11 +1041,19 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
                 //mlDisplay.backgroundPercentage = 0;
                 mixLab.append(mlDisplay);
             }
+            } else {
+                print("cannot find ingredient. oops.");
+            }
+                
+
         }
         
         for pg in recipeDisplay
         {
             let pgIngredient = getIngredientByUUID(pg.backgroundIngredient.RecipeIngredientID, ingredientLibrary: ingredientLibrary);
+            if (pgIngredient != nil)
+            {
+                
             if (pgIngredient!.Type.uppercaseString == "PG")
             {
                 //totalPGNeeded -= nicSolutionVolumeThatIsVG;
@@ -1041,6 +1070,10 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
                 mlDisplay.Percentage = String(format:"%.2f%%",mlDisplay.backgroundPercentage);
                 mixLab.append(mlDisplay);
             }
+            } else {
+                print("cannot find ingredient.  oops.");
+            }
+
             
         }
 
@@ -1087,6 +1120,9 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         outletMixLabView.reloadData();
         
     }
+    
+    /* old source list implementation */
+    
 
     override var representedObject: AnyObject? {
         didSet {
@@ -1191,9 +1227,130 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         }
         return nil;
     }
+ 
+ 
+    /* End old source list implementation */
     
+    /* new source List implementation 
+ 
+ override var representedObject: AnyObject? {
+ didSet {
+ // Update the view, if already loaded.
+ }
+ }
+ 
+ func outlineView(outlineView: NSOutlineView, child index: Int, ofItem item: AnyObject?) -> AnyObject {
+ if let item: AnyObject = item {
+ switch item {
+ case let department as Department:
+ return department.accounts[index]
+ case let account as Account:
+ return account.employees[index]
+ default:
+ return self
+ }
+ } else {
+ switch index {
+ case 0:
+ return department1
+ default:
+ return department2
+ }
+ }
+ }
+ 
+ func outlineView(outlineView: NSOutlineView, isItemExpandable item: AnyObject) -> Bool {
+ switch item {
+ case let department as Department:
+ return (department.accounts.count > 0) ? true : false
+ case let account as Account:
+ return (account.employees.count > 0) ? true : false
+ default:
+ return false
+ }
+ }
+ 
+ func outlineView(outlineView: NSOutlineView, numberOfChildrenOfItem item: AnyObject?) -> Int {
+ if let item: AnyObject = item {
+ switch item {
+ case let department as Department:
+ return department.accounts.count
+ case let account as Account:
+ return account.employees.count
+ default:
+ return 0
+ }
+ } else {
+ return 2 //Department1 , Department 2
+ }
+ }
+ 
+ 
+ // NSOutlineViewDelegate
+ func outlineView(outlineView: NSOutlineView, viewForTableColumn: NSTableColumn?, item: AnyObject) -> NSView? {
+ switch item {
+ case let department as Department:
+ let view = outlineView.makeViewWithIdentifier("HeaderCell", owner: self) as NSTableCellView
+ if let textField = view.textField {
+ textField.stringValue = department.name
+ }
+ return view
+ case let account as Account:
+ let view = outlineView.makeViewWithIdentifier("DataCell", owner: self) as NSTableCellView
+ if let textField = view.textField {
+ textField.stringValue = account.name
+ }
+ if let image = account.icon {
+ view.imageView!.image = image
+ }
+ return view
+ case let employee as Employee:
+ let view = outlineView.makeViewWithIdentifier("DataCell", owner: self) as NSTableCellView
+ if let textField = view.textField {
+ textField.stringValue = employee.firstName + " " + employee.lastName
+ }
+ if let image = employee.icon {
+ view.imageView!.image = image
+ }
+ return view
+ default:
+ return nil
+ }
+ 
+ }
+ 
+ func outlineView(outlineView: NSOutlineView, isGroupItem item: AnyObject) -> Bool {
+ switch item {
+ case let department as Department:
+ return true
+ default:
+ return false
+ }
+ }
+ 
+ func outlineViewSelectionDidChange(notification: NSNotification){
+ println(notification)
+ var selectedIndex = notification.object?.selectedRow
+ var object:AnyObject? = notification.object?.itemAtRow(selectedIndex!)
+ println(object)
+ 
+ if (object is Employee){
+ println("selected Object is a Employee " +  (object as Employee).firstName);
+ self.firstNameTextField?.stringValue = (object as Employee).firstName
+ self.lastNameTextField?.stringValue = (object as Employee).lastName
+ self.emailIdTextField?.stringValue = (object as Employee).email
+ }
+ else{
+ println("Do nothing on Department or Account Selection")
+ }
+ 
+ }
+ 
+ }
+ 
+ */
     /* XML Parsing Functionality */
-    
+ 
     /*
  <IngredientLibrary>
 	<IngredientLibraryIngredient ID="" Name="FW Menthol" Manufacturer="Flavor West" Type="FLAVOR" Base="PG" Gravity="1.03" Cost="0.23" Strength="0.0" Notes="These are my notes about this flavor"/>
@@ -1207,7 +1364,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
     var ingredientFromXML = Ingredient();
     var hadToAddIDs : Bool = false;
     var hadToAddRecipeIDs : Bool = false;
-    
+ 
     func parserDidStartDocument(parser: NSXMLParser) {
         if (parser == ingredientLibraryParser)
         {
@@ -1216,7 +1373,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         }
         if (parser == recipeLibraryParser)
         {
-            
+ 
             print("parsing recipe Library XML");
         }
     }
