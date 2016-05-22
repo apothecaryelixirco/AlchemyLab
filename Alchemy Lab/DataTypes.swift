@@ -56,6 +56,7 @@ class mixLabDisplay : NSObject
     var backgroundCost : Double = 0.00;
     var backgroundVolume : Double = 0.00;
     var backgroundWeight : Double = 0.00;
+    var RecipeIngredientID : String = "";
     
     
     override init()

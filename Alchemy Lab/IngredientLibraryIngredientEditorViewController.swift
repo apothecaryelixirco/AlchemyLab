@@ -12,6 +12,7 @@ import Cocoa
 //func RecipeViewDelegate(controller: RecipeEditorViewController, recipe: Recipe, mode : String)
 //}
 
+
 protocol IngredientLibraryEditorDelegate : class {
     func IngredientEditorDelegate(controller: IngredientLibraryIngredientEditorViewController, ingredient : Ingredient, mode :String)
 }
@@ -20,6 +21,8 @@ class IngredientLibraryIngredientEditorViewController: NSViewController {
     //    weak var delegate: AddRecipeIngredientDelegate?
 
     weak var delegate: RecipeEditorDelegate?
+    
+    
     
     @IBOutlet weak var outletCostPerML: NSTextField!
     @IBOutlet weak var outletIngredientStrength: NSTextField!

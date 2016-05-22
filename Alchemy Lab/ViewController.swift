@@ -44,7 +44,8 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
     @IBOutlet weak var outletPGRatioTextField: NSTextField!
     @IBOutlet weak var outletNicStrengthTextField: NSTextField!
     
-    
+    @IBOutlet weak var outletLabelRecipeName: NSTextField!
+
     @IBAction func outletRefreshButtonAction(sender: NSButton) {
         UpdateRecipeView();
         outletRecipeTableView.reloadData();
@@ -83,6 +84,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             outletMixLabView.reloadData();
             ingredientLibrary.sortInPlace({$0.Name < $1.Name});
             outletIngredientLibraryTableView.reloadData();
+            UpdateLabelsWithRecipeInformation();
             //TODO: Ingredient library isn't sorting properly after adding an ingredient.
 
         }
@@ -133,6 +135,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             // we've edited a recipe, need to reload it which means we need to select it?
             // need to get the index of the recipe we're working with..
         }
+        UpdateLabelsWithRecipeInformation();
         UpdateUIControls();
         UpdateMixLabView();
         UpdateRecipeView();
@@ -222,19 +225,72 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
  */
     @IBOutlet weak var outletMixLabScrollView: NSScrollView!
 
-    
-    
+    /*
+ 
+ @IBAction func outletRecipeIngredientAddRemoveSegment(sender: NSSegmentedControl) {
+ if (sender.selectedSegment == 0)
+ {
+ print("add button selected!");
+ //showAddIngredient(self);
+ showAddPopOver(sender);
+ }
+ if (sender.selectedSegment == 1)
+ {
+ // we should now delete the selected item from the recipe...
+ RemoveSelectedRecipeIngredient();
+ print("Delete button selected!");
+ }
+ if (sender.selectedSegment == 2)
+ {
+ if (outletRecipeTableView.selectedRow == -1)
+ {
+ return;
+ }
+ print("edit button selected");
+ // let's find which ingredient we're working with...
+ ingredientToEdit = currentRecipe.RecipeIngredients[outletRecipeTableView.selectedRow];
+ //showEditIngredient(self);
+ //            showRecipeIngredientEditPopOver(sender);
+ }
+ }
+*/
+ 
     @IBAction func outletMixLabSegmentActionhandler(sender: NSSegmentedControl) {
-        if (sender.selectedSegment == 0)
+        
+        switch (sender.selectedSegment)
         {
-            dialogAlertUser("Feature not implemented yet.");
-        }
-        if (sender.selectedSegment == 1)
-        {
+        case 0:
+            print("add ingredient to recipe.");
+            showAddPopOver(sender);
+        case 1:
+            print("remove ingredient from recipe.");
+            RemoveSelectedMixLabRecipeIngredient();
+        case 2:
+            if (outletMixLabView.selectedRow > -1)
+            {
+  //              UpdateRecipeView();
+//                UpdateMixLabView();
+                print("editing row " + outletMixLabView.selectedRow.description);
+                if (mixLab[outletMixLabView.selectedRow].RecipeIngredientID != "")
+                {
+                    showRecipeIngredientEditPopOverFromRecipeIngredientID(mixLab[outletMixLabView.selectedRow].RecipeIngredientID);
+                }
+            }
+            print("modify ingredient in recipe.");
+        case 3:
+            UpdateRecipeView();
+            outletRecipeTableView.reloadData();
+            UpdateMixLabView();
+            outletMixLabView.reloadData();
+            print("refresh view.");
+        case 4:
+            print("print recipe.");
             let pInfo = NSPrintInfo();
             pInfo.orientation = NSPaperOrientation.Landscape;
             let pOperation = NSPrintOperation(view: self.outletMixLabScrollView, printInfo: pInfo);
             pOperation.runOperation();
+        default:
+            print("no action selected.");
         }
     }
     
@@ -283,7 +339,32 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         }
     }
 */
-    
+    func showIngredientLibraryEditorPopOverAsAddFromIngredientID(ID: String)
+    {
+        let storyboard = NSStoryboard(name: "Main", bundle: nil)
+        let ingredientLibraryWindowController = storyboard.instantiateControllerWithIdentifier("Ingredient Library Editor View Controller") as! NSWindowController
+        
+        if let ingredientLibraryWindow = ingredientLibraryWindowController.window
+        {
+            print("calling display as popover for ingredient library editor by Ingredient ID");
+            let ingredientLibraryEditorViewController = ingredientLibraryWindow.contentViewController as! IngredientLibraryIngredientEditorViewController
+            ingredientLibraryEditorViewController.mode = "EDIT";
+            if (outletIngredientLibraryTableView.selectedRow > -1)
+            {
+                let indexOfIngredientToWorkWith = getIngredientIndexInLibraryByUUID(ID, ingredientLibrary: ingredientLibrary);
+                if (indexOfIngredientToWorkWith > -1)
+                {
+                    
+                    ingredientLibraryEditorViewController.ingredientToWorkWith = ingredientLibrary[indexOfIngredientToWorkWith];
+                    presentViewController(ingredientLibraryEditorViewController, asPopoverRelativeToRect: outletIngredientLibraryTableView.bounds, ofView: outletIngredientLibraryTableView, preferredEdge: NSRectEdge.MaxX, behavior: NSPopoverBehavior.Transient)
+                    ingredientLibraryEditorViewController.RefreshForEdit();
+                }
+                
+            }
+        }
+    }
+        
+        
     func showIngredientLibraryEditorPopupFromIngredientID(ID: String)
     {
         let storyboard = NSStoryboard(name: "Main", bundle: nil)
@@ -336,6 +417,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
     }
  */
     
+    /*
     @IBAction func showRecipeIngredientEditPopOver(sender: NSSegmentedControl)
     {
         // 1
@@ -350,8 +432,10 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             addIngredientViewController.mode = "EDIT";
             addIngredientViewController.incomingRecipe = currentRecipe;
             addIngredientViewController.ingredientToEdit = ingredientToEdit;
-            let rectForPopup = outletRecipeTableView.bounds;
-            let viewForPopup = outletRecipeTableView;
+ //           let rectForPopup = outletRecipeTableView.bounds;
+//            let viewForPopup = outletRecipeTableView;
+            let rectForPopup = outletMixLabView.bounds;
+            let viewForPopup = outletMixLabView;
             presentViewController(addIngredientViewController, asPopoverRelativeToRect: rectForPopup, ofView: viewForPopup, preferredEdge: NSRectEdge.MaxX, behavior: NSPopoverBehavior.Transient)
             //            outletRecipeTableView.selectedCell()?.draw
             //            presentViewControllerAsSheet(addIngredientViewController);
@@ -362,6 +446,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             //application.runModalForWindow(addIngredientWindow)
         }
     }
+ */
     
     @IBAction func showRecipeIngredientEditPopOverFromTableRow(sender: NSTableView)
     {
@@ -414,7 +499,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             
             addIngredientViewController.ingredientToEdit = ingredientToEdit;
             
-            presentViewController(addIngredientViewController, asPopoverRelativeToRect: outletRecipeTableView.bounds, ofView: outletRecipeTableView, preferredEdge: NSRectEdge.MaxX, behavior: NSPopoverBehavior.Transient)
+            presentViewController(addIngredientViewController, asPopoverRelativeToRect: outletMixLabView.bounds, ofView: outletMixLabView, preferredEdge: NSRectEdge.MaxX, behavior: NSPopoverBehavior.Transient)
             addIngredientViewController.RefreshForEdit();
         }
     }
@@ -428,6 +513,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             print("calling display as popover for recipe addition.");
             let recipeEditorViewController = recipeEditorWindow.contentViewController as! RecipeEditorViewController
             recipeEditorViewController.mode = "ADD";
+            recipeEditorViewController.LoadCategoriesIntoComboBox(recipeLibrary);
             presentViewController(recipeEditorViewController, asPopoverRelativeToRect: sender.bounds, ofView: sender, preferredEdge: NSRectEdge.MinY, behavior: NSPopoverBehavior.Transient)
             print("done with the modal view.");
         }
@@ -446,6 +532,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             let recipeEditorViewController = recipeEditorWindow.contentViewController as! RecipeEditorViewController
             recipeEditorViewController.mode = "EDIT";
             recipeEditorViewController.workingRecipe = recipeLibrary[sender.selectedRow];
+            recipeEditorViewController.LoadCategoriesIntoComboBox(recipeLibrary);
             presentViewController(recipeEditorViewController, asPopoverRelativeToRect: sender.bounds, ofView: sender, preferredEdge: NSRectEdge.MinY, behavior: NSPopoverBehavior.Transient)
             print("done with the modal view.");
             recipeEditorViewController.RefreshUIForEdit();
@@ -473,6 +560,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             let recipeEditorViewController = recipeEditorWindow.contentViewController as! RecipeEditorViewController
             recipeEditorViewController.mode = "EDIT";
             recipeEditorViewController.workingRecipe = recipeLibrary[index];
+            recipeEditorViewController.LoadCategoriesIntoComboBox(recipeLibrary);
             presentViewController(recipeEditorViewController, asPopoverRelativeToRect: outletRecipeCategoryOutlineView.bounds, ofView: outletRecipeCategoryOutlineView, preferredEdge: NSRectEdge.MinY, behavior: NSPopoverBehavior.Transient)
             print("done with the modal view.");
             recipeEditorViewController.RefreshUIForEdit();
@@ -481,30 +569,6 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         }
     }
 
-    
-//    @IBAction func ShowRecipeEditorPopOver(sender: NSSegmentedControl)
-//    {
-//        //Recipe Editor View Controller
-//        // 1
-//        let storyboard = NSStoryboard(name: "Main", bundle: nil)
-//        let recipeEditorWindowController = storyboard.instantiateControllerWithIdentifier("Recipe Editor View Controller") as! NSWindowController
-//        if let recipeEditorWindow = recipeEditorWindowController.window {
-//            
-//            print("calling display as popover for recipe EDITING.");
-//            let recipeEditorViewController = recipeEditorWindow.contentViewController as! RecipeEditorViewController
-//            recipeEditorViewController.mode = "EDIT";
-//            getR
-//            recipeEditorViewController.workingRecipe = recipeLibrary[outletRecipeList.selectedRow];
-//            presentViewController(recipeEditorViewController, asPopoverRelativeToRect: sender.bounds, ofView: sender, preferredEdge: NSRectEdge.MinY, behavior: NSPopoverBehavior.Transient)
-//            print("done with the modal view.");
-//            recipeEditorViewController.RefreshUIForEdit();
-////            recipeEditorViewController.
-//        }
-//    }
-    
-    
-    
-    
     
     @IBAction func showAddPopOver(sender: NSSegmentedControl)
     {
@@ -555,7 +619,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             // let's find which ingredient we're working with...
             ingredientToEdit = currentRecipe.RecipeIngredients[outletRecipeTableView.selectedRow];
             //showEditIngredient(self);
-            showRecipeIngredientEditPopOver(sender);
+//            showRecipeIngredientEditPopOver(sender);
         }
         if (sender.selectedSegment == 3)
         {
@@ -581,9 +645,39 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             //        outletRecipeTableView.reloadData();
             UpdateRecipeView();
             UpdateMixLabView();
+            UpdateLabelsWithRecipeInformation();
             UpdateUIControls();
             let indexSet = NSIndexSet(index: selectIndex);
             outletRecipeTableView.selectRowIndexes(indexSet,byExtendingSelection: false);
+        }
+    }
+    
+    func RemoveSelectedMixLabRecipeIngredient()
+    {
+        print("removing selected recipe ingredient");
+        if (outletMixLabView.selectedRow > -1)
+        {
+            let ingredientIdToRemove = mixLab[outletMixLabView.selectedRow].RecipeIngredientID;
+            if (ingredientIdToRemove != "")
+            {
+                for index in 0...currentRecipe.RecipeIngredients.count
+                {
+                    if (currentRecipe.RecipeIngredients[index].RecipeIngredientID == ingredientIdToRemove)
+                    {
+                        print("found recipe ingredient to remove.");
+                        let areWeSure = dialogAlertUserAreYouSure("Remove Ingredient?", AlertInfo: "Remove ingredient from recipe?");
+                        if (areWeSure)
+                        {
+                            currentRecipe.RecipeIngredients.removeAtIndex(index);
+                            UpdateRecipeView();
+                            UpdateMixLabView();
+                            UpdateLabelsWithRecipeInformation();
+                            UpdateUIControls();
+                        }
+                        return;
+                    }
+                }
+            }
         }
     }
     
@@ -596,6 +690,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         var filteredString = String(filteredCharacters) // -> 347
         if (filteredString == "") { filteredString = "0"; }
         desiredNicStrength = Double(filteredString)!;
+        UpdateLabelsWithRecipeInformation();
         UpdateUIControls();
         UpdateMixLabView();
     }
@@ -612,6 +707,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         if (filteredString == "") { filteredString = "0"; }
         VGRatio = Int(filteredString)!;
         PGRatio = 100 - VGRatio;
+        UpdateLabelsWithRecipeInformation();
         UpdateUIControls();
         UpdateMixLabView();
     }
@@ -627,6 +723,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         PGRatio = Int(filteredString)!;
         VGRatio = 100 - PGRatio;
 //        print("new PG: " + String(PGRatio) + " - VG: " + String(VGRatio));
+        UpdateLabelsWithRecipeInformation();
         UpdateUIControls();
         UpdateMixLabView();
     }
@@ -640,6 +737,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         var filteredString = String(filteredCharacters) // -> 347
         if (filteredString == "") { filteredString = "0"; }
         amountOfJuice = Int(filteredString)!;
+        UpdateLabelsWithRecipeInformation();
         UpdateUIControls();
         UpdateMixLabView();
         
@@ -662,20 +760,43 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
  }
  */
     
+    //             print("add ingredient.");    showIngredientLibraryEditorPopupAsAdd(sender);
+
     @IBOutlet weak var outletIngredientLibrarySearchField: NSSearchField!
+
+    /* edit double click function */
+    /*
+ 
+ @IBAction func outletIngredientLibraryItemDoubleClick(sender: NSTableView) {
+ print("double clicked item.  edit ingredient.");
+ // we should add an ingredient here from the library instead of editing the ingredient.
+ let selectedObject : AnyObject = outletIngredientLibraryArrayController.arrangedObjects[sender.selectedRow];
+ if (selectedObject is Ingredient)
+ {
+ let selectedIngredient = selectedObject as! Ingredient;
+ print("we selected " + selectedIngredient.Name);
+ print("selected object is an ingredient!");
+ showIngredientLibraryEditorPopupFromIngredientID(selectedIngredient.ID);
+ }
+ }*/
     
+ 
+    /* add double click function */
     @IBAction func outletIngredientLibraryItemDoubleClick(sender: NSTableView) {
-        print("double clicked item.  edit ingredient.");
+        print("double clicked item.  add ingredient to recipe.");
         let selectedObject : AnyObject = outletIngredientLibraryArrayController.arrangedObjects[sender.selectedRow];
         if (selectedObject is Ingredient)
         {
             let selectedIngredient = selectedObject as! Ingredient;
-            print("we selected " + selectedIngredient.Name);
-            print("selected object is an ingredient!");
-            showIngredientLibraryEditorPopupFromIngredientID(selectedIngredient.ID);
+            let ingredientToAddToRecipe = getIngredientByUUID(selectedIngredient.ID, ingredientLibrary: ingredientLibrary);
+            QuickAddIngredientToRecipe(ingredientToAddToRecipe!);
+            UpdateLabelsWithRecipeInformation();
+            UpdateRecipeView();
+            UpdateMixLabView();
+            showRecipeIngredientEditPopOverFromRecipeIngredientID((ingredientToAddToRecipe?.ID)!);
         }
     }
-    
+
     // TODO: Implement filtering potentially.
     
     func AddIngredientFromDoubleClick(ingredientIndex: Int)
@@ -823,6 +944,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
     
     @IBAction func outletNicStrengthSliderHandler(sender: NSSlider) {
         desiredNicStrength = Double(sender.integerValue);
+        UpdateLabelsWithRecipeInformation();
         UpdateUIControls();
         UpdateMixLabView();
     }
@@ -888,6 +1010,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
     
     @IBAction func outletRecipeCategoryOutlineViewDoubleClickAction(sender: NSOutlineView) {
         print("received double click event for Recipe Category outline view, handle it.");
+        print("we need to edit a recipe..let's find out which recipe we're editing..");
         let selectedIndex = sender.selectedRow;
         let object:AnyObject? = sender.itemAtRow(selectedIndex);
         if (object is RecipeSourceListRecipe)
@@ -940,6 +1063,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         
         currentRecipe = recipeLibrary[0];
         // let's get our sliders and UI all setup...
+        UpdateLabelsWithRecipeInformation();
         UpdateUIControls();
         UpdateRecipeView();
         UpdateMixLabView();
@@ -970,16 +1094,64 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         self.view.window?.delegate = self;
         super.viewDidAppear();
     }
-
+    
+    @IBOutlet var outletRecipeLabelTextView: NSTextView!
+    
+    @IBOutlet weak var outletRecipeLabelImageView: NSImageView!
+    
+    @IBOutlet weak var outletRecipeInformationLabel: NSTextField!
+    
+    @IBOutlet weak var outletRecipeAdditionalInformationLabel: NSTextField!
+    
+    @IBOutlet weak var outletIngredientLabelMaterialInformation: NSTextField!
+    @IBOutlet weak var outletIngredientLabelFlavorInformation: NSTextField!
+    
+    @IBOutlet weak var outletIngredientLabelTotalFlavorPercentage: NSTextField!
+    
+    @IBOutlet weak var outletIngredientLabelNotes: NSTextField!
+    
     func UpdateUIControls()
     {
-        //outletPGRatioSlider.integerValue = PGRatio;
-        //outletVGRatioSlider.integerValue = VGRatio;
+        //outletIngredientLabelNotes.stringValue = "";
+        //outletIngredientLabelMaterialInformation.stringValue = "";
+        //outletIngredientLabelFlavorInformation.stringValue = "";
+        //outletIngredientLabelTotalFlavorPercentage.stringValue = "";
+        // let's go get the ingredient that we're working with if one is selected..
+        switch (currentRecipe.RecipeCategory.uppercaseString)
+        {
+            case "FRUIT":
+                outletRecipeLabelImageView.image = NSImage(named: "category-fruit");
+            case "FRUITS":
+                outletRecipeLabelImageView.image = NSImage(named: "category-fruit");
+            case "DESSERT":
+                outletRecipeLabelImageView.image = NSImage(named: "category-dessert");
+            case "DESSERTS":
+                outletRecipeLabelImageView.image = NSImage(named: "category-dessert");
+            case "DRINK":
+                outletRecipeLabelImageView.image = NSImage(named: "category-drink");
+            case "DRINKS":
+                outletRecipeLabelImageView.image = NSImage(named: "category-drink");
+            case "MENTHOL":
+                outletRecipeLabelImageView.image = NSImage(named: "category-menthol");
+            case "MENTHOLS":
+                outletRecipeLabelImageView.image = NSImage(named: "category-menthol");
+            case "THE APOTHECARY":
+                outletRecipeLabelImageView.image = NSImage(named: "category-apothecary");
+            default:
+                outletRecipeLabelImageView.image = NSImage(named: "category-default");
+        }
+        
+        outletLabelRecipeName.stringValue = String(format: "%@ - (%d%%vg/%d%%pg)",currentRecipe.RecipeName, VGRatio, PGRatio, amountOfJuice, desiredNicStrength);
+        outletRecipeInformationLabel.stringValue = String(format: "%dml @ %.2fmg/mL Nicotine", amountOfJuice, desiredNicStrength);
+        if (currentRecipe.RecipeDescription != "")
+        {
+            outletRecipeAdditionalInformationLabel.stringValue = currentRecipe.RecipeDescription;
+        } else {
+            outletRecipeAdditionalInformationLabel.stringValue = "";
+        }
         outletPGRatioTextField.integerValue = PGRatio;
         outletVGRatioTextField.integerValue = VGRatio;
-        //outletNicStrengthSlider.doubleValue = desiredNicStrength;
         outletNicStrengthTextField.doubleValue = desiredNicStrength;
-        //outletAmountLabel.stringValue = String(format:"Target e-liquid Amount: %dml",amountOfJuice);
         outletAmountComboBox.stringValue = String(format:"%dml",amountOfJuice);
         outletRecipeTableView.reloadData();
 
@@ -1068,6 +1240,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         }
         var nicotineIngredientId = "";
         var nicotineDisplayString = "";
+        let nicDisplay = mixLabDisplay();
         for nicotine in recipeDisplay
         {
             let ingredientFromLibrary = getIngredientByUUID(nicotine.backgroundIngredient.RecipeIngredientID, ingredientLibrary: ingredientLibrary);
@@ -1075,6 +1248,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             {
                 nicotineIngredientId = nicotine.backgroundIngredient.RecipeIngredientID;
                 nicotineDisplayString = nicotine.Ingredient;
+                nicDisplay.RecipeIngredientID = nicotineIngredientId;
                 break;
             }
         }
@@ -1108,21 +1282,18 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
            // print(String(format: "Nic amount in VG: %2.2f -- PG: %2.2f",nicSolutionVolumeThatIsVG, nicSolutionVolumeThatIsPG));
             
             // at this point we know all about our nicotine so we should be able to add it to the mixlab display.
-            let mlDisplay = mixLabDisplay();
-            
-            mlDisplay.Ingredient = nicotineDisplayString + String(format: " [%d%%vg/%d%%pg]",Int((nicotine?.VGRatioForIngredient)!), Int((nicotine?.PGRatioForIngredient)!));
+            nicDisplay.Ingredient = nicotineDisplayString + String(format: " [%d%%vg/%d%%pg]",Int((nicotine?.VGRatioForIngredient)!), Int((nicotine?.PGRatioForIngredient)!));
             
             //    mlDisplay.Ingredient = nicotineDisplayString;
-            mlDisplay.Volume = String(format:"%.2fml",nicSolutionNeeded);
-            mlDisplay.backgroundVolume = nicSolutionNeeded;
-            mlDisplay.Weight = String(format:"%.2fg",nicBaseWeight);
-            mlDisplay.backgroundWeight = nicBaseWeight;
-            mlDisplay.backgroundCost = (nicSolutionNeeded * nicotine!.Cost);
-            mlDisplay.Cost = String(format:"$%.2f",mlDisplay.backgroundCost);
-            mlDisplay.backgroundPercentage = (nicSolutionNeeded / Double(amountOfJuice)) * 100;
-            mlDisplay.Percentage = String(format: "%.2f%%",mlDisplay.backgroundPercentage);
-            mixLab.append(mlDisplay);
-
+            nicDisplay.Volume = String(format:"%.2fml",nicSolutionNeeded);
+            nicDisplay.backgroundVolume = nicSolutionNeeded;
+            nicDisplay.Weight = String(format:"%.2fg",nicBaseWeight);
+            nicDisplay.backgroundWeight = nicBaseWeight;
+            nicDisplay.backgroundCost = (nicSolutionNeeded * nicotine!.Cost);
+            nicDisplay.Cost = String(format:"$%.2f",nicDisplay.backgroundCost);
+            nicDisplay.backgroundPercentage = (nicSolutionNeeded / Double(amountOfJuice)) * 100;
+            nicDisplay.Percentage = String(format: "%.2f%%",nicDisplay.backgroundPercentage);
+            mixLab.append(nicDisplay);
         }
         
         // determine how much nicotine solution we need first.
@@ -1132,6 +1303,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         {
             let flavorIngredient = getIngredientByUUID(flavor.backgroundIngredient.RecipeIngredientID, ingredientLibrary: ingredientLibrary);
             let mlDisplay = mixLabDisplay();
+            mlDisplay.RecipeIngredientID = flavor.backgroundIngredient.RecipeIngredientID;
             if (flavorIngredient != nil)
             {
                 
@@ -1180,6 +1352,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             {
                 //totalVGNeeded -= nicSolutionVolumeThatIsVG;
                 let mlDisplay = mixLabDisplay();
+                mlDisplay.RecipeIngredientID = vg.backgroundIngredient.RecipeIngredientID;
                 mlDisplay.Ingredient = vg.Ingredient;
                 mlDisplay.backgroundVolume = totalVGNeeded;
                 mlDisplay.backgroundWeight = (mlDisplay.backgroundVolume * vgIngredient!.Gravity);
@@ -1210,6 +1383,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             {
                 //totalPGNeeded -= nicSolutionVolumeThatIsVG;
                 let mlDisplay = mixLabDisplay();
+                mlDisplay.RecipeIngredientID = pg.backgroundIngredient.RecipeIngredientID;
                 mlDisplay.Ingredient = pg.Ingredient;
                 mlDisplay.backgroundVolume = totalPGNeeded;
                 mlDisplay.backgroundWeight = (mlDisplay.backgroundVolume * pgIngredient!.Gravity);
@@ -1229,13 +1403,13 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             
         }
 
-        for ingredient in recipeDisplay
-        {
-            let mlDisplay = mixLabDisplay();
+      //  for ingredient in recipeDisplay
+     //   {
+    //        let mlDisplay = mixLabDisplay();
 //            ingredient.backgroundIngredient.RecipeIngredient.Type
-            mlDisplay.Ingredient = ingredient.Ingredient;
+  //          mlDisplay.Ingredient = ingredient.Ingredient;
             // now let's figure out how much of this ingredient we need...
-        }
+//        }
 /*        for ingredient in recipe.RecipeIngredients
         {
             let mlDisplay = mixLabDisplay();
@@ -1273,6 +1447,99 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         
     }
     
+    /* Begin Mixlab Table handlers */
+    
+    @IBAction func outletMixLabRowClickHandler(sender: NSTableView)
+    {
+        print("row clicked in mix lab.");
+        UpdateLabelsWithRecipeInformation();
+    }
+    
+    func UpdateLabelsWithRecipeInformation()
+    {
+        outletIngredientLabelMaterialInformation.stringValue = "";
+        outletIngredientLabelTotalFlavorPercentage.stringValue = "";
+        outletIngredientLabelFlavorInformation.stringValue = "";
+        outletIngredientLabelNotes.stringValue = "";
+        
+        var totalFlavorPercentage : Double = 0;
+        for ingredientId in currentRecipe.RecipeIngredients
+        {
+            let ingredient = getIngredientByUUID(ingredientId.RecipeIngredientID, ingredientLibrary: ingredientLibrary);
+            if (ingredient?.Type.uppercaseString == "FLAVOR")
+            {
+                totalFlavorPercentage += ingredientId.Percentage;
+            }
+        }
+        outletIngredientLabelTotalFlavorPercentage.stringValue = String(format: "Total Flavor Percentage: %.2f",totalFlavorPercentage);
+
+        if (outletMixLabView.selectedRow > -1)
+        {
+            print("we have a row -- should be updating.");
+            let selectedRecipeIngredientId = mixLab[outletMixLabView.selectedRow].RecipeIngredientID;
+            if (selectedRecipeIngredientId != "")
+            {
+                let selectedIngredient = getIngredientByUUID(selectedRecipeIngredientId, ingredientLibrary: ingredientLibrary);
+                outletIngredientLabelFlavorInformation.stringValue = String(format: "Type: %@ | Mfg: %@",(selectedIngredient?.Type.capitalizedString)!, (selectedIngredient?.Manufacturer.capitalizedString)!);
+                outletIngredientLabelMaterialInformation.stringValue = String(format: "%d%%vg/%d%%pg | Gravity: %.4f",Int((selectedIngredient?.VGRatioForIngredient)!), Int((selectedIngredient?.PGRatioForIngredient)!),(selectedIngredient?.Gravity)!);
+                if (selectedIngredient?.Type.uppercaseString == "NICOTINE")
+                {
+                    outletIngredientLabelMaterialInformation.stringValue += String(format: " | Strength: %.2fmg/mL", selectedIngredient!.Strength);
+                }
+                if (selectedIngredient?.Notes != "")
+                {
+                    outletIngredientLabelNotes.stringValue = (selectedIngredient?.Notes)!;
+                    outletIngredientLabelNotes.toolTip = (selectedIngredient?.Notes)!;
+                } else
+                {
+                    outletIngredientLabelNotes.stringValue = "";
+                }
+            }
+
+        }
+        /*
+        print("attempting to update recipe information..");
+        if (sender.selectedRow > -1)
+        {
+        }*/
+    }
+    
+    /*
+     let selectedIndex = outletRecipeCategoryOutlineView.selectedRow;
+     let object:AnyObject? = outletRecipeCategoryOutlineView.itemAtRow(selectedIndex);
+     if (object is RecipeSourceListRecipe)
+     {
+     let recipeToRemoveFromControlSegment = object as! RecipeSourceListRecipe;
+     print("we are going to remove" + recipeToRemoveFromControlSegment.Name);
+     let indexToRemove = getRecipeIndexInLibraryByUUID(recipeToRemoveFromControlSegment.RecipeID, recipeLibrary: recipeLibrary);
+     if (indexToRemove > -1)
+     {
+     recipeLibrary.removeAtIndex(indexToRemove);
+     LoadRecipesIntoSourceListContainer();
+     outletRecipeCategoryOutlineView.reloadData();
+     outletRecipeCategoryOutlineView.expandItem(nil, expandChildren: true);
+     }
+     
+     }
+     */
+
+    @IBAction func outletMixLabRowDoubleClickHandler(sender: NSTableView) {
+        print("row double clicked in mix lab.");
+        if (sender.selectedRow > -1)
+        {
+            let selectedMixLabRow = mixLab[sender.selectedRow];
+            if (selectedMixLabRow.RecipeIngredientID != "")
+            {
+                print("editing ingredient...");
+                
+                showRecipeIngredientEditPopOverFromRecipeIngredientID(selectedMixLabRow.RecipeIngredientID);
+            }
+        }
+    }
+ 
+ 
+    /* End Mixlab Table handlers */
+ 
  /* New source list implementation */
  
     var recipeSourceListHeader : RecipeSourceListHeader = RecipeSourceListHeader();
@@ -1306,8 +1573,11 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
                 print("adding recipe to category.");
                 recipeCategory.Recipes.append(recipeSourceToAdd);
             }
+            recipeCategory.Recipes.sortInPlace({$0.Name < $1.Name});
             recipeSourceListHeader.RecipeCategories.append(recipeCategory);
         }
+        //        recipe.RecipeIngredients.sortInPlace({$0.Sequence < $1.Sequence});
+        recipeSourceListHeader.RecipeCategories.sortInPlace({$0.CategoryName < $1.CategoryName});
         print("now we have a list!!");
     }
     
@@ -1449,6 +1719,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             if (i > -1)
             {
                 currentRecipe = recipeLibrary[i];
+                
                 if (currentRecipe.PGRatio + currentRecipe.VGRatio != 100)
                 {
                     currentRecipe.PGRatio = 30;
@@ -1456,6 +1727,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
                 }
                 PGRatio = currentRecipe.PGRatio;
                 VGRatio = currentRecipe.VGRatio;
+                UpdateLabelsWithRecipeInformation();
                 UpdateUIControls();
                 UpdateRecipeView();
                 UpdateMixLabView();
@@ -1663,7 +1935,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             let GravityAttribute = NSXMLNode.attributeWithName("Gravity", stringValue: String(ing.Gravity)) as! NSXMLNode;
             let CostAttribute = NSXMLNode.attributeWithName("Cost", stringValue: String(ing.Cost)) as! NSXMLNode;
             let StrengthAttribute = NSXMLNode.attributeWithName("Strength", stringValue: String(ing.Strength)) as! NSXMLNode;
-            let NotesAttribute = NSXMLNode.attributeWithName("Notes", stringValue: ing.Name) as! NSXMLNode;
+            let NotesAttribute = NSXMLNode.attributeWithName("Notes", stringValue: ing.Notes) as! NSXMLNode;
             let VGRatioForIngredientAttribute = NSXMLNode.attributeWithName("VGRatioForIngredient", stringValue: String(ing.VGRatioForIngredient)) as! NSXMLNode;
             let PGRatioForIngredientAttribute = NSXMLNode.attributeWithName("PGRatioForIngredient", stringValue: String(ing.PGRatioForIngredient)) as! NSXMLNode;
 

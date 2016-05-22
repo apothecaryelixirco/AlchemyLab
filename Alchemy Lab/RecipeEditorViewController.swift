@@ -8,6 +8,8 @@
 
 import Cocoa
 
+// TODO: Implement case insensitive autocomplete.  Will likely require full comboboxdatasource implementation.  
+// see: http://www.knowstack.com/swift-nscombobox-datasource-sample-code/ for information
 
 protocol RecipeEditorDelegate: class {
     func RecipeViewDelegate(controller: RecipeEditorViewController, recipe: Recipe, mode : String)
@@ -25,6 +27,8 @@ class RecipeEditorViewController: NSViewController {
     // outlets
     
     var workingRecipe : Recipe = Recipe();
+    dynamic var categoryList : [String] = [];
+    var categoriesForAutoComplete : [NSString] = [];
 //    var EditingRecipe : Recipe = Recipe();
     @IBOutlet weak var outletRecipeName: NSTextField!
     
@@ -81,7 +85,7 @@ class RecipeEditorViewController: NSViewController {
     func getAllValuesFromControls()
     {
         workingRecipe.RecipeName = outletRecipeName.stringValue;
-        workingRecipe.Notes = outletRecipeName.stringValue;
+        workingRecipe.Notes = outletRecipeNotes.stringValue;
         workingRecipe.RecipeAuthor = outletAuthor.stringValue;
         workingRecipe.maxVG = outletMaxVG.state == 1 ? true : false;
         workingRecipe.RecipeCategory = outletRecipeCategory.stringValue;
@@ -90,6 +94,51 @@ class RecipeEditorViewController: NSViewController {
         workingRecipe.PGRatio = outletPGRatio.integerValue;
         workingRecipe.VGRatio = outletVGRatio.integerValue;
     }
+    
+    func LoadCategoriesIntoComboBox(categories : [Recipe])
+    {
+        
+        categoriesForAutoComplete = [NSString]();
+        for categoryFromLibrary in categories
+        {
+            if !categoryList.contains(categoryFromLibrary.RecipeCategory.capitalizedString)
+            {
+                categoryList.append(categoryFromLibrary.RecipeCategory.capitalizedString);
+                outletRecipeCategory.addItemWithObjectValue(categoryFromLibrary.RecipeCategory.capitalizedString);
+                let categoryNSString = NSString(string: categoryFromLibrary.RecipeCategory.capitalizedString);
+                categoriesForAutoComplete.append(categoryNSString);
+            }
+        }
+    }
+    
+    // FUTURE: autocomplete
+    /*- (NSString *)comboBox:(NSComboBox *)comboBox completedString:(NSString *)partialString
+     {
+     for (NSString dataString in dataSourceArray) {
+     if ([[dataString commonPrefixWithString:partialString options:NSCaseInsensitiveSearch] length] == [commonPrefixWithString:partialString length]) {
+     return testItem;
+     }
+     }
+     return @"";
+     
+     }*/
+    
+    /*
+    func comboBox(aComboBox: NSComboBox, completedString string: String) -> String? {
+        print("got here.  string is: " + string);
+        
+        for dataString : NSString in categoriesForAutoComplete
+        {
+            if (dataString.commonPrefixWithString(string, options: NSStringCompareOptions.CaseInsensitiveSearch).lengthOfBytesUsingEncoding(NSUTF8StringEncoding) == string.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
+            {
+                return dataString as String;
+            }
+        }
+        return "";
+    }
+ */
+    
+
     
     @IBAction func outletSaveSegmentHandler(sender: NSSegmentedControl) {
         getAllValuesFromControls();
