@@ -1,23 +1,11 @@
 <RecipeLibrary>
-    <Recipe ID="B065003A-E945-4C39-8EBC-6422CAB69593" Notes="" PGRatio="30" RecipeAuthor="" RecipeCategory="Menthol" RecipeDate="2016-05-21 00:25:27 +0000" RecipeDescription="" RecipeName="Haley Menthol" VGRatio="70" maxVG="false">
-        <RecipeIngredient Notes="" Percentage="0.0" RecipeIngredientID="395AEA8F-7A9D-4D05-BCED-95DC8A49CCCF" Sequence="1" TempScale="F" Temperature="0.0"/>
+    <Recipe ID="B065003A-E945-4C39-8EBC-6422CAB69593" Notes="not enough throat hit @ 70/30 for haley.  may try dropping to 65/35 and see if it increases" PGRatio="30" RecipeAuthor="" RecipeCategory="Menthols" RecipeDate="2016-05-22 06:51:45 +0000" RecipeDescription="" RecipeName="Haley Menthol" VGRatio="70" maxVG="false">
         <RecipeIngredient Notes="" Percentage="0.0" RecipeIngredientID="041C3584-8841-453E-A552-3F5EC219705C" Sequence="2" TempScale="F" Temperature="0.0"/>
         <RecipeIngredient Notes="" Percentage="2.0" RecipeIngredientID="14222906-9490-473F-B59C-7159731C5E26" Sequence="3" TempScale="F" Temperature="0.0"/>
         <RecipeIngredient Notes="" Percentage="1.0" RecipeIngredientID="D93C401F-2B7B-4C19-8D56-012F10CE64EA" Sequence="4" TempScale="F" Temperature="0.0"/>
+        <RecipeIngredient Notes="" Percentage="0.0" RecipeIngredientID="395AEA8F-7A9D-4D05-BCED-95DC8A49CCCF" Sequence="5" TempScale="F" Temperature="0.0"/>
     </Recipe>
-    <Recipe ID="946AE052-B599-464B-9F30-313FEC78A850" Notes="Strawberry Banana Milkshake" PGRatio="30" RecipeAuthor="Randy Williams" RecipeCategory="Desserts" RecipeDate="2016-05-21 00:25:27 +0000" RecipeDescription="Nice cool creamy shake" RecipeName="Strawberry Banana Milkshake" VGRatio="70" maxVG="false">
-        <RecipeIngredient Notes="" Percentage="0.0" RecipeIngredientID="041C3584-8841-453E-A552-3F5EC219705C" Sequence="0" TempScale="F" Temperature="0.0"/>
-        <RecipeIngredient Notes="" Percentage="0.0" RecipeIngredientID="395AEA8F-7A9D-4D05-BCED-95DC8A49CCCF" Sequence="0" TempScale="F" Temperature="0.0"/>
-        <RecipeIngredient Notes="" Percentage="6.0" RecipeIngredientID="D4E2EA32-B69F-494E-9AC2-EC50E0CEFF38" Sequence="0" TempScale="F" Temperature="0.0"/>
-        <RecipeIngredient Notes="" Percentage="5.0" RecipeIngredientID="4D92CC2E-F980-4076-A79F-FCF238C721AA" Sequence="0" TempScale="F" Temperature="0.0"/>
-        <RecipeIngredient Notes="" Percentage="1.0" RecipeIngredientID="1734CDAD-C673-47E8-B453-614B0FAA99EF" Sequence="0" TempScale="F" Temperature="0.0"/>
-        <RecipeIngredient Notes="" Percentage="1.0" RecipeIngredientID="4D0953F3-50A3-47FB-93AF-F880F5B4DA62" Sequence="0" TempScale="F" Temperature="0.0"/>
-        <RecipeIngredient Notes="" Percentage="4.0" RecipeIngredientID="6BC50A96-3894-44AB-ABDF-23F689AC58B9" Sequence="0" TempScale="F" Temperature="0.0"/>
-        <RecipeIngredient Notes="" Percentage="1.0" RecipeIngredientID="4F0278BF-B1EE-4038-B8D6-AF85B477FC9A" Sequence="0" TempScale="F" Temperature="0.0"/>
-        <RecipeIngredient Notes="" Percentage="1.0" RecipeIngredientID="D93C401F-2B7B-4C19-8D56-012F10CE64EA" Sequence="0" TempScale="F" Temperature="0.0"/>
-        <RecipeIngredient Notes="" Percentage="0.0" RecipeIngredientID="4CFA6761-E3AE-4E1C-A159-F9B264C0B94D" Sequence="0" TempScale="F" Temperature="0.0"/>
-    </Recipe>
-    <Recipe ID="F5CC7706-3C1A-4074-8C9C-D26F9D57F192" Notes="'Nana Cream Clone" PGRatio="30" RecipeAuthor="Fizzmustard" RecipeCategory="Clones" RecipeDate="2016-05-21 00:25:27 +0000" RecipeDescription="" RecipeName="'Nana Cream Clone" VGRatio="70" maxVG="false">
+    <Recipe ID="F5CC7706-3C1A-4074-8C9C-D26F9D57F192" Notes="" PGRatio="30" RecipeAuthor="Fizzmustard" RecipeCategory="Clones" RecipeDate="2016-05-22 06:51:45 +0000" RecipeDescription="" RecipeName="'Nana Cream Clone" VGRatio="70" maxVG="false">
         <RecipeIngredient Notes="" Percentage="5.0" RecipeIngredientID="D4E2EA32-B69F-494E-9AC2-EC50E0CEFF38" Sequence="0" TempScale="F" Temperature="0.0"/>
         <RecipeIngredient Notes="" Percentage="3.0" RecipeIngredientID="A4306B9C-BFE8-4344-9D80-D36EDF6031C1" Sequence="0" TempScale="F" Temperature="0.0"/>
         <RecipeIngredient Notes="" Percentage="7.0" RecipeIngredientID="0A088A6B-0575-4CB0-A2F5-1A6A36AD7797" Sequence="0" TempScale="F" Temperature="0.0"/>
@@ -25,15 +13,7 @@
         <RecipeIngredient Notes="" Percentage="0.0" RecipeIngredientID="395AEA8F-7A9D-4D05-BCED-95DC8A49CCCF" Sequence="0" TempScale="F" Temperature="0.0"/>
         <RecipeIngredient Notes="" Percentage="0.0" RecipeIngredientID="4CFA6761-E3AE-4E1C-A159-F9B264C0B94D" Sequence="0" TempScale="F" Temperature="0.0"/>
     </Recipe>
-    <Recipe ID="D628F6A2-0FF8-4361-8873-9F5A592C33ED" Notes="Vanilla Bourbon" PGRatio="30" RecipeAuthor="Randy Williams" RecipeCategory="Rich" RecipeDate="2016-05-21 00:25:27 +0000" RecipeDescription="" RecipeName="Vanilla Bourbon" VGRatio="70" maxVG="false">
-        <RecipeIngredient Notes="" Percentage="7.0" RecipeIngredientID="12CCA800-469A-4350-910E-5EF1FC091EEA" Sequence="0" TempScale="F" Temperature="0.0"/>
-        <RecipeIngredient Notes="" Percentage="0.0" RecipeIngredientID="041C3584-8841-453E-A552-3F5EC219705C" Sequence="0" TempScale="F" Temperature="0.0"/>
-        <RecipeIngredient Notes="" Percentage="0.0" RecipeIngredientID="395AEA8F-7A9D-4D05-BCED-95DC8A49CCCF" Sequence="0" TempScale="F" Temperature="0.0"/>
-        <RecipeIngredient Notes="" Percentage="1.0" RecipeIngredientID="4D0953F3-50A3-47FB-93AF-F880F5B4DA62" Sequence="0" TempScale="F" Temperature="0.0"/>
-        <RecipeIngredient Notes="" Percentage="3.0" RecipeIngredientID="4F0278BF-B1EE-4038-B8D6-AF85B477FC9A" Sequence="0" TempScale="F" Temperature="0.0"/>
-        <RecipeIngredient Notes="" Percentage="1.0" RecipeIngredientID="2B2B8452-6F72-4737-BC2A-EA1743EE3637" Sequence="0" TempScale="F" Temperature="0.0"/>
-    </Recipe>
-    <Recipe ID="A7872FA6-BCF2-44AA-95C4-48AE108EF63B" Notes="Mustard Milk (Diketone free)" PGRatio="30" RecipeAuthor="Randy Williams" RecipeCategory="Desserts" RecipeDate="2016-05-21 00:25:27 +0000" RecipeDescription="" RecipeName="Mustard Milk (Diketone free)" VGRatio="70" maxVG="false">
+    <Recipe ID="A7872FA6-BCF2-44AA-95C4-48AE108EF63B" Notes="" PGRatio="30" RecipeAuthor="Randy Williams" RecipeCategory="Desserts" RecipeDate="2016-05-22 06:51:45 +0000" RecipeDescription="" RecipeName="Mustard Milk (Diketone free)" VGRatio="70" maxVG="false">
         <RecipeIngredient Notes="" Percentage="1.0" RecipeIngredientID="4D0953F3-50A3-47FB-93AF-F880F5B4DA62" Sequence="0" TempScale="F" Temperature="0.0"/>
         <RecipeIngredient Notes="" Percentage="2.0" RecipeIngredientID="2B2B8452-6F72-4737-BC2A-EA1743EE3637" Sequence="0" TempScale="F" Temperature="0.0"/>
         <RecipeIngredient Notes="" Percentage="6.0" RecipeIngredientID="0A088A6B-0575-4CB0-A2F5-1A6A36AD7797" Sequence="0" TempScale="F" Temperature="0.0"/>
@@ -41,7 +21,7 @@
         <RecipeIngredient Notes="" Percentage="0.0" RecipeIngredientID="395AEA8F-7A9D-4D05-BCED-95DC8A49CCCF" Sequence="0" TempScale="F" Temperature="0.0"/>
         <RecipeIngredient Notes="" Percentage="0.0" RecipeIngredientID="041C3584-8841-453E-A552-3F5EC219705C" Sequence="0" TempScale="F" Temperature="0.0"/>
     </Recipe>
-    <Recipe ID="CCC882B7-683A-4D0D-9E03-2FCE33B0EE54" Notes="" PGRatio="25" RecipeAuthor="cuttwoodspy" RecipeCategory="Clones" RecipeDate="2016-05-21 00:25:27 +0000" RecipeDescription="UM Clone" RecipeName="Unicorn Milk Leak" VGRatio="75" maxVG="false">
+    <Recipe ID="CCC882B7-683A-4D0D-9E03-2FCE33B0EE54" Notes="" PGRatio="25" RecipeAuthor="cuttwoodspy" RecipeCategory="Clones" RecipeDate="2016-05-22 06:51:46 +0000" RecipeDescription="UM Clone" RecipeName="Unicorn Milk Leak" VGRatio="75" maxVG="false">
         <RecipeIngredient Notes="" Percentage="0.0" RecipeIngredientID="395AEA8F-7A9D-4D05-BCED-95DC8A49CCCF" Sequence="0" TempScale="F" Temperature="0.0"/>
         <RecipeIngredient Notes="" Percentage="0.0" RecipeIngredientID="041C3584-8841-453E-A552-3F5EC219705C" Sequence="0" TempScale="F" Temperature="0.0"/>
         <RecipeIngredient Notes="" Percentage="1.5" RecipeIngredientID="4C749B9E-C1D8-411C-89B3-EB94B2AF774C" Sequence="0" TempScale="F" Temperature="0.0"/>
@@ -52,8 +32,8 @@
         <RecipeIngredient Notes="" Percentage="1.0" RecipeIngredientID="B0826A2A-9DFF-43D6-8DCA-53ACDC4A4BCD" Sequence="0" TempScale="F" Temperature="0.0"/>
         <RecipeIngredient Notes="" Percentage="3.0" RecipeIngredientID="40476685-0992-443A-96AE-88932E033A0A" Sequence="0" TempScale="F" Temperature="0.0"/>
     </Recipe>
-    <Recipe ID="E6BD58B3-CCDD-42D9-AA0A-F82FFB2058E2" Notes="Nicotine Only Flavored Base" PGRatio="30" RecipeAuthor="" RecipeCategory="Base" RecipeDate="2016-05-21 00:25:27 +0000" RecipeDescription="" RecipeName="Nicotine Only Flavored Base" VGRatio="70" maxVG="false"/>
-    <Recipe ID="DD704285-6D2E-4A54-9CA5-3C05FE16E05C" Notes="Banana Milk" PGRatio="25" RecipeAuthor="Randy Williams" RecipeCategory="Desserts" RecipeDate="2016-05-21 00:25:27 +0000" RecipeDescription="" RecipeName="Banana Milk" VGRatio="75" maxVG="false">
+    <Recipe ID="E6BD58B3-CCDD-42D9-AA0A-F82FFB2058E2" Notes="" PGRatio="30" RecipeAuthor="" RecipeCategory="Base" RecipeDate="2016-05-22 06:51:46 +0000" RecipeDescription="" RecipeName="Nicotine Only Flavored Base" VGRatio="70" maxVG="false"/>
+    <Recipe ID="DD704285-6D2E-4A54-9CA5-3C05FE16E05C" Notes="" PGRatio="25" RecipeAuthor="Randy Williams" RecipeCategory="Desserts" RecipeDate="2016-05-22 06:51:46 +0000" RecipeDescription="" RecipeName="Banana Milk" VGRatio="75" maxVG="false">
         <RecipeIngredient Notes="" Percentage="0.0" RecipeIngredientID="395AEA8F-7A9D-4D05-BCED-95DC8A49CCCF" Sequence="1" TempScale="F" Temperature="0.0"/>
         <RecipeIngredient Notes="" Percentage="0.0" RecipeIngredientID="041C3584-8841-453E-A552-3F5EC219705C" Sequence="2" TempScale="F" Temperature="0.0"/>
         <RecipeIngredient Notes="" Percentage="1.5" RecipeIngredientID="4C749B9E-C1D8-411C-89B3-EB94B2AF774C" Sequence="3" TempScale="F" Temperature="0.0"/>
@@ -64,15 +44,13 @@
         <RecipeIngredient Notes="" Percentage="0.5" RecipeIngredientID="2D9CDB5A-7195-46A2-8878-FD9DD7D591D6" Sequence="8" TempScale="F" Temperature="0.0"/>
         <RecipeIngredient Notes="" Percentage="3.0" RecipeIngredientID="9A722A52-0CCF-439E-973F-9AAD5E2C9695" Sequence="9" TempScale="F" Temperature="0.0"/>
     </Recipe>
-    <Recipe ID="BCC8F4AE-D6A2-4A00-8E71-C5AFC7EB9F0C" Notes="Seven Seas Clone" PGRatio="30" RecipeAuthor="Zizeksucks" RecipeCategory="Clones" RecipeDate="2016-05-21 00:25:27 +0000" RecipeDescription="Bombies clone!" RecipeName="Seven Seas Clone" VGRatio="70" maxVG="false">
+    <Recipe ID="8EB5EF27-23D1-45E8-8792-03928D5F0750" Notes="probably going to scrap this one and go for 4" PGRatio="20" RecipeAuthor="Randy Williams" RecipeCategory="Rejects" RecipeDate="2016-05-22 06:51:46 +0000" RecipeDescription="Watermelon, Raspberry, and a hint of apple for tartness." RecipeName="Reject No. 3" VGRatio="80" maxVG="false">
+        <RecipeIngredient Notes="" Percentage="6.0" RecipeIngredientID="A16D26B8-7F7D-4CF2-B406-E315148C2F34" Sequence="0" TempScale="F" Temperature="0.0"/>
+        <RecipeIngredient Notes="" Percentage="4.0" RecipeIngredientID="B0DF50E2-637E-41E4-8803-BEE7A21D54DC" Sequence="0" TempScale="F" Temperature="0.0"/>
+        <RecipeIngredient Notes="" Percentage="2.0" RecipeIngredientID="5D0EB467-BD2B-4548-A854-1AF0374A3E48" Sequence="0" TempScale="F" Temperature="0.0"/>
+        <RecipeIngredient Notes="" Percentage="1.0" RecipeIngredientID="7548CD05-924A-45F0-93C5-8B89D08CADB7" Sequence="0" TempScale="F" Temperature="0.0"/>
+        <RecipeIngredient Notes="" Percentage="1.0" RecipeIngredientID="DF169144-E336-4B2C-99FD-50D6450A4AA0" Sequence="0" TempScale="F" Temperature="0.0"/>
         <RecipeIngredient Notes="" Percentage="0.0" RecipeIngredientID="395AEA8F-7A9D-4D05-BCED-95DC8A49CCCF" Sequence="0" TempScale="F" Temperature="0.0"/>
-        <RecipeIngredient Notes="" Percentage="0.0" RecipeIngredientID="041C3584-8841-453E-A552-3F5EC219705C" Sequence="1" TempScale="F" Temperature="0.0"/>
-        <RecipeIngredient Notes="" Percentage="6.0" RecipeIngredientID="B0DF50E2-637E-41E4-8803-BEE7A21D54DC" Sequence="2" TempScale="F" Temperature="0.0"/>
-        <RecipeIngredient Notes="" Percentage="3.0" RecipeIngredientID="A16D26B8-7F7D-4CF2-B406-E315148C2F34" Sequence="3" TempScale="F" Temperature="0.0"/>
-        <RecipeIngredient Notes="" Percentage="3.0" RecipeIngredientID="67BBECD3-0221-4FED-AC14-038A40F35773" Sequence="4" TempScale="F" Temperature="0.0"/>
-        <RecipeIngredient Notes="" Percentage="3.0" RecipeIngredientID="7548CD05-924A-45F0-93C5-8B89D08CADB7" Sequence="5" TempScale="F" Temperature="0.0"/>
-        <RecipeIngredient Notes="" Percentage="1.5" RecipeIngredientID="D93C401F-2B7B-4C19-8D56-012F10CE64EA" Sequence="7" TempScale="F" Temperature="0.0"/>
-        <RecipeIngredient Notes="" Percentage="3.0" RecipeIngredientID="1734CDAD-C673-47E8-B453-614B0FAA99EF" Sequence="7" TempScale="F" Temperature="0.0"/>
-        <RecipeIngredient Notes="" Percentage="0.0" RecipeIngredientID="4CFA6761-E3AE-4E1C-A159-F9B264C0B94D" Sequence="8" TempScale="F" Temperature="0.0"/>
+        <RecipeIngredient Notes="" Percentage="0.0" RecipeIngredientID="041C3584-8841-453E-A552-3F5EC219705C" Sequence="0" TempScale="F" Temperature="0.0"/>
     </Recipe>
 </RecipeLibrary>

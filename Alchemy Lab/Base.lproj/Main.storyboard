@@ -2184,6 +2184,9 @@
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="smallSystem"/>
                                 </buttonCell>
+                                <connections>
+                                    <action selector="outletMaxVGCheckBoxChanged:" target="XfG-lQ-9wD" id="fSf-yC-5C7"/>
+                                </connections>
                             </button>
                         </subviews>
                     </view>
@@ -2198,6 +2201,7 @@
                         <outlet property="outletIngredientLibrarySearchField" destination="o64-dX-Y31" id="iuf-e7-4HU"/>
                         <outlet property="outletIngredientLibraryTableView" destination="uEE-GU-4Do" id="Q2L-nS-tuA"/>
                         <outlet property="outletLabelRecipeName" destination="bsa-i3-moa" id="8nO-p4-73B"/>
+                        <outlet property="outletMaxVGCheckBox" destination="zKf-JV-b6T" id="V8M-75-zLE"/>
                         <outlet property="outletMixLab" destination="whs-SO-7qV" id="40e-ju-mS0"/>
                         <outlet property="outletMixLabScrollView" destination="ZTd-WD-bud" id="dJ1-jF-MNH"/>
                         <outlet property="outletMixLabView" destination="XaZ-sU-ZqP" id="YSm-9p-aAU"/>

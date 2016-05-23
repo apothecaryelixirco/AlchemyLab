@@ -14,7 +14,7 @@ import Cocoa
 
 
 protocol IngredientLibraryEditorDelegate : class {
-    func IngredientEditorDelegate(controller: IngredientLibraryIngredientEditorViewController, ingredient : Ingredient, mode :String)
+    func IngredientEditorDelegate(controller: IngredientLibraryIngredientEditorViewController, ingredient : Ingredient, mode : String, action : String)
 }
 
 class IngredientLibraryIngredientEditorViewController: NSViewController {
@@ -149,7 +149,7 @@ class IngredientLibraryIngredientEditorViewController: NSViewController {
         {
             print("save ingredient.");
             print("name is going to be: " + ingredientToWorkWith.Name);
-            ViewController.sharedInstance?.IngredientEditorDelegate(self, ingredient: ingredientToWorkWith, mode: mode);
+            ViewController.sharedInstance?.IngredientEditorDelegate(self, ingredient: ingredientToWorkWith, mode: mode, action: "SAVE");
             dismissViewController(self);
 
         }
