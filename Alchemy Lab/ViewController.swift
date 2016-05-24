@@ -58,7 +58,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
     var ingredientToEdit : RecipeIngredient = RecipeIngredient();
 
     func IngredientEditorDelegate(controller: IngredientLibraryIngredientEditorViewController, ingredient: Ingredient, mode: String, action: String) {
-        if (mode == "ADD")
+        if (mode == "ADD" && action != "CANCEL")
         {
             ingredientLibrary.append(ingredient);
             print ("add ingredient to library.");
@@ -66,7 +66,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             outletIngredientLibraryTableView.reloadData();
 
         }
-        if (mode == "EDIT")
+        if (mode == "EDIT" && action != "CANCEL")
         {
             let ingIndex = getIngredientIndexInLibraryByUUID(ingredient.ID, ingredientLibrary: ingredientLibrary);
             if (ingIndex > -1)
@@ -479,6 +479,32 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         }
     }
 
+    func showRecipeIngredientQuickAddPopOverFromRecipeIngredientID(recipeIngredientID: String)
+    {
+        let storyboard = NSStoryboard(name: "Main", bundle: nil)
+        let addIngredientWindowController = storyboard.instantiateControllerWithIdentifier("Add Ingredient View Controller") as! NSWindowController
+        
+        if let addIngredientWindow = addIngredientWindowController.window {
+            
+            print("Calling display as popover for adding recipe ingredient.");
+            let addIngredientViewController = addIngredientWindow.contentViewController as! AddIngredientViewController
+            addIngredientViewController.ingredientLibrary = ingredientLibrary;
+            addIngredientViewController.incomingRecipe = currentRecipe;
+            addIngredientViewController.IngredientIdForQuickAdd = recipeIngredientID;
+            addIngredientViewController.mode = "ADD";
+            
+            presentViewController(addIngredientViewController, asPopoverRelativeToRect: outletMixLabView.bounds, ofView: outletMixLabView, preferredEdge: NSRectEdge.MinX, behavior: NSPopoverBehavior.Transient)
+            addIngredientViewController.RefreshForAdd();
+            addIngredientViewController.RefreshForQuickAdd();
+            //            outletRecipeTableView.selectedCell()?.draw
+            //            presentViewControllerAsSheet(addIngredientViewController);
+            print("done with the modal view.");
+            // 3
+            //let application = NSApplication.sharedApplication()
+            //application.runModalForWindow(addIngredientWindow)
+        }
+    }
+    
     func showRecipeIngredientEditPopOverFromRecipeIngredientID(recipeIngredientID: String)
     {
         UpdateRecipeView();
@@ -843,6 +869,11 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         return false;
     }
 
+    func QuickAddIngredientToRecipeByRecipeId(ingredientIdToAdd : String)
+    {
+        
+    }
+    
     func QuickAddIngredientToRecipe(ingredientToAdd : Ingredient) -> Bool
     {
         let recipeIngredientToAdd : RecipeIngredient = RecipeIngredient();
@@ -897,9 +928,11 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             if (selectedIngredientIndex != -1 && selectedIngredientID != nil)
             {
                 let ingredientToAddToRecipe = getIngredientByUUID(selectedIngredientID!, ingredientLibrary: ingredientLibrary);
-                QuickAddIngredientToRecipe(ingredientToAddToRecipe!);
-                UpdateRecipeView();
-                showRecipeIngredientEditPopOverFromRecipeIngredientID((ingredientToAddToRecipe?.ID)!);
+//                QuickAddIngredientToRecipe(ingredientToAddToRecipe!);
+//                QuickAddIngredientToRecipeById(selectedIngredientID);
+//                UpdateRecipeView();
+                //showRecipeIngredientEditPopOverFromRecipeIngredientID((ingredientToAddToRecipe?.ID)!);
+                showRecipeIngredientQuickAddPopOverFromRecipeIngredientID((ingredientToAddToRecipe?.ID)!);
             }
         }
         if (sender.selectedSegment == 1)

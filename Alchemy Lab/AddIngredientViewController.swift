@@ -20,6 +20,7 @@ class AddIngredientViewController: NSViewController {
     var incomingRecipe : Recipe = Recipe();
     var mode : String = "";
     var ingredientToEdit : RecipeIngredient = RecipeIngredient();
+    var IngredientIdForQuickAdd : String = "";
     
     @IBOutlet weak var outletIngredientName: NSPopUpButton!
     @IBOutlet weak var IngredientPopup: NSPopUpButton!
@@ -72,6 +73,7 @@ class AddIngredientViewController: NSViewController {
             outletSequenceValue.integerValue = highSequence+1;
         }
     }
+    
     func RefreshForEdit()
     {
         if (mode == "EDIT")
@@ -103,6 +105,22 @@ class AddIngredientViewController: NSViewController {
             outletSequenceValue.integerValue = ingredientToEdit.Sequence;
         }
     }
+    
+    func RefreshForQuickAdd()
+    {
+        print("Quick add....need to get the ingredient properties for this specific ingredient");
+        let recipeIngredient = getIngredientByUUID(IngredientIdForQuickAdd, ingredientLibrary: ingredientLibrary)
+        print("ingredient we're editing: " + recipeIngredient!.Name);
+        // need to find the right ingredient in our library..
+        print("Looking for ID " + IngredientIdForQuickAdd);
+        let indexOfIngredient = getIngredientIndexInLibraryByUUID(IngredientIdForQuickAdd,ingredientLibrary: ingredientLibrary);
+        print("index is " + String(indexOfIngredient));
+        if (indexOfIngredient != -1)
+        {
+            IngredientPopup.selectItemAtIndex(indexOfIngredient);
+        }
+    }
+    
     
     @IBAction func dismissAddIngredientWindow(sender: NSButton) {
         let application = NSApplication.sharedApplication()
@@ -137,7 +155,7 @@ class AddIngredientViewController: NSViewController {
                 var rejectItem : Bool = false;
                 print("checking for " + ingredientFromLibrary!.Type.uppercaseString);
                 print ("checking for conflicting base: " + (ingredientFromLibrary?.Type)!);
-                if (mode == "ADD")
+                if (mode == "ADD" || mode == "QUICKADD")
                 {
                     switch (ingredientFromLibrary!.Type.uppercaseString)
                     {
@@ -157,7 +175,7 @@ class AddIngredientViewController: NSViewController {
                                 let ingredientToCheck = getIngredientByUUID(ing.RecipeIngredientID, ingredientLibrary: ingredientLibrary);
                                 if ingredientToCheck?.Type.uppercaseString == "PG"
                                 {
-                                    print("found a nicotine base present in recipe.");
+                                    print("found a PG base present in recipe.");
                                     rejectItem = true;
                                 }
                         }
@@ -168,7 +186,7 @@ class AddIngredientViewController: NSViewController {
                                 let ingredientToCheck = getIngredientByUUID(ing.RecipeIngredientID, ingredientLibrary: ingredientLibrary);
                                 if ingredientToCheck?.Type.uppercaseString == "VG"
                                 {
-                                    print("found a nicotine base present in recipe.");
+                                    print("found a VG base present in recipe.");
                                     rejectItem = true;
                                 }
                         }
