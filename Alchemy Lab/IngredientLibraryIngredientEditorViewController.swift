@@ -37,6 +37,7 @@ class IngredientLibraryIngredientEditorViewController: NSViewController {
     
     @IBOutlet weak var outletPGRatioComboBox: NSComboBox!
     
+    var targetIngredientLibrary : [Ingredient] = [];
     
     var ingredientToWorkWith : Ingredient = Ingredient();
     var mode : String = "";
@@ -147,10 +148,20 @@ class IngredientLibraryIngredientEditorViewController: NSViewController {
     @IBAction func outletSegmentControlActionHandler(sender: NSSegmentedControl) {
         if (sender.selectedSegment == 1)
         {
+            if ((ingredientToWorkWith.Type.uppercaseString == "NICOTINE" && ingredientToWorkWith.Strength > 0.00) || ["FLAVOR","PG","VG","ADDITIVE"].contains(ingredientToWorkWith.Type.uppercaseString))
+            {
             print("save ingredient.");
             print("name is going to be: " + ingredientToWorkWith.Name);
             ViewController.sharedInstance?.IngredientEditorDelegate(self, ingredient: ingredientToWorkWith, mode: mode, action: "SAVE");
             dismissViewController(self);
+            } else {
+                print("strength needs to be > 0");
+                let alert = NSAlert();
+                alert.alertStyle = NSAlertStyle.CriticalAlertStyle;
+                alert.messageText = "Input issue.";
+                alert.informativeText = "For nicotine type ingredients, strength must be > 0";
+                alert.runModal();
+            }
 
         }
         if (sender.selectedSegment == 0)
@@ -160,11 +171,30 @@ class IngredientLibraryIngredientEditorViewController: NSViewController {
 
         }
     }
+    
+    
+    func DetermineAndPopulateIngredientCategories()
+    {
+        var manufacturers : [String] = [];
+        for ing in targetIngredientLibrary {
+            if (!manufacturers.contains(ing.Manufacturer.capitalizedString))
+            {
+                manufacturers.append(ing.Manufacturer.capitalizedString);
+            }
+        }
+        outletManufacturer.addItemsWithObjectValues(manufacturers);
+    }
+    
+    func RefreshForAdd()
+    {
+        DetermineAndPopulateIngredientCategories();
+    }
     func RefreshForEdit()
     {
         // call when editing.
         if (mode=="EDIT")
         {
+            DetermineAndPopulateIngredientCategories();
             // TODO: Need to validate values I suppose..
             UpdateUIControls();
         }

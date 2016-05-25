@@ -13,7 +13,7 @@
         <RecipeIngredient Notes="" Percentage="0.0" RecipeIngredientID="395AEA8F-7A9D-4D05-BCED-95DC8A49CCCF" Sequence="0" TempScale="F" Temperature="0.0"/>
         <RecipeIngredient Notes="" Percentage="0.0" RecipeIngredientID="4CFA6761-E3AE-4E1C-A159-F9B264C0B94D" Sequence="0" TempScale="F" Temperature="0.0"/>
     </Recipe>
-    <Recipe ID="A7872FA6-BCF2-44AA-95C4-48AE108EF63B" Notes="" PGRatio="30" RecipeAuthor="Randy Williams" RecipeCategory="Desserts" RecipeDate="2016-05-22 06:51:45 +0000" RecipeDescription="" RecipeName="Mustard Milk (Diketone free)" VGRatio="70" maxVG="false">
+    <Recipe ID="A7872FA6-BCF2-44AA-95C4-48AE108EF63B" Notes="" PGRatio="30" RecipeAuthor="Randy Williams" RecipeCategory="Desserts" RecipeDate="2016-05-22 06:51:45 +0000" RecipeDescription="" RecipeName="Mustard Milk (Diketone free)" VGRatio="70" maxVG="fazlse">
         <RecipeIngredient Notes="" Percentage="1.0" RecipeIngredientID="4D0953F3-50A3-47FB-93AF-F880F5B4DA62" Sequence="0" TempScale="F" Temperature="0.0"/>
         <RecipeIngredient Notes="" Percentage="2.0" RecipeIngredientID="2B2B8452-6F72-4737-BC2A-EA1743EE3637" Sequence="0" TempScale="F" Temperature="0.0"/>
         <RecipeIngredient Notes="" Percentage="6.0" RecipeIngredientID="0A088A6B-0575-4CB0-A2F5-1A6A36AD7797" Sequence="0" TempScale="F" Temperature="0.0"/>

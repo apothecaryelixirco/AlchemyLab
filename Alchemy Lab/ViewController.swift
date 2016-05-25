@@ -306,13 +306,14 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             print("calling display as popover for ingredient library editor.");
             let ingredientLibraryEditorViewController = ingredientLibraryWindow.contentViewController as! IngredientLibraryIngredientEditorViewController
             ingredientLibraryEditorViewController.mode = "ADD";
+            ingredientLibraryEditorViewController.targetIngredientLibrary = ingredientLibrary
             let rectForPopup = outletIngredientLibraryTableView.bounds;
             let viewForPopup = outletIngredientLibraryTableView;
             presentViewController(ingredientLibraryEditorViewController, asPopoverRelativeToRect: rectForPopup, ofView: viewForPopup, preferredEdge: NSRectEdge.MaxX, behavior: NSPopoverBehavior.Transient)
             //            outletRecipeTableView.selectedCell()?.draw
             //            presentViewControllerAsSheet(addIngredientViewController);
             print("done with the modal view.");
-            ingredientLibraryEditorViewController.RefreshForEdit();
+            ingredientLibraryEditorViewController.RefreshForAdd();
         }
     }
     
@@ -356,7 +357,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
                 let ingredientToWorkWith = getIngredientByUUID(ID, ingredientLibrary: ingredientLibrary)
                 if (ingredientToWorkWith != nil)
                 {
-                    
+                    ingredientLibraryEditorViewController.targetIngredientLibrary = ingredientLibrary;
                     ingredientLibraryEditorViewController.ingredientToWorkWith = getIngredientByUUID(ID, ingredientLibrary: ingredientLibrary)!;
                     presentViewController(ingredientLibraryEditorViewController, asPopoverRelativeToRect: outletIngredientLibraryTableView.bounds, ofView: outletIngredientLibraryTableView, preferredEdge: NSRectEdge.MaxX, behavior: NSPopoverBehavior.Transient)
                     ingredientLibraryEditorViewController.RefreshForEdit();
@@ -382,7 +383,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
                 let indexOfIngredientToWorkWith = getIngredientIndexInLibraryByUUID(ID, ingredientLibrary: ingredientLibrary);
                 if (indexOfIngredientToWorkWith > -1)
                 {
-                    
+                    ingredientLibraryEditorViewController.targetIngredientLibrary = ingredientLibrary;
                     //ingredientLibraryEditorViewController.ingredientToWorkWith = ingredientLibrary[indexOfIngredientToWorkWith];
                     ingredientLibraryEditorViewController.ingredientToWorkWith = getIngredientByUUID(ID, ingredientLibrary: ingredientLibrary)!
                     presentViewController(ingredientLibraryEditorViewController, asPopoverRelativeToRect: outletIngredientLibraryTableView.bounds, ofView: outletIngredientLibraryTableView, preferredEdge: NSRectEdge.MaxX, behavior: NSPopoverBehavior.Transient)
@@ -869,10 +870,6 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         return false;
     }
 
-    func QuickAddIngredientToRecipeByRecipeId(ingredientIdToAdd : String)
-    {
-        
-    }
     
     func QuickAddIngredientToRecipe(ingredientToAdd : Ingredient) -> Bool
     {
@@ -927,7 +924,17 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             // quick add ingredient to recipe..
             if (selectedIngredientIndex != -1 && selectedIngredientID != nil)
             {
+                for loopIngredient in currentRecipe.RecipeIngredients
+                {
+                    if (loopIngredient.RecipeIngredientID == selectedIngredientID)
+                    {
+                        dialogAlertUser("Ingredient already exists in recipe.  Cannot add duplicate.");
+                        return;
+                    }
+                }
+
                 let ingredientToAddToRecipe = getIngredientByUUID(selectedIngredientID!, ingredientLibrary: ingredientLibrary);
+                
 //                QuickAddIngredientToRecipe(ingredientToAddToRecipe!);
 //                QuickAddIngredientToRecipeById(selectedIngredientID);
 //                UpdateRecipeView();
@@ -1419,7 +1426,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             if (flavorIngredient != nil)
             {
                 
-                if (flavorIngredient!.Type.uppercaseString == "FLAVOR")
+                if (flavorIngredient!.Type.uppercaseString == "FLAVOR" || flavorIngredient!.Type.uppercaseString == "ADDITIVE")
                 {
                     // first determine how much of this flavor we need..
                     let volumeOfFlavorNeeded = (flavor.backgroundPercentage * Double(amountOfJuice)) / 100;
