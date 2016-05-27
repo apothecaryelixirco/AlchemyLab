@@ -1921,14 +1921,14 @@
                                 </scroller>
                             </scrollView>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jRc-8i-oJW">
-                                <rect key="frame" x="578" y="278" width="107" height="23"/>
+                                <rect key="frame" x="578" y="278" width="106" height="23"/>
                                 <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="b2J-m9-h8c">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VtT-oc-QmO">
-                                <rect key="frame" x="684" y="278" width="116" height="23"/>
+                                <rect key="frame" x="683" y="278" width="116" height="23"/>
                                 <segmentedCell key="cell" borderStyle="border" alignment="left" style="smallSquare" trackingMode="momentary" id="jDV-if-d7B">
                                     <font key="font" metaFont="system"/>
                                     <segments>
@@ -2221,6 +2221,19 @@
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <menu title="Actions" id="PZC-UF-tW0">
+                    <items>
+                        <menuItem title="Edit Ingredient" id="4hx-9y-6cw">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                        </menuItem>
+                        <menuItem title="Export.." id="fEI-gF-DfS">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                        </menuItem>
+                        <menuItem title="Import.." id="UCG-2B-cNO">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                        </menuItem>
+                    </items>
+                </menu>
                 <arrayController objectClassName="AlchemyLab.Ingredient" id="he8-9h-FyL">
                     <connections>
                         <binding destination="XfG-lQ-9wD" name="contentArray" keyPath="self.ingredientLibrary" id="B6j-sg-6XQ"/>

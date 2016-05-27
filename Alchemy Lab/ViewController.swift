@@ -1147,9 +1147,10 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
     @IBOutlet weak var outletIngredientLibraryTableView: NSTableView!
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        LoadIngredientsFromXML();
-        LoadRecipesFromXML();
+        let ingredientLibraryPath = NSBundle.mainBundle().pathForResource("IngredientLibrary", ofType: "xml");
+        let recipeLibraryPath = NSBundle.mainBundle().pathForResource("RecipeLibrary", ofType: "xml");
+        LoadIngredientsFromXML(ingredientLibraryPath);
+        LoadRecipesFromXML(recipeLibraryPath);
         
         // recipes are now in the library, let's make our view for it.
         LoadRecipesIntoSourceListContainer();
@@ -1377,18 +1378,25 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             let nicotine = getIngredientByUUID(nicotineIngredientId, ingredientLibrary: ingredientLibrary)
             nicPGRatio = (nicotine?.PGRatioForIngredient)!;
             nicVGRatio = (nicotine?.VGRatioForIngredient)!;
-            var baseWeight : Double = 0.0;
-            var nicBaseWeight = Double(desiredNicStrength) * nicotine!.Gravity;
-            if (nicotine!.Base.uppercaseString == "PG")
-            {
-                baseWeight = PGWeight;
-            }
-            if (nicotine!.Base.uppercaseString == "VG")
-            {
-                baseWeight = VGWeight;
-            }
-            let nicSolutionNeeded = (desiredNicStrength / nicotine!.Strength) * Double(amountOfJuice);
+            var nicWeightPerMl : Double = 0;
+            //nicWeightPerMl = 1.01;
+            let y = ((nicPGRatio + nicVGRatio) - ((nicotine?.Strength)! / 100)) / 100;
+            let p = (y * nicPGRatio) / 100;
+            let v = (y * nicVGRatio) / 100;
+            nicWeightPerMl = ((nicotine?.Gravity)! / 100) + (p * PGWeight) + (v * VGWeight);
+            //var baseWeight : Double = 0.0;
+            //var nicBaseWeight = Double(desiredNicStrength) * nicotine!.Gravity;
             
+            //if (nicotine!.Base.uppercaseString == "PG")
+            //{
+            //    baseWeight = PGWeight;
+            //}
+            //if (nicotine!.Base.uppercaseString == "VG")
+           // {
+               // baseWeight = VGWeight;
+           // }
+            let nicSolutionNeeded = (desiredNicStrength / nicotine!.Strength) * Double(amountOfJuice);
+            let nicWeightNeeded = nicSolutionNeeded * nicWeightPerMl;
             //let nicStrength : Double = nicotine!.Strength / 10;
             //nicBaseWeight += Double((100-nicStrength)) * baseWeight;
             //nicBaseWeight = nicBaseWeight / 100;
@@ -1404,8 +1412,8 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             //    mlDisplay.Ingredient = nicotineDisplayString;
             nicDisplay.Volume = String(format:"%.2fml",nicSolutionNeeded);
             nicDisplay.backgroundVolume = nicSolutionNeeded;
-            nicDisplay.Weight = String(format:"%.2fg",nicBaseWeight);
-            nicDisplay.backgroundWeight = nicBaseWeight;
+            nicDisplay.Weight = String(format:"%.2fg",nicWeightNeeded);
+            nicDisplay.backgroundWeight = nicWeightNeeded;
             nicDisplay.backgroundCost = (nicSolutionNeeded * nicotine!.Cost);
             nicDisplay.Cost = String(format:"$%.2f",nicDisplay.backgroundCost);
             nicDisplay.backgroundPercentage = (nicSolutionNeeded / Double(amountOfJuice)) * 100;
@@ -1980,7 +1988,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         }
     }
     
-    func WriteRecipeLibraryToFile()
+    func WriteRecipeLibraryToFile(path: String?)
     {
         let xmlRoot = NSXMLElement(name: "RecipeLibrary");
         let xmlDoc = NSXMLDocument(rootElement: xmlRoot);
@@ -2031,7 +2039,6 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             }
         }
         print("XML Data for Ingredients that we need to add:");
-        let path = NSBundle.mainBundle().pathForResource("RecipeLibrary", ofType: "xml");
         if (path != nil)
         {
             do
@@ -2049,7 +2056,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         
     }
     
-    func WriteIngredientLibraryToFile()
+    func WriteIngredientLibraryToFile(path: String?)
     {
         let xmlRoot = NSXMLElement(name: "IngredientLibrary");
         let xmlDoc = NSXMLDocument(rootElement: xmlRoot);
@@ -2083,7 +2090,6 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             
         }
         print("XML Data for Ingredients that we need to add:");
-        let path = NSBundle.mainBundle().pathForResource("IngredientLibrary", ofType: "xml");
         if (path != nil)
         {
             do
@@ -2113,7 +2119,9 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             if (hadToAddIDs)
             {
                 print("we need to write the XML file back out now -- we had to add IDs");
-                WriteIngredientLibraryToFile();
+                let ingredientLibraryPath = NSBundle.mainBundle().pathForResource("IngredientLibrary", ofType: "xml");
+
+                WriteIngredientLibraryToFile(ingredientLibraryPath);
                 print("wrote XML!");
             }
         }
@@ -2128,7 +2136,8 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             if (hadToAddRecipeIDs)
             {
                 print("we need to write the XML file back out now -- we had to add IDs");
-                WriteRecipeLibraryToFile();
+                let recipeLibraryPath = NSBundle.mainBundle().pathForResource("RecipeLibrary", ofType: "xml");
+                WriteRecipeLibraryToFile(recipeLibraryPath);
                 print("wrote XML!");
             }
 
@@ -2136,11 +2145,10 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         }
     }
     
-    func LoadIngredientsFromXML()
+    func LoadIngredientsFromXML(path: String?)
     {
         //        parser = NSXMLParser(contentsOfURL: NSURL(fileURLWithPath: path!))
         //     let path = NSBundle.mainBundle().pathForResource("MyFile", ofType: "xml")
-        let path = NSBundle.mainBundle().pathForResource("IngredientLibrary", ofType: "xml");
         if path != nil
         {
             ingredientLibraryParser = NSXMLParser(contentsOfURL: NSURL(fileURLWithPath: path!))!;
@@ -2150,9 +2158,8 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         }
     }
     
-    func LoadRecipesFromXML()
+    func LoadRecipesFromXML(path: String?)
     {
-        let path = NSBundle.mainBundle().pathForResource("RecipeLibrary", ofType: "xml");
         if path != nil
         {
             recipeLibraryParser = NSXMLParser(contentsOfURL: NSURL(fileURLWithPath: path!))!;
@@ -2162,10 +2169,13 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         }
         
     }
+    
     func windowShouldClose(sender: AnyObject) -> Bool {
         print ("window closing, save XML!");
-        WriteIngredientLibraryToFile();
-        WriteRecipeLibraryToFile();
+        let ingredientLibraryPath = NSBundle.mainBundle().pathForResource("IngredientLibrary", ofType: "xml");
+        WriteIngredientLibraryToFile(ingredientLibraryPath);
+        let recipeLibraryPath = NSBundle.mainBundle().pathForResource("RecipeLibrary", ofType: "xml");
+        WriteRecipeLibraryToFile(recipeLibraryPath);
         print("wrote XML...");
         return true;
     }
