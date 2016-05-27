@@ -2198,6 +2198,7 @@
                         <outlet property="outletIngredientLabelNotes" destination="NQq-yJ-RBm" id="nQP-rI-o30"/>
                         <outlet property="outletIngredientLabelTotalFlavorPercentage" destination="7PS-rZ-dIM" id="Vr4-Ef-G8B"/>
                         <outlet property="outletIngredientLibraryArrayController" destination="he8-9h-FyL" id="4uQ-Zk-IQS"/>
+                        <outlet property="outletIngredientLibraryMenu" destination="PZC-UF-tW0" id="NoU-uW-En0"/>
                         <outlet property="outletIngredientLibrarySearchField" destination="o64-dX-Y31" id="iuf-e7-4HU"/>
                         <outlet property="outletIngredientLibraryTableView" destination="uEE-GU-4Do" id="Q2L-nS-tuA"/>
                         <outlet property="outletLabelRecipeName" destination="bsa-i3-moa" id="8nO-p4-73B"/>
@@ -2215,22 +2216,54 @@
                         <outlet property="outletRecipeControlSegment" destination="ihe-91-Dpl" id="kDf-rO-wGL"/>
                         <outlet property="outletRecipeInformationLabel" destination="vAS-j6-0AN" id="kwe-Wx-k9K"/>
                         <outlet property="outletRecipeLabelImageView" destination="gdg-WJ-i3E" id="pZP-zO-25B"/>
+                        <outlet property="outletRecipeMenu" destination="cBy-Zi-8Tq" id="LTF-7w-N2o"/>
                         <outlet property="outletRecipeTableView" destination="Opg-6Q-SMS" id="qdg-tA-Ax0"/>
                         <outlet property="outletVGRatioLabel" destination="zsb-hc-Mbo" id="o3O-bk-ebz"/>
                         <outlet property="outletVGRatioTextField" destination="ejr-1y-57Z" id="Wji-9M-vKp"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
-                <menu title="Actions" id="PZC-UF-tW0">
+                <menu showsStateColumn="NO" autoenablesItems="NO" id="cBy-Zi-8Tq">
+                    <items>
+                        <menuItem title="Edit Recipe" id="PWd-o2-Zy3">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                            <connections>
+                                <action selector="outletRecipeMenuEditRecipeAction:" target="XfG-lQ-9wD" id="bg5-Sz-yL2"/>
+                            </connections>
+                        </menuItem>
+                        <menuItem title="Export.." id="Cka-JB-JdO">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                            <connections>
+                                <action selector="outletRecipeMenuExportAction:" target="XfG-lQ-9wD" id="JbH-tU-Vml"/>
+                            </connections>
+                        </menuItem>
+                        <menuItem title="Import.." id="jSz-7v-QSn">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                            <connections>
+                                <action selector="outletRecipeMenuImportAction:" target="XfG-lQ-9wD" id="jpK-d8-XKi"/>
+                            </connections>
+                        </menuItem>
+                    </items>
+                </menu>
+                <menu title="Actions" showsStateColumn="NO" autoenablesItems="NO" id="PZC-UF-tW0">
                     <items>
                         <menuItem title="Edit Ingredient" id="4hx-9y-6cw">
                             <modifierMask key="keyEquivalentModifierMask"/>
+                            <connections>
+                                <action selector="outletRecipeMenuEditIngredientAction:" target="XfG-lQ-9wD" id="XDw-Zd-1Gh"/>
+                            </connections>
                         </menuItem>
                         <menuItem title="Export.." id="fEI-gF-DfS">
                             <modifierMask key="keyEquivalentModifierMask"/>
+                            <connections>
+                                <action selector="outletIngredientLibraryMenuItemExportAction:" target="XfG-lQ-9wD" id="BUD-YB-Scj"/>
+                            </connections>
                         </menuItem>
                         <menuItem title="Import.." id="UCG-2B-cNO">
                             <modifierMask key="keyEquivalentModifierMask"/>
+                            <connections>
+                                <action selector="outletIngredientLibraryMenuItemImportAction:" target="XfG-lQ-9wD" id="rTq-2f-w5b"/>
+                            </connections>
                         </menuItem>
                     </items>
                 </menu>

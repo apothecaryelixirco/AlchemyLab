@@ -893,6 +893,9 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         return true;
     }
     
+    @IBOutlet var outletIngredientLibraryMenu: NSMenu!
+    
+    
     // Ingredient Library Button Cick Handler
     @IBAction func outletIngredientLibrarySegmentButton(sender: NSSegmentedControl) {
         // for quick add, remove, or edit functionality we need to know which ingredient we're working with.
@@ -985,15 +988,86 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         }
         if (sender.selectedSegment == 3)
         {
+         //   if (selectedIngredientID != nil)
+           // {
+                print("editing ingredient in library");
             if (selectedIngredientID != nil)
             {
-                print("editing ingredient in library");
+                outletIngredientLibraryMenu.itemAtIndex(0)?.enabled = true;
+            } else
+            {
+                outletIngredientLibraryMenu.itemAtIndex(0)?.enabled = false;
+            }
+            outletIngredientLibraryMenu.itemAtIndex(1)?.enabled = true;
+            outletIngredientLibraryMenu.itemAtIndex(2)?.enabled = true;
+                outletIngredientLibraryMenu.popUpMenuPositioningItem(outletIngredientLibraryMenu.itemAtIndex(0), atLocation: NSEvent.mouseLocation(), inView: nil)
+                //showIngredientLibraryEditorPopupFromIngredientID(selectedIngredientID!);
+                
+            //}
+        }
+    }
+    
+    @IBAction func outletIngredientLibraryMenuItemEditAction(sender: NSMenuItem) {
+        if (outletIngredientLibraryTableView.selectedRow > -1)
+        {
+            
+            let selectedObject : AnyObject? = outletIngredientLibraryArrayController.arrangedObjects[outletIngredientLibraryTableView.selectedRow];
+            var selectedIngredientID : String? = nil;
+            if (selectedObject is Ingredient)
+            {
+                let selectedIngredient = selectedObject as! Ingredient;
+                print("we selected " + selectedIngredient.Name);
+                print("selected object is an ingredient!");
+                selectedIngredientID = selectedIngredient.ID;
+            }
+            if (selectedIngredientID != nil)
+            {
                 showIngredientLibraryEditorPopupFromIngredientID(selectedIngredientID!);
+            }
+        }
+        print("edit menu item clicked.");
+    }
+    
+    @IBAction func outletIngredientLibraryMenuItemExportAction(sender: NSMenuItem) {
+        
+        print("export ingredient library clicked.");
+        let dialog : NSSavePanel = NSSavePanel();
+        dialog.nameFieldStringValue = "IngredientLibrary.xml";
+        dialog.allowedFileTypes = ["xml"];
+        let result = dialog.runModal();
+        if (result == NSFileHandlingPanelOKButton)
+        {
+            if (dialog.URL?.path != nil)
+            {
+                WriteIngredientLibraryToFile(dialog.URL?.path);
+                dialogAlertUser("Saved Ingredient library to file.");
             }
         }
     }
     
-    
+    @IBAction func outletIngredientLibraryMenuItemImportAction(sender: NSMenuItem) {
+        print("import ingredient library clicked.");
+        let dialog : NSOpenPanel = NSOpenPanel();
+        dialog.allowsMultipleSelection = false;
+        dialog.canChooseDirectories = false;
+        dialog.canChooseFiles = true;
+        dialog.allowedFileTypes = ["xml"];
+        let result = dialog.runModal();
+        if (result == NSFileHandlingPanelOKButton)
+        {
+            let ingredientLibraryPathToLoad = dialog.URL?.path;
+            if (ingredientLibraryPathToLoad != nil)
+            {
+                ingredientLibrary = [];
+                LoadIngredientsFromXML(ingredientLibraryPathToLoad);
+                outletIngredientLibraryTableView.reloadData();
+
+            }
+            
+        }
+    }
+ 
+ 
     @IBAction func outletNicStrengthSliderHandler(sender: NSSlider) {
         desiredNicStrength = Double(sender.integerValue);
         UpdateLabelsWithRecipeInformation();
@@ -1053,6 +1127,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
     }
     @IBOutlet weak var outletRecipeControlSegment: NSSegmentedControl!
     
+    @IBOutlet var outletRecipeMenu: NSMenu!
     @IBAction func outletRecipeControlSegmentAction(sender: NSSegmentedControl) {
         if (sender.selectedSegment == 0)
         {
@@ -1094,6 +1169,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         }
         if (sender.selectedSegment == 3)
         {
+            
             print("we need to edit a recipe..let's find out which recipe we're editing..");
             let selectedIndex = outletRecipeCategoryOutlineView.selectedRow;
             let object:AnyObject? = outletRecipeCategoryOutlineView.itemAtRow(selectedIndex);
@@ -1105,11 +1181,86 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
                 if (indexToEdit > -1)
                 {
                     print(String(format: "found recipe at index %d",indexToEdit));
-                    ShowRecipeEditorPopOverFromRecipeLibraryIndex(indexToEdit);
+                    outletRecipeMenu.itemAtIndex(0)?.enabled = true;
+                    //ShowRecipeEditorPopOverFromRecipeLibraryIndex(indexToEdit);
+                } else
+                {
+                    outletRecipeMenu.itemAtIndex(0)?.enabled = false;
                 }
+            } else {
+                outletRecipeMenu.itemAtIndex(0)?.enabled = false;
+            }
+            outletRecipeMenu.itemAtIndex(1)?.enabled = true;
+            outletRecipeMenu.itemAtIndex(2)?.enabled = true;
+            outletRecipeMenu.popUpMenuPositioningItem(outletRecipeMenu.itemAtIndex(0), atLocation: NSEvent.mouseLocation(), inView: nil);
+        }
+    }
+    
+    @IBAction func outletRecipeMenuEditRecipeAction(sender: NSMenuItem) {
+        print("edit recipe.");
+        let selectedIndex = outletRecipeCategoryOutlineView.selectedRow;
+        let object:AnyObject? = outletRecipeCategoryOutlineView.itemAtRow(selectedIndex);
+        if (object is RecipeSourceListRecipe)
+        {
+            let recipeToEditFromControlSegment = object as! RecipeSourceListRecipe;
+            print("we are going to edit " + recipeToEditFromControlSegment.Name);
+            let indexToEdit = getRecipeIndexInLibraryByUUID(recipeToEditFromControlSegment.RecipeID, recipeLibrary: recipeLibrary);
+            if (indexToEdit > -1)
+            {
+                print(String(format: "found recipe at index %d",indexToEdit));
+                ShowRecipeEditorPopOverFromRecipeLibraryIndex(indexToEdit);
+            }
+        }
+
+    }
+    
+    @IBAction func outletRecipeMenuExportAction(sender: NSMenuItem) {
+        print ("export recipe library");
+        let dialog : NSSavePanel = NSSavePanel();
+        dialog.nameFieldStringValue = "RecipeLibrary.xml";
+        dialog.allowedFileTypes = ["xml"];
+        let result = dialog.runModal();
+        if (result == NSFileHandlingPanelOKButton)
+        {
+            if (dialog.URL?.path != nil)
+            {
+                WriteRecipeLibraryToFile(dialog.URL?.path);
+                dialogAlertUser("Saved Recipe library to file.");
+            }
+            
+        }
+    }
+    
+    
+    @IBAction func outletRecipeMenuImportAction(sender: NSMenuItem) {
+        print("import recipe library.");
+        let dialog : NSOpenPanel = NSOpenPanel();
+        dialog.allowsMultipleSelection = false;
+        dialog.canChooseDirectories = false;
+        dialog.canChooseFiles = true;
+        dialog.allowedFileTypes = ["xml"];
+        let result = dialog.runModal();
+        if (result == NSFileHandlingPanelOKButton)
+        {
+            print("file chosen was: " + (dialog.URL?.path)!);
+            let recipeLibraryPathToLoad = dialog.URL?.path;
+            if (recipeLibraryPathToLoad != nil)
+            {
+                recipeLibrary = [Recipe]();
+                LoadRecipesIntoSourceListContainer();
+                outletRecipeCategoryOutlineView.reloadData();
+                outletRecipeCategoryOutlineView.expandItem(nil, expandChildren: true);
+                print("we have: " + recipeLibrary.count.description + " recipes");
+                LoadRecipesFromXML(recipeLibraryPathToLoad);
+                print("we have: " + recipeLibrary.count.description + " recipes");
+                currentRecipe = recipeLibrary[0];
+                LoadRecipesIntoSourceListContainer();
+                outletRecipeCategoryOutlineView.reloadData();
+                outletRecipeCategoryOutlineView.expandItem(nil, expandChildren: true);
             }
         }
     }
+    
     
     @IBAction func outletRecipeCategoryOutlineViewDoubleClickAction(sender: NSOutlineView) {
         print("received double click event for Recipe Category outline view, handle it.");
@@ -1982,8 +2133,20 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             print("found end of recipe.  now we should append it.");
             if recipeWeAreParsing.ID != ""
             {
-                recipeLibraryFromXML.append(recipeWeAreParsing);
-                outletRecipeTableView.reloadData();
+                var duplicateRecipeId = false;
+                for recipe in recipeLibraryFromXML
+                {
+                    if (recipeWeAreParsing.ID == recipe.ID)
+                    {
+                        duplicateRecipeId = true;
+                    }
+                
+                }
+                if (!duplicateRecipeId)
+                {
+                    recipeLibraryFromXML.append(recipeWeAreParsing);
+                    outletRecipeTableView.reloadData();
+                }
             }
         }
     }
@@ -2151,6 +2314,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         //     let path = NSBundle.mainBundle().pathForResource("MyFile", ofType: "xml")
         if path != nil
         {
+            recipeLibraryFromXML = [Recipe]();
             ingredientLibraryParser = NSXMLParser(contentsOfURL: NSURL(fileURLWithPath: path!))!;
             print("loaded file...");
             ingredientLibraryParser.delegate = self;
