@@ -1006,11 +1006,10 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             //}
         }
     }
-    
-    @IBAction func outletIngredientLibraryMenuItemEditAction(sender: NSMenuItem) {
+    @IBAction func outletIngredientLibraryMenuItemEditIngredientAction(sender: NSMenuItem) {
+        print("editing this bitch..");
         if (outletIngredientLibraryTableView.selectedRow > -1)
         {
-            
             let selectedObject : AnyObject? = outletIngredientLibraryArrayController.arrangedObjects[outletIngredientLibraryTableView.selectedRow];
             var selectedIngredientID : String? = nil;
             if (selectedObject is Ingredient)
@@ -1027,6 +1026,8 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
         }
         print("edit menu item clicked.");
     }
+    
+    
     
     @IBAction func outletIngredientLibraryMenuItemExportAction(sender: NSMenuItem) {
         

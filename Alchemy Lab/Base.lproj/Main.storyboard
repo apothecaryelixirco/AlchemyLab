@@ -2231,13 +2231,13 @@
                                 <action selector="outletRecipeMenuEditRecipeAction:" target="XfG-lQ-9wD" id="bg5-Sz-yL2"/>
                             </connections>
                         </menuItem>
-                        <menuItem title="Export.." id="Cka-JB-JdO">
+                        <menuItem title="Export Library.." id="Cka-JB-JdO">
                             <modifierMask key="keyEquivalentModifierMask"/>
                             <connections>
                                 <action selector="outletRecipeMenuExportAction:" target="XfG-lQ-9wD" id="JbH-tU-Vml"/>
                             </connections>
                         </menuItem>
-                        <menuItem title="Import.." id="jSz-7v-QSn">
+                        <menuItem title="Import Library.." id="jSz-7v-QSn">
                             <modifierMask key="keyEquivalentModifierMask"/>
                             <connections>
                                 <action selector="outletRecipeMenuImportAction:" target="XfG-lQ-9wD" id="jpK-d8-XKi"/>
@@ -2250,16 +2250,16 @@
                         <menuItem title="Edit Ingredient" id="4hx-9y-6cw">
                             <modifierMask key="keyEquivalentModifierMask"/>
                             <connections>
-                                <action selector="outletRecipeMenuEditIngredientAction:" target="XfG-lQ-9wD" id="XDw-Zd-1Gh"/>
+                                <action selector="outletIngredientLibraryMenuItemEditIngredientAction:" target="XfG-lQ-9wD" id="12M-iA-3s2"/>
                             </connections>
                         </menuItem>
-                        <menuItem title="Export.." id="fEI-gF-DfS">
+                        <menuItem title="Export Library.." id="fEI-gF-DfS">
                             <modifierMask key="keyEquivalentModifierMask"/>
                             <connections>
                                 <action selector="outletIngredientLibraryMenuItemExportAction:" target="XfG-lQ-9wD" id="BUD-YB-Scj"/>
                             </connections>
                         </menuItem>
-                        <menuItem title="Import.." id="UCG-2B-cNO">
+                        <menuItem title="Import Library.." id="UCG-2B-cNO">
                             <modifierMask key="keyEquivalentModifierMask"/>
                             <connections>
                                 <action selector="outletIngredientLibraryMenuItemImportAction:" target="XfG-lQ-9wD" id="rTq-2f-w5b"/>
