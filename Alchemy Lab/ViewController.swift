@@ -1607,7 +1607,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
                     totalVGNeeded -= mlDisplay.backgroundVolume * ((flavorIngredient?.VGRatioForIngredient)!/100);
                     totalPGNeeded -= mlDisplay.backgroundVolume * ((flavorIngredient?.PGRatioForIngredient)!/100);
                     mlDisplay.Weight = String(format:"%.2fg",mlDisplay.backgroundWeight);
-                    mlDisplay.backgroundCost = flavorIngredient!.Cost;
+                    mlDisplay.backgroundCost = (flavorIngredient!.Cost * volumeOfFlavorNeeded);
                     mlDisplay.Cost = String(format:"$%.2f",mlDisplay.backgroundCost);
                     mlDisplay.backgroundPercentage = flavor.backgroundPercentage;
                     mlDisplay.Percentage = String(format:"%.2f%%",mlDisplay.backgroundPercentage);
