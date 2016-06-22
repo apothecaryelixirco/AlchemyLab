@@ -1523,6 +1523,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
                 break;
             }
         }
+        //let nicSolutionNeeded = 0.0;
         if (nicotineIngredientId != "")
         {
             print("determining how much nicotine solution we need...");
@@ -1547,7 +1548,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
            // {
                // baseWeight = VGWeight;
            // }
-            let nicSolutionNeeded = (desiredNicStrength / nicotine!.Strength) * Double(amountOfJuice);
+            nicSolutionNeeded = (desiredNicStrength / nicotine!.Strength) * Double(amountOfJuice);
             let nicWeightNeeded = nicSolutionNeeded * nicWeightPerMl;
             //let nicStrength : Double = nicotine!.Strength / 10;
             //nicBaseWeight += Double((100-nicStrength)) * baseWeight;
@@ -1624,6 +1625,7 @@ class ViewController: NSViewController, NSOutlineViewDataSource, NSOutlineViewDe
             totalVGNeeded -= volumeOfPGInFlavors;
             totalPGNeeded = Double(amountOfJuice) - volumeOfPGInFlavors;
             totalPGNeeded -= totalVGNeeded;
+            totalVGNeeded -= nicSolutionNeeded;
         }
         for pg in recipeDisplay
         {
